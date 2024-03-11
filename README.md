@@ -5,6 +5,10 @@
 - DockerおよびGitのインストール，GitHubのセットアップが前提
 ```bash
 git clone "git@github.com:ARCircle/Kojirer.git"
+cd Kojirer
+```
+ここで，.env の中身の環境変数であるPOSTGRES_PASSWORD，POSTGRES_USERを編集してください．そして，以下のコマンドを入力することで，開発サーバが起動します．
+```bash
 sudo TARGET=dev docker-compose up -d
 npm run migrate:dev
 ```
