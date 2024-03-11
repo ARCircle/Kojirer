@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig to read more about this file */
+
+    /* Language and Environment */
+    "target": "ESNext", 
+
+    /* Modules */
+    "module": "ESNext",
+    "rootDir": "./src",
+    "moduleResolution": "Node", 
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*", "./dist/*"]
+    },
+    "resolveJsonModule": true,
+    
+    /* Emit */
+    "outDir": "./built",
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+
+    /* Completeness */
+    "skipLibCheck": true
+  }
+}

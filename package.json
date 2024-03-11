@@ -1,0 +1,27 @@
+{
+  "name": "kojirer",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/env-cmd -f .env node ./scripts/build.mjs",
+    "start": "cd packages/backend/built && ../../../node_modules/.bin/env-cmd -f ../../../.env node index.js",
+    "clean": "node ./scripts/clean.mjs",
+    "dev": "./node_modules/.bin/env-cmd -f .env node ./scripts/dev.mjs",
+    "migrate:create": "cd packages/backend && env-cmd -f ../../.env npm run migrate:create",
+    "migrate:exe": "cd packages/backend && env-cmd -f ../../.env npm run migrate:exe",
+    "migrate:dev": "cd packages/backend && env-cmd -f ../../.env npm run migrate:exe",
+    "migrate:status": "cd packages/backend && env-cmd -f ../../.env npm run migrate:status",
+    "migrate:reset": "cd packages/backend && env-cmd -f ../../.env npm run migrate:reset",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "packages/frontend",
+    "packages/backend"
+  ],
+  "dependencies": {
+    "env-cmd": "^10.1.0"
+  }
+}
