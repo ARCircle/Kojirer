@@ -21,6 +21,11 @@ npm install
 また，現状ではvolumeが自動的にroot権限になってしまうためsudoが必要です．
 UIDとかそこら辺が原因？
 
+### trouble shooting
+- `.docker/buildx/current: permission denied`
+    - `sudo chown -R {username} ~/.docker/buildx/current`
+
+
 ## How to Start Production
 ```bash
 sudo docker-compose up -d --build
