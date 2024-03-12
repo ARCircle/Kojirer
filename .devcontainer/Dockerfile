@@ -15,7 +15,6 @@ ENV POSTGRES_DB=kojirer
 ENV DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}"
 
 # アプリの依存関係をインストール
-RUN npm run migrate:dev
 RUN npm install
 
 # ビルド
