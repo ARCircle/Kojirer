@@ -12,6 +12,7 @@ cp example.env .env
 ```bash
 sudo TARGET=dev docker-compose up -d
 npm run migrate:dev
+npm install
 ```
 
 `TARGET=dev`では，開発の迅速化のため，フロントエンドサーバ (port: 52800) とバックエンドサーバ (port: 52600) の両方が起動します．このときはフロントエンドサーバを軸に開発してください．
