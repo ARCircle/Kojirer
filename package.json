@@ -20,5 +20,8 @@
   "workspaces": [
     "packages/frontend",
     "packages/backend"
-  ]
+  ],
+  "dependencies": {
+    "env-cmd": "^10.1.0"
+  }
 }
