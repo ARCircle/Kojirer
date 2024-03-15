@@ -2,12 +2,16 @@
 - AR会謹製豚そば「こうじろう」の食券管理システム
 
 ## How to Start develop
-- DockerおよびGitのインストール，GitHubのセットアップが前提
+Docker，Docker Desktop，Git，VSCode，VSCodeのdev containersという拡張機能のインストール，GitHubのセットアップが前提です．
 ```bash
 git clone "git@github.com:ARCircle/Kojirer.git"
 cd Kojirer
 cp example.env .env
 ```
+DockerDesktopを立ち上げ，VSCodeでプロジェクトフォルダを開いてください．
+左下の「><」みたいなマークをクリックして，「コンテナーで再度開く（英語: open container?）」を選択して，開発コンテナを立ち上げてください．
+開発はこのコンテナの中で行われます．
+
 ここで，.env の中身の環境変数であるPOSTGRES_PASSWORD，POSTGRES_USERを編集してください．そして，以下のコマンドを入力することで，開発サーバが起動します．
 ```bash
 sudo TARGET=dev docker-compose up -d
