@@ -1,0 +1,19 @@
+# デフォルトの改行コードをLFにする。
+* text=auto eol=lf
+
+# Linuxシェル
+*.sh    text eol=lf
+
+# Windowsシェル
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.ps1   text eol=crlf
+
+# 完全にバイナリで変更すべきでないファイルをすべて示す。
+*.png   binary
+*.jpg   binary
+*.jar   binary
+
+# ビルドツールのLinux用シェル
+node    text eol=lf
+npx     text eol=lf
