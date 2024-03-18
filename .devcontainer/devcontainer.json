@@ -5,5 +5,5 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "postCreateCommand": "npm install"
+	"postCreateCommand": "npm install"
 }
