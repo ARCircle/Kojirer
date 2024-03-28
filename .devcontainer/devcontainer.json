@@ -5,5 +5,14 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "prisma.prisma",
+        "prisma.prisma-insider",
+        "knisterpeter.vscode-commitizen"
+      ]
+    }
+  },
 	"postCreateCommand": "npm install"
 }
