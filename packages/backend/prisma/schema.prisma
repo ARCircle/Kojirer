@@ -14,13 +14,13 @@ datasource db {
 }
 
 model adding {
-  dons_id     BigInt 
-  toppings_id Int
+  don_id      BigInt 
+  topping_id  Int
   amount      Int
-  dons        dons     @relation(fields: [dons_id], references: [id])
-  toppings    toppings @relation(fields: [toppings_id], references: [id])
+  dons        dons     @relation(fields: [don_id], references: [id])
+  toppings    toppings @relation(fields: [topping_id], references: [id])
 
-  @@id([dons_id, toppings_id])
+  @@id([don_id, topping_id])
 }
 
 model dons {
@@ -28,7 +28,7 @@ model dons {
   size_id      Int
   order_id     BigInt
   status       Int
-  vegetables   Int
+  vegetable    Int
   garlic       Int
   karame       Int
   abura        Int
@@ -55,9 +55,11 @@ model sizes {
 }
 
 model size_prices {
-  id      Int   @id @default(autoincrement())
+  id      Int      @id @default(autoincrement())
   size_id Int
-  sizes   sizes @relation(fields: [size_id], references: [id])
+  price   Int  
+  since   DateTime
+  sizes   sizes    @relation(fields: [size_id], references: [id])
 }
 
 model toppings {
@@ -72,7 +74,7 @@ model topping_prices {
   id         Int      @id @default(autoincrement())
   topping_id Int 
   price      Int 
-  until      DateTime
+  since      DateTime
   toppings   toppings @relation(fields: [topping_id], references: [id])
 }
 
