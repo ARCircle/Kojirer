@@ -34,8 +34,18 @@
                 ],
                 "operationId": "",
                 "responses": {
-                    "default": {
-                        "description": "Default response"
+                    "200": {
+                        "description": "注文の一覧を正常に取得しました。",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Order"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
