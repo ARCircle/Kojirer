@@ -28,13 +28,13 @@ model dons {
   size_id      Int
   order_id     BigInt
   status       Int
-  vegetable    Int
-  garlic       Int
+  yasai        Int
+  ninniku      Int
   karame       Int
   abura        Int
   sns_followed Boolean? @default(false)
-  created_at   DateTime
-  updated_at   DateTime
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
   sizes        sizes    @relation(fields: [size_id], references: [id])
   orders       orders   @relation(fields: [order_id], references: [id])
   adding       adding[]
@@ -42,7 +42,7 @@ model dons {
 
 model orders {
   id         BigInt   @id @default(autoincrement())
-  created_at DateTime
+  created_at DateTime @default(now())
   call_num   Int
   dons       dons[]
 }
