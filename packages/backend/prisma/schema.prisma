@@ -14,11 +14,11 @@ datasource db {
 }
 
 model adding {
-  don_id      BigInt 
-  topping_id  Int
-  amount      Int
-  dons        dons     @relation(fields: [don_id], references: [id])
-  toppings    toppings @relation(fields: [topping_id], references: [id])
+  don_id     BigInt
+  topping_id Int
+  amount     Int
+  dons       dons     @relation(fields: [don_id], references: [id])
+  toppings   toppings @relation(fields: [topping_id], references: [id])
 
   @@id([don_id, topping_id])
 }
@@ -57,24 +57,23 @@ model sizes {
 model size_prices {
   id      Int      @id @default(autoincrement())
   size_id Int
-  price   Int  
+  price   Int
   since   DateTime
   sizes   sizes    @relation(fields: [size_id], references: [id])
 }
 
 model toppings {
-  id              Int               @id @default(autoincrement())
-  label           String            @db.VarChar()
-  available       Boolean?          @default(true)
-  adding          adding[]
-  topping_prices  topping_prices[]
+  id             Int              @id @default(autoincrement())
+  label          String           @db.VarChar()
+  available      Boolean?         @default(true)
+  adding         adding[]
+  topping_prices topping_prices[]
 }
 
 model topping_prices {
   id         Int      @id @default(autoincrement())
-  topping_id Int 
-  price      Int 
+  topping_id Int
+  price      Int
   since      DateTime
   toppings   toppings @relation(fields: [topping_id], references: [id])
 }
-
