@@ -25,7 +25,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
+              "type": "number",
               "default": "10"
             },
             "description": "取得件数上限"
