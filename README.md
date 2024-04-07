@@ -11,11 +11,18 @@
 また，VSCode内に以下の拡張機能のインストールが必要．
 - Dev Containers
 ### 1. リポジトリのクローン
-Workingディレクトリにおいて，以下のコマンドを実行．
+Workingディレクトリにおいて，GitHubからソースファイルをクローンする．
 ```bash
 git clone "git@github.com:ARCircle/Kojirer.git"
+```
+クローンしたディレクトリに移動し，`.env`ファイルをコピーする．
+```bash
 cd Kojirer
 cp example.env .env
+```
+VSCodeでクローンしたディレクトリを開く．
+```bash
+code .
 ```
 ### 2. devcontainerの起動
 VSCodeの画面左の「><」のようなマークから，
@@ -62,6 +69,12 @@ tsファイルを`src/routes`に追加すると，そのファイル名のパス
 2. `npm run migrate:create`を実行し，sqlファイルを`prisma`ディレクトリ以下に作成される
 3. 作成されたsqlファイルを確認し，既存のスキーマを壊すことがないか確認
 4. `npm run migrate:dev`でsqlを実行する
+
+#### 開発用データのInsert
+`.devcontainer`の外，すなわちWSL上の`Kojirer`ディレクトリにおいて，以下のコマンドを実行．
+```bash
+ docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql 
+```
 
 ### pakages/frontend
 | Feature | Package |
