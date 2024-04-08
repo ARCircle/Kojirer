@@ -11,10 +11,10 @@ ENV POSTGRES_DB=kojirer
 ENV DATABASE_URL="postgres://kojirer:kojirer@localhost:5432/kojirer"
 
 # アプリの依存関係をインストール
-RUN npm install
+# RUN npm install
 
 # ビルド
-RUN npm run build
+# RUN npm run build
 
 # ポートを指定
 EXPOSE 52600
