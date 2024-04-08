@@ -33,28 +33,3 @@ COPY --from=builder "/kojirer/package.json" "./package.json"
 EXPOSE 52600
 
 CMD [ "npm", "run", "start" ]
-
-##################### DEVELOPMENT STAGE #####################
-FROM node:20-slim AS dev
-
-# 作業ディレクトリを指定
-WORKDIR /kojirer
-
-# 依存関係を示すファイルをコピー
-COPY [ "package.json", "./" ]
-COPY [ "scripts", "./scripts" ]
-COPY [ "packages/backend/package.json", "./packages/backend/" ]
-COPY [ "packages/frontend/package.json", "./packages/frontend/" ]
-
-# 各種インストール
-RUN apt-get update -qq \
-  && apt-get install -qy procps --no-install-recommends \
-  && npm install 
-
-# ソースコードをコピー
-COPY --link . ./
-
-# ポートを指定
-EXPOSE 52800:52800 52600:52600 
-
-CMD [ "npm", "run", "dev" ]
