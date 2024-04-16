@@ -1,42 +1,94 @@
-import { Grid, GridItem, HStack, Text, Box, Heading } from '@chakra-ui/react'
+import { Grid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex } from '@chakra-ui/react'
+import React from 'react'
 
 type TableProps = {
   n: number
 }
 
-const Card: React.FC<{ text: string }> = ({ text }) => (
-  <Text color='white' pos='absolute' top='50%' left='50%' transform='translate(-50%,-50%)' fontSize='xxx-large'>
-    {text}
-  </Text>
-)
+type Don = {
+  id: number,
+  status: number
+}
+
+type Order = {
+  id: number,
+  dons: Don[]
+}
+
+type MockProps = {
+  numOrders: number
+}
 
 
-function YobidashiTable({ n }: TableProps) {
+const YobidashiTable: React.FC<TableProps> = ({ n }: TableProps) => {
+  function generateMockOrders({numOrders}: MockProps): Order[] {
+    const orders: Order[] = [];
+
+    // Generate mock data for orders
+    for (let i = 1; i <=numOrders; i++) {
+      const dons: Don[] = [];
+      const numDons = Math.floor(Math.random() * 4) + 2;
+
+      // Generate mock data for dons
+      for (let j = 1; j <= numDons; j++) {
+        const don: Don = {
+          id: j,
+          status: Math.floor(Math.random() * 3)
+        };
+        dons.push(don);
+      }
+
+      const order: Order = {
+        id: i,
+        dons: dons
+      };
+
+      orders.push(order);
+    }
+
+    return orders;
+  }
+  function calculateProgress(order: Order): number {
+    const numDons = order.dons.length;
+    const numDoneDons = order.dons.filter(don => don.status === 2).length;
+    return Math.floor(numDoneDons / numDons * 100);
+  }
+
+  const data = generateMockOrders({numOrders: n});
   return (
-    <Grid templateColumns='repeat(3, 1fr)' gap={6} pt='20px'>
-      {Array(n).fill(
-        <GridItem width='100%' height='20' bg='blue.500' borderRadius='md' pos='relative'>
-          <Card text={n.toString()} />
+    <>
+      {data.map((order) => (
+        <GridItem key={order.id} colSpan={1} bg='blue.500' h='200px' pos='relative'>
+          <Heading textAlign='center' color='white' pos='absolute' size='4xl'>{order.id}</Heading>
+          <Center>
+            <CircularProgress value={calculateProgress(order)} color='green' size='180px' p='10px'>
+              <CircularProgressLabel>{order.dons.filter(dons=>dons.status == 2).length}/{order.dons.length}</CircularProgressLabel>
+            </CircularProgress>
+          </Center>
         </GridItem>
-      )}
-    </Grid>
+      ))}
+    </>
   )
 }
 
-const Yobidashi = () => {
+const Yobidashi: React.FC = () => {
   return (
     <>
       <Heading textAlign='center' fontSize='xxx-large'>呼び出し口画面</Heading>
-      <HStack spacing={4} w='100%' p='10px'>
-        <Box w='70%' border='2px' borderColor='black' p='20px'>
+      <Flex flexDirection='row' px='10px'>
+        <Box w='60%' border='2px' borderColor='black' p='20px' mr='5px'>
           <Heading textAlign='center' borderRadius='md' w='fit-content' mx='auto' fontSize='xxx-large'>調理中</Heading>
-          <YobidashiTable n={17}/>
+          <Grid templateColumns='repeat(3, 1fr)' gap={6} pt='20px'>
+            <YobidashiTable n={21}/>
+          </Grid>
         </Box>
-        <Box w='30%' border='2px' borderColor='black' p='20px' verticalAlign='top'>
+        <Box w='40%' border='2px' borderColor='black' p='20px' verticalAlign='top' ml='5px'>
           <Heading textAlign='center' borderRadius='md' w='fit-content' mx='auto' fontSize='xxx-large'>呼出中</Heading>
-          <YobidashiTable n={4}/>
+          <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
+            <YobidashiTable n={4}/>
+          </Grid>
         </Box>
-      </HStack>
+      </Flex>
     </>
   );
 }
