@@ -3,12 +3,15 @@ import prisma from '@/lib/prismaClient.js';
 
 const router = express.Router();
 
+//get available only
 router.get('/koujirer/toppingList/available', async (req, res, next) => {
   try {
     const topping_table = await prisma.toppings.findMany({
+      //get available: true
       where: {
         available: true,
       },
+      //get id and label
       select: {
         id: true,
         label: true
@@ -28,9 +31,11 @@ router.get('/koujirer/toppingList/available', async (req, res, next) => {
   }
 });
 
+//get all
 router.get('/koujirer/toppingList/all', async (req, res, next) => {
   try {
     const topping_table = await prisma.toppings.findMany({
+      //get id and label
       select: {
         id: true,
         label: true
