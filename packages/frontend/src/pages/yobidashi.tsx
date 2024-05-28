@@ -6,6 +6,11 @@ type TableProps = {
   status: string
 }
 
+type RowProps = {
+  n: number
+  status: string
+}
+
 type Don = {
   id: number,
   status: number
@@ -53,43 +58,53 @@ const FudaProgress: React.FC<FudaProps> = ({ order }) => {
   )
 }
 
-// const YobidashiRows: React.FC = () => {
-//   return (
-//     <Center py='20px'>
-//       <Heading>kari</Heading>
-//     </Center>
-//   )
-// }
+const generateMockOrders = ({numOrders}: MockProps): Order[] => {
+  const orders: Order[] = [];
 
-const YobidashiTable: React.FC<TableProps> = ({ n, status }: TableProps) => {
-  function generateMockOrders({numOrders}: MockProps): Order[] {
-    const orders: Order[] = [];
+  // Generate mock data for orders
+  for (let i = 1; i <=numOrders; i++) {
+    const dons: Don[] = [];
+    const numDons = Math.floor(Math.random() * 4) + 2;
 
-    // Generate mock data for orders
-    for (let i = 1; i <=numOrders; i++) {
-      const dons: Don[] = [];
-      const numDons = Math.floor(Math.random() * 4) + 2;
-
-      // Generate mock data for dons
-      for (let j = 1; j <= numDons; j++) {
-        const don: Don = {
-          id: j,
-          status: Math.floor(Math.random() * 3)
-        };
-        dons.push(don);
-      }
-
-      const order: Order = {
-        id: 200+i,
-        dons: dons
+    // Generate mock data for dons
+    for (let j = 1; j <= numDons; j++) {
+      const don: Don = {
+        id: j,
+        status: Math.floor(Math.random() * 3)
       };
-
-      orders.push(order);
+      dons.push(don);
     }
 
-    return orders;
+    const order: Order = {
+      id: 200+i,
+      dons: dons
+    };
+
+    orders.push(order);
   }
 
+  return orders;
+}
+
+const YobidashiRow: React.FC<RowProps> = ({n, status}: RowProps) => {
+  const data = generateMockOrders({numOrders: n})
+  return (
+    <>
+      {data.map((order) => {
+        return (
+          <>
+            <Box h='100px' py='5px'>
+              {status === 'cooking' && <FudaProgress order={order} color={'blue.200'}/>}
+              {status === 'finish' && <FudaSimple order={order} color={'green.300'}/>}
+            </Box>
+          </>
+        )
+      })}
+    </>
+  )
+}
+
+const YobidashiTable: React.FC<TableProps> = ({ n, status }: TableProps) => {
   const data = generateMockOrders({numOrders: n});
   return (
     <>
@@ -119,9 +134,7 @@ const Yobidashi: React.FC = () => {
       <Flex flexDirection='row' px='10px'>
         <Box w='25%' border='2px' borderColor='black' p='20px' mr='5px'>
           <TableLabel name='調理中'/>
-          <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
-            <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'cooking'}/>
-          </Grid>
+          <YobidashiRow n={Math.floor(Math.random()*16)+4} status={'cooking'}/>
         </Box>
         <Box w='50%' border='2px' borderColor='black' p='20px' verticalAlign='top' ml='5px'>
           <TableLabel name='呼出中'/>
@@ -131,9 +144,10 @@ const Yobidashi: React.FC = () => {
         </Box>
         <Box w='25%' border='2px' borderColor='black' p='20px' verticalAlign='top' ml='5px'>
           <TableLabel name='呼出完了'/>
-          <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
+          {/* <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
             <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'finish'}/>
-          </Grid>
+          </Grid> */}
+          <YobidashiRow n={Math.floor(Math.random()*16)+4} status={'finish'}/>
         </Box>
       </Flex>
     </>
