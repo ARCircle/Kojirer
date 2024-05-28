@@ -1,8 +1,9 @@
-import { Grid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex, calc} from '@chakra-ui/react'
+import { Grid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex, calc, Divider} from '@chakra-ui/react'
 import React from 'react'
 
 type TableProps = {
   n: number
+  status: string
 }
 
 type Don = {
@@ -21,9 +22,16 @@ type MockProps = {
 
 type FudaProps = {
   order: Order
+  color: string
 }
 
-const Fuda: React.FC<FudaProps> = ({ order }) => {
+const FudaSimple: React.FC<FudaProps> = ({ order, color }) => {
+  return (
+    <Center h='100%' w='100%' bg={color} borderColor='gray' border='4px' borderRadius='16px' fontSize='xxx-large' fontWeight='bold'>{order.id}</Center>
+  )
+}
+
+const FudaProgress: React.FC<FudaProps> = ({ order }) => {
   function calculateProgress(order: Order): number {
     const numDons = order.dons.length;
     const numDoneDons = order.dons.filter(don => don.status === 2).length;
@@ -31,13 +39,14 @@ const Fuda: React.FC<FudaProps> = ({ order }) => {
   }
 
   return (
-    <Box h='100%' w='100%' pos='relative'>
-      <Box h='100%' w={`${calculateProgress(order)}%`} bg='blue.200' pos='absolute'></Box>
+    <Box h='100%' w='100%' pos='relative' borderColor='gray' border='4px' borderRadius='16px' overflow='hidden'>
+      <Box h='100%' w={`${calculateProgress(order)}%`} bg='blue.400' pos='absolute' opacity={0.3} ></Box>
       <Flex flexDirection='row' px='10px' h='100%' pos='absolute' w='100%'>
         <Center w='50%' fontWeight='bold' fontSize='1em' color='black' pr='2px' >{order.id}</Center>
         <Center w='2%'>
-          <Center h='90%' color='gray.400' border='4px' borderRadius={4}></Center>
+          <Center h='90%' color='gray.400' border='2px' borderRadius={4}></Center>
         </Center>
+        {/* <Divider orientation='horizontal' /> */}
         <Center w='50%' fontSize='1em'>{`${order.dons.filter(don => don.status === 2).length}/${order.dons.length}`}</Center>
       </Flex>
     </Box>
@@ -52,7 +61,7 @@ const Fuda: React.FC<FudaProps> = ({ order }) => {
 //   )
 // }
 
-const YobidashiTable: React.FC<TableProps> = ({ n }: TableProps) => {
+const YobidashiTable: React.FC<TableProps> = ({ n, status }: TableProps) => {
   function generateMockOrders({numOrders}: MockProps): Order[] {
     const orders: Order[] = [];
 
@@ -85,8 +94,10 @@ const YobidashiTable: React.FC<TableProps> = ({ n }: TableProps) => {
   return (
     <>
       {data.map((order) => (
-        <GridItem key={order.id} colSpan={1} h='100px' borderColor='gray' border='4px'>
-          <Fuda order={order} />
+        <GridItem key={order.id} colSpan={1} h='100px'>
+          {status === 'cooking' && <FudaProgress order={order} color={'blue.200'} />}
+          {status === 'calling' && <FudaSimple order={order} color={'blue.200'}/>}
+          {status === 'finish' && <FudaSimple order={order} color={'green.300'}/>}
         </GridItem>
       ))}
     </>
@@ -101,19 +112,19 @@ const Yobidashi: React.FC = () => {
         <Box w='25%' border='2px' borderColor='black' p='20px' mr='5px'>
           <Heading textAlign='center' borderRadius='md' w='fit-content' mx='auto' fontSize='xxx-large'>調理中</Heading>
           <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
-            <YobidashiTable n={Math.floor(Math.random()*16)+4}/>
+            <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'cooking'}/>
           </Grid>
         </Box>
         <Box w='50%' border='2px' borderColor='black' p='20px' verticalAlign='top' ml='5px'>
           <Heading textAlign='center' borderRadius='md' w='fit-content' mx='auto' fontSize='xxx-large'>調理完了＆呼出中</Heading>
           <Grid templateColumns='repeat(4, 1fr)' gap={6} pt='20px'>
-            <YobidashiTable n={Math.floor(Math.random()*32)+8}/>
+            <YobidashiTable n={Math.floor(Math.random()*32)+8} status={'calling'}/>
           </Grid>
         </Box>
         <Box w='25%' border='2px' borderColor='black' p='20px' verticalAlign='top' ml='5px'>
           <Heading textAlign='center' borderRadius='md' w='fit-content' mx='auto' fontSize='xxx-large'>呼出完了</Heading>
           <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
-            <YobidashiTable n={Math.floor(Math.random()*16)+4}/>
+            <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'finish'}/>
           </Grid>
         </Box>
       </Flex>
