@@ -1,4 +1,4 @@
-import { Grid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex, calc, Divider} from '@chakra-ui/react'
+import { Grid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex, calc, Divider, Text} from '@chakra-ui/react'
 import React from 'react'
 
 type TableProps = {
@@ -105,24 +105,32 @@ const YobidashiTable: React.FC<TableProps> = ({ n, status }: TableProps) => {
 }
 
 const Yobidashi: React.FC = () => {
+  type TableLabelProp = {
+    name: string
+  }
+  const TableLabel: React.FC<TableLabelProp> = ({name}: TableLabelProp) => {
+    return (
+      <Heading textAlign='center' p='2px' w='fit-content' mx='auto' fontSize='5xl' fontWeight='bold' >{name}</Heading>
+    )
+  }
   return (
     <>
       <Heading textAlign='center' fontSize='xxx-large'>呼び出し口画面</Heading>
       <Flex flexDirection='row' px='10px'>
         <Box w='25%' border='2px' borderColor='black' p='20px' mr='5px'>
-          <Heading textAlign='center' borderRadius='md' w='fit-content' mx='auto' fontSize='xxx-large'>調理中</Heading>
+          <TableLabel name='調理中'/>
           <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
             <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'cooking'}/>
           </Grid>
         </Box>
         <Box w='50%' border='2px' borderColor='black' p='20px' verticalAlign='top' ml='5px'>
-          <Heading textAlign='center' borderRadius='md' w='fit-content' mx='auto' fontSize='xxx-large'>調理完了＆呼出中</Heading>
+          <TableLabel name='呼出中'/>
           <Grid templateColumns='repeat(4, 1fr)' gap={6} pt='20px'>
             <YobidashiTable n={Math.floor(Math.random()*32)+8} status={'calling'}/>
           </Grid>
         </Box>
         <Box w='25%' border='2px' borderColor='black' p='20px' verticalAlign='top' ml='5px'>
-          <Heading textAlign='center' borderRadius='md' w='fit-content' mx='auto' fontSize='xxx-large'>呼出完了</Heading>
+          <TableLabel name='呼出完了'/>
           <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
             <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'finish'}/>
           </Grid>
