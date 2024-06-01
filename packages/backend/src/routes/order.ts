@@ -1,4 +1,5 @@
 import prisma from '@/lib/prismaClient.js';
+import { bigint2number } from '@/util/typeConverters';
 import express from 'express';
 import util from 'util';
 
@@ -136,7 +137,7 @@ async function saveOrder(req: express.Request, res: express.Response, next: expr
 
     // addedOrderをJSONに変換する前にBigIntを処理
     const serializedOrder = JSON.parse(JSON.stringify(addedOrder, (key, value) =>
-      typeof value === 'bigint' ? value.toString() : value
+      typeof value === 'bigint' ? bigint2number(value) : value
     ));
 
     res.status(201).json(serializedOrder);
