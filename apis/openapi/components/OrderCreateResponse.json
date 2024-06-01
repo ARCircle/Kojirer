@@ -3,7 +3,7 @@
     "type": "object",
     "properties": {
       "id": {
-        "type": "string"
+        "type": "integer"
       },
       "created_at": {
         "type": "string",
@@ -24,13 +24,13 @@
     "type": "object",
     "properties": {
       "id": {
-        "type": "string"
+        "type": "integer"
       },
       "size_id": {
         "type": "integer"
       },
       "order_id": {
-        "type": "string"
+        "type": "integer"
       },
       "status": {
         "type": "integer"
@@ -70,7 +70,7 @@
     "type": "object",
     "properties": {
       "don_id": {
-        "type": "string"
+        "type": "integer"
       },
       "topping_id": {
         "type": "integer"
