@@ -1,5 +1,5 @@
 import prisma from '@/lib/prismaClient.js';
-import { bigint2number } from '@/util/typeConverters';
+import { bigint2number } from '@/util/typeConverters.js';
 import express from 'express';
 import util from 'util';
 
