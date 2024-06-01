@@ -1,5 +1,5 @@
 // bigint2number converts a bigint to a number if it is within the safe integer range, otherwise it returns null.
-function bigint2number(value: bigint): number {
+export function bigint2number(value: bigint): number {
   const maxSafeInteger = BigInt(Number.MAX_SAFE_INTEGER);
   const minSafeInteger = BigInt(Number.MIN_SAFE_INTEGER);
 
