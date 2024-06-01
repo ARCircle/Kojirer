@@ -47,7 +47,10 @@ function validateNewOrder(req: express.Request, res: express.Response, next: exp
     const order: Order = req.body;
 
     if ((order.call_num == null) || (order.dons == null) || !Array.isArray(order.dons)) {
-      res.status(400).send("invalid request: callNum and dons are required");
+      const received_object = util.inspect(order, {depth: null});
+      res.status(400).send(`invalid request: callNum and dons are required
+      you sent : ${received_object}
+      `);
       return;
     }
 
