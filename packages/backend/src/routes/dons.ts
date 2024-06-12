@@ -15,19 +15,19 @@ interface PriceBody {
 const router = express.Router();
 
 router.post('/price', async (req: Request<any, any, PriceBody>, res, next) => {
-  const size = req.body.size;
-  const toppings = req.body.toppings || [];
+  const reqSize = req.body.size;
+  const reqToppings = req.body.toppings || [];
   const isFollowed = !!req.body.isFollowed;
 
-  if (!size) {
+  if (!reqSize) {
     next();
     return;
   }
 
   try {
-    const sizes = await prisma.sizes.findFirst({ 
+    const size = await prisma.sizes.findFirst({ 
       where: { 
-        id: size,
+        id: reqSize,
       }, 
       include: { 
         size_prices: {
@@ -42,7 +42,7 @@ router.post('/price', async (req: Request<any, any, PriceBody>, res, next) => {
     const toppingsPrices = await prisma.toppings.findMany({
       where: {
         id: {
-          in: toppings?.map(t => t.id),
+          in: reqToppings?.map(t => t.id),
         },
       },
       include: {
@@ -56,14 +56,14 @@ router.post('/price', async (req: Request<any, any, PriceBody>, res, next) => {
       }
     });
 
-    if (!sizes) {
+    if (!size) {
       next();
       return;
     }
 
-    const donPrice = sizes.size_prices[0].price;
+    const donPrice = size.size_prices[0].price;
     const toppingsPrice = toppingsPrices.reduce((sum, topping) => {
-      const amount = toppings.filter(t => t.id == topping.id)[0].amount;
+      const amount = reqToppings.filter(t => t.id == topping.id)[0].amount;
       const price = topping.topping_prices[0].price;
 
       return sum + price * amount;
