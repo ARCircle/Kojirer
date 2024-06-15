@@ -1,0 +1,57 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "kojirer",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "paths": {
+    "/api/status": {
+      "put": {
+        "summary": "丼の調理状態を変更する",
+        "description": "丼のIDと遷移先の調理状態コードをパラメータとするリクエストを投げ、成功したか否かを返します。",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./components/UpdateDonsStatusRequest.json#/UpdateDonStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "調理状態の更新に成功しました。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                    "items": {
+                      "$ref": "./components/Order.json#/Order"
+                    }
+                  }
+                }
+              }
+            },
+          "400": {
+            "description": "リクエストが不正です。",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [],
+  "servers": [],
+  "components": {
+    "links": {},
+    "callbacks": {},
+    "schemas": {}
+  }
+}

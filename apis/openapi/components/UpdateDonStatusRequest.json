@@ -1,0 +1,17 @@
+{
+  "UpdateDonStatus": {
+    "type": "object",
+    "properties": {
+      "don_id": {
+        "type": "integer"
+      },
+      "next_status": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "don_id",
+      "next_status"
+    ]
+  }
+}
