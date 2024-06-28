@@ -135,17 +135,17 @@ const Yobidashi: React.FC = () => {
     <>
       <Heading textAlign='center' fontSize='xxx-large'>呼び出し口画面</Heading>
       <Flex flexDirection='row' px='10px'>
-        <Box w='25%' border='2px' borderColor='black' p={responsiveSpace} mr='5px'>
+        <Box w='25%' border='2px' borderColor='black' p={responsiveSpace} mx={responsiveSpace}>
           <TableLabel name='調理中' />
           <YobidashiRow n={Math.floor(Math.random() * 16) + 4} status={'cooking'} />
         </Box>
-        <Box w='50%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' ml='5px'>
+        <Box w='50%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' mx={responsiveSpace}>
           <TableLabel name='呼出中' />
           <Grid templateColumns='repeat(4, 1fr)' gap={responsiveSpace} pt={responsiveSpace}>
             <YobidashiTable n={Math.floor(Math.random() * 32) + 8} status={'calling'} />
           </Grid>
         </Box>
-        <Box w='25%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' ml='5px'>
+        <Box w='25%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' mx={responsiveSpace}>
           <TableLabel name='呼出完了' />
           {/* <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
             <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'finish'}/>
