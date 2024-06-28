@@ -1,4 +1,4 @@
-import { Grid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex, calc, Divider, Text } from '@chakra-ui/react'
+import { SimpleGrid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex, calc, Divider, Text } from '@chakra-ui/react'
 import React from 'react'
 
 type TableProps = {
@@ -141,9 +141,9 @@ const Yobidashi: React.FC = () => {
         </Box>
         <Box w='50%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' mx={responsiveSpace}>
           <TableLabel name='呼出中' />
-          <Grid templateColumns='repeat(4, 1fr)' gap={responsiveSpace} pt={responsiveSpace}>
+          <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} gap={responsiveSpace} pt={responsiveSpace}>
             <YobidashiTable n={Math.floor(Math.random() * 32) + 8} status={'calling'} />
-          </Grid>
+          </SimpleGrid>
         </Box>
         <Box w='25%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' mx={responsiveSpace}>
           <TableLabel name='呼出完了' />
