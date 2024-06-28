@@ -11,20 +11,6 @@ type RowProps = {
   status: string
 }
 
-type Don = {
-  id: number,
-  status: number
-}
-
-type Order = {
-  id: number,
-  dons: Don[]
-}
-
-type MockProps = {
-  numOrders: number
-}
-
 type FudaProps = {
   order: Order
   color: string
