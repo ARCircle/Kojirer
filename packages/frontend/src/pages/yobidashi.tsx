@@ -1,4 +1,4 @@
-import { SimpleGrid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex, calc, Divider, Text } from '@chakra-ui/react'
+import { SimpleGrid, GridItem, Box, Heading, Center, Flex } from '@chakra-ui/react'
 import React from 'react'
 
 type TableProps = {
