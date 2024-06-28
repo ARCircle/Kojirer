@@ -1,4 +1,4 @@
-import { Grid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex, calc, Divider, Text} from '@chakra-ui/react'
+import { Grid, GridItem, Box, Heading, CircularProgress, CircularProgressLabel, Center, Flex, calc, Divider, Text } from '@chakra-ui/react'
 import React from 'react'
 
 type TableProps = {
@@ -58,11 +58,11 @@ const FudaProgress: React.FC<FudaProps> = ({ order }) => {
   )
 }
 
-const generateMockOrders = ({numOrders}: MockProps): Order[] => {
+const generateMockOrders = ({ numOrders }: MockProps): Order[] => {
   const orders: Order[] = [];
 
   // Generate mock data for orders
-  for (let i = 1; i <=numOrders; i++) {
+  for (let i = 1; i <= numOrders; i++) {
     const dons: Don[] = [];
     const numDons = Math.floor(Math.random() * 4) + 2;
 
@@ -76,7 +76,7 @@ const generateMockOrders = ({numOrders}: MockProps): Order[] => {
     }
 
     const order: Order = {
-      id: 200+i,
+      id: 200 + i,
       dons: dons
     };
 
@@ -86,16 +86,16 @@ const generateMockOrders = ({numOrders}: MockProps): Order[] => {
   return orders;
 }
 
-const YobidashiRow: React.FC<RowProps> = ({n, status}: RowProps) => {
-  const data = generateMockOrders({numOrders: n})
+const YobidashiRow: React.FC<RowProps> = ({ n, status }: RowProps) => {
+  const data = generateMockOrders({ numOrders: n })
   return (
     <>
       {data.map((order) => {
         return (
           <>
             <Box h='100px' py='5px'>
-              {status === 'cooking' && <FudaProgress order={order} color={'blue.200'}/>}
-              {status === 'finish' && <FudaSimple order={order} color={'green.300'}/>}
+              {status === 'cooking' && <FudaProgress order={order} color={'blue.200'} />}
+              {status === 'finish' && <FudaSimple order={order} color={'green.300'} />}
             </Box>
           </>
         )
@@ -105,14 +105,14 @@ const YobidashiRow: React.FC<RowProps> = ({n, status}: RowProps) => {
 }
 
 const YobidashiTable: React.FC<TableProps> = ({ n, status }: TableProps) => {
-  const data = generateMockOrders({numOrders: n});
+  const data = generateMockOrders({ numOrders: n });
   return (
     <>
       {data.map((order) => (
         <GridItem key={order.id} colSpan={1} h='100px'>
           {status === 'cooking' && <FudaProgress order={order} color={'blue.200'} />}
-          {status === 'calling' && <FudaSimple order={order} color={'blue.200'}/>}
-          {status === 'finish' && <FudaSimple order={order} color={'green.300'}/>}
+          {status === 'calling' && <FudaSimple order={order} color={'blue.200'} />}
+          {status === 'finish' && <FudaSimple order={order} color={'green.300'} />}
         </GridItem>
       ))}
     </>
@@ -123,7 +123,7 @@ const Yobidashi: React.FC = () => {
   type TableLabelProp = {
     name: string
   }
-  const TableLabel: React.FC<TableLabelProp> = ({name}: TableLabelProp) => {
+  const TableLabel: React.FC<TableLabelProp> = ({ name }: TableLabelProp) => {
     return (
       <Heading textAlign='center' p='2px' w='fit-content' mx='auto' fontSize='5xl' fontWeight='bold' >{name}</Heading>
     )
@@ -133,21 +133,21 @@ const Yobidashi: React.FC = () => {
       <Heading textAlign='center' fontSize='xxx-large'>呼び出し口画面</Heading>
       <Flex flexDirection='row' px='10px'>
         <Box w='25%' border='2px' borderColor='black' p='20px' mr='5px'>
-          <TableLabel name='調理中'/>
-          <YobidashiRow n={Math.floor(Math.random()*16)+4} status={'cooking'}/>
+          <TableLabel name='調理中' />
+          <YobidashiRow n={Math.floor(Math.random() * 16) + 4} status={'cooking'} />
         </Box>
         <Box w='50%' border='2px' borderColor='black' p='20px' verticalAlign='top' ml='5px'>
-          <TableLabel name='呼出中'/>
+          <TableLabel name='呼出中' />
           <Grid templateColumns='repeat(4, 1fr)' gap={6} pt='20px'>
-            <YobidashiTable n={Math.floor(Math.random()*32)+8} status={'calling'}/>
+            <YobidashiTable n={Math.floor(Math.random() * 32) + 8} status={'calling'} />
           </Grid>
         </Box>
         <Box w='25%' border='2px' borderColor='black' p='20px' verticalAlign='top' ml='5px'>
-          <TableLabel name='呼出完了'/>
+          <TableLabel name='呼出完了' />
           {/* <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
             <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'finish'}/>
           </Grid> */}
-          <YobidashiRow n={Math.floor(Math.random()*16)+4} status={'finish'}/>
+          <YobidashiRow n={Math.floor(Math.random() * 16) + 4} status={'finish'} />
         </Box>
       </Flex>
     </>
