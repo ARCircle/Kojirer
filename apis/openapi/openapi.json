@@ -48,6 +48,43 @@
           }
         }
       }
+    },
+    "/api/order": {
+      "post" : {
+        "summary": "新規注文を追加する",
+        "description": "新規注文を含むリクエストに対して，DBにその内容を保存し，作成した内容をレスポンスする",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./components/OrderCreateRequest.json#/Order"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "注文の追加が成功した",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./components/OrderCreateResponse.json#/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "リクエストが不正",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "security": [],

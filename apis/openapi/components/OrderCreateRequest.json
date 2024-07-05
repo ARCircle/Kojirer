@@ -1,0 +1,71 @@
+{
+  "Order": {
+    "type": "object",
+    "properties": {
+      "call_num": {
+        "type": "integer"
+      },
+      "dons": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Don"
+        }
+      }
+    },
+    "required": [
+      "call_num",
+      "dons"
+    ]
+  },
+  "Don": {
+    "type": "object",
+    "properties": {
+      "size": {
+        "type": "integer"
+      },
+      "yasai": {
+        "type": "integer"
+      },
+      "ninniku": {
+        "type": "integer"
+      },
+      "karame": {
+        "type": "integer"
+      },
+      "abura": {
+        "type": "integer"
+      },
+      "toppings" : [
+        {
+          "$ref": "#/Topping"
+        }
+      ],
+      "sns_followed": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "size",
+      "yasai",
+      "ninniku",
+      "karame",
+      "abura",
+      "toppings",
+      "sns_followed"
+    ]
+  },
+  "Topping": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "label" : {
+        "type": "string"
+      },
+      "amount": {
+        "type": "integer"
+      }
+    }
+  }
+}
