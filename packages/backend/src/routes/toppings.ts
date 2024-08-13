@@ -6,7 +6,7 @@ const router = express.Router();
 //get available only
 router.get('/available', async (req, res, next) => {
   try {
-    const toppingTable = await prisma.toppings.findMany({
+    const toppings = await prisma.toppings.findMany({
       
       //get available: true
       where: {
@@ -17,23 +17,29 @@ router.get('/available', async (req, res, next) => {
       include: {
         topping_prices: {
           select: {
-            price: true
-          }
+            price: true,
+          },
+          orderBy: { since: 'desc' },
+          take: 1
         }
-      },
-      //get id and label
-      select: {
-        id: true,
-        label: true
       }
     });
 
-    if (!toppingTable) {
+    if (!toppings) {
       next();
       return;
     }
 
-    res.status(200).send({ toppingTable });
+    const sendToppings = toppings.map(t => {
+      const { available, topping_prices, ...sendTopping } = t
+
+      return {
+        ...sendTopping,
+        price: topping_prices[0].price
+      }
+    })
+
+    res.status(200).send(sendToppings);
 
   } catch(e) {
     next();
@@ -44,30 +50,35 @@ router.get('/available', async (req, res, next) => {
 //get all
 router.get('/all', async (req, res, next) => {
   try {
-    const toppingTable = await prisma.toppings.findMany({
+    const toppings = await prisma.toppings.findMany({
 
       //include topping_prices table
       include: {
-        topping_price: {
+        topping_prices: {
           select: {
-            price: true
-          }
+            price: true,
+          },
+          orderBy: { since: 'desc' },
+          take: 1
         }
       },
-
-      //get id and label
-      select: {
-        id: true,
-        label: true
-      }
     });
 
-    if (!toppingTable) {
+    if (!toppings) {
       next();
       return;
     }
 
-    res.status(200).send({ toppingTable });
+    const sendToppings = toppings.map(t => {
+      const { available, topping_prices, ...sendTopping } = t
+
+      return {
+        ...sendTopping,
+        price: topping_prices[0].price
+      }
+    })
+
+    res.status(200).send(sendToppings);
 
   } catch(e) {
     next();
