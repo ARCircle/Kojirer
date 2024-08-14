@@ -1,10 +1,7 @@
 import express from "express";
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
- 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { fileURLToPath } from "./middlewares/errorHandler";
 
 const app = express();
 const port = 52600;
@@ -20,7 +17,9 @@ const filenames = fs.readdirSync(path.join(__dirname, 'routes'));
 // ファイル名ごとにrouteを動的インポート
 for (const filename of filenames ) {
   const name = filename.replace('.js', '');
-  const route = await import(`./routes/${name}.js`);
+  const route_path = `${__dirname}/routes/${name}.js`;
+  const route = require(route_path);
+
   app.use(`/api/${name}`, route.default);
 }
 
