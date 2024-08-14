@@ -1,7 +1,7 @@
 import express from "express";
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from "./middlewares/errorHandler";
+import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
 const port = 52600;
@@ -32,6 +32,8 @@ app.get('/api/*', (req, res) => {
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'web', 'index.html'));
 });
+
+app.use(errorHandler);
 
 // ポート開放
 app.listen(port);
