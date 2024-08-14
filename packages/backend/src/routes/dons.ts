@@ -1,5 +1,5 @@
 import express, { Request } from 'express';
-import prisma from '@/lib/prismaClient.js';
+import prisma from '@/lib/prismaClient';
 
 interface Topping {
   id: number,
