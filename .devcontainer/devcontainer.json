@@ -7,7 +7,12 @@
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "customizations": {
     "vscode": {
-      "extensions": ["prisma.prisma", "prisma.prisma-insider", "knisterpeter.vscode-commitizen"]
+      "extensions": [
+        "prisma.prisma",
+        "prisma.prisma-insider",
+        "knisterpeter.vscode-commitizen",
+        "esbenp.prettier-vscode"
+      ]
     }
   },
   "postCreateCommand": "npm install"
