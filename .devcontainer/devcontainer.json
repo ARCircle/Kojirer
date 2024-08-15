@@ -1,18 +1,14 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node-postgres
 {
-	"name": "Node.js & PostgreSQL",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "name": "Node.js & PostgreSQL",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "customizations": {
     "vscode": {
-      "extensions": [
-        "prisma.prisma",
-        "prisma.prisma-insider",
-        "knisterpeter.vscode-commitizen"
-      ]
+      "extensions": ["prisma.prisma", "prisma.prisma-insider", "knisterpeter.vscode-commitizen"]
     }
   },
-	"postCreateCommand": "npm install"
+  "postCreateCommand": "npm install"
 }
