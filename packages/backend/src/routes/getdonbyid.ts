@@ -19,7 +19,7 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
 
     //idが非負の整数に変換できるデータか，正規表現で検証する
     if( !/^\d+$/.test(id) ){
-        throw ApiError.internalProblems();
+        throw ApiError.invalidParams();
     }
 
     
