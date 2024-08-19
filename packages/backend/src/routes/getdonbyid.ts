@@ -7,7 +7,7 @@ const router = express.Router();
 
 //IDが指定されなかった場合，エラーメッセージを返す．
 router.get('/', asyncWrapper(async (req, res, next) => {
-    res.status(404).send({"error": "missing the ID. Please provide the Don ID."});
+    throw ApiError.invalidParams;
 
 }));
 
