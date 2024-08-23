@@ -111,8 +111,6 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
       },
   });
 
-  console.log(don);
-
   //そのIDのDonがない場合，エラーを返す．
   if(!don){
       throw ApiError.internalProblems();
