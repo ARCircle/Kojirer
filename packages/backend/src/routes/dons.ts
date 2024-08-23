@@ -111,13 +111,21 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
       },
   });
 
+  console.log(don);
+
   //そのIDのDonがない場合，エラーを返す．
   if(!don){
       throw ApiError.internalProblems();
   }
 
+  const resDon = {
+    ...don,
+    id: don.id.toString(),
+    order_id: don.order_id.toString()
+  };
+
   //とりあえずJSONで送る
-  res.status(200).json(don);
+  res.status(200).json(resDon);
 
 }));
 
