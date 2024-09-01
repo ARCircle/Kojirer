@@ -2,6 +2,7 @@ import express, { Request } from 'express';
 import prisma from '@/lib/prismaClient';
 import { asyncWrapper } from '@/utils/wrappers';
 import { ApiError } from '@/utils/ApiError';
+import { bigint2number } from '@/utils/typeConverters';
 
 interface Topping {
   id: number,
@@ -118,8 +119,8 @@ router.get('/:id', asyncWrapper(async (req, res, next) => {
 
   const resDon = {
     ...don,
-    id: don.id.toString(),
-    order_id: don.order_id.toString()
+    id: bigint2number(don.id),
+    order_id: bigint2number(don.order_id)
   };
 
   //とりあえずJSONで送る
