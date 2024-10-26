@@ -44,6 +44,7 @@ paths:
             type: integer
             format: int32
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -68,6 +69,7 @@ paths:
         - don
       description: 特定の条件の場合の丼の値段を取得
       requestBody:
+        required: true
         content:
           application/json:
             schema: 
@@ -77,14 +79,19 @@ paths:
                   type: integer
                   format: int32
                 toppings:
-                  type: object
-                  properties:
-                    id: 
-                      type: integer
-                      format: int32
-                    amount: 
-                      type: integer
-                      format: int32
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id: 
+                        type: integer
+                        format: int32
+                      amount: 
+                        type: integer
+                        format: int32
+                    required:
+                      - id
+                      - amount
                 snsFollowed:
                   type: boolean
               required:
@@ -149,6 +156,7 @@ paths:
       summary: 新規注文を追加
       description: 新規注文を含むリクエストに対して，DBにその内容を保存し，作成した内容をレスポンスする
       requestBody:
+        required: true
         content:
           application/json:
             schema: 

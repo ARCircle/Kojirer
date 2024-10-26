@@ -1,8 +1,9 @@
 import express, { Request } from 'express';
 import prisma from '@/lib/prismaClient';
-import { typedAsyncWrapper } from '@/utils/wrappers';
+import { asyncWrapper, typedAsyncWrapper } from '@/utils/wrappers';
 import { ApiError } from '@/utils/ApiError';
 import { bigint2number } from '@/utils/typeConverters';
+import { components } from 'api/schema';
 
 interface Topping {
   id: number,
@@ -17,10 +18,10 @@ interface PriceBody {
 
 const router = express.Router();
 
-router.post('/price', typedAsyncWrapper<"/dons/price", "post">(async (req, res, next) => {
+router.post('/price', typedAsyncWrapper<"/dons/price", "post">(async (req, res) => {
   const reqSize = req.body.size;
   const reqToppings = req.body.toppings || [];
-  const isFollowed = !!req.body.isFollowed;
+  const isFollowed = req.body.snsFollowed;
 
   if (!reqSize) {
     throw ApiError.invalidParams();
@@ -94,31 +95,32 @@ router.get('/', asyncWrapper(async (req, res, next) => {
 }));
 
 //あるIDのDonの詳細を返す
-router.get('/:id', asyncWrapper(async (req, res, next) => {
+router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next) => {
 
   //クエリパラメータを取得．
   const id = req.params.id;
 
   //idが非負の整数に変換できるデータか，正規表現で検証する
-  if( !/^\d+$/.test(id) ){
-      throw ApiError.invalidParams();
+  if( !/^\d+$/.test(`${id}`) ){
+    throw ApiError.invalidParams();
   }
 
   
   //そのIDのDonを取得する
   const don = await prisma.dons.findUnique({
-      where: {
-          id: Number(id),
-      },
+    where: {
+      id: Number(id),
+    },
   });
 
   //そのIDのDonがない場合，エラーを返す．
   if(!don){
-      throw ApiError.internalProblems();
+    throw ApiError.internalProblems();
   }
 
   const resDon = {
     ...don,
+    size: don.size_id,
     id: bigint2number(don.id),
     order_id: bigint2number(don.order_id)
   };

@@ -39,14 +39,14 @@ interface paths {
                 };
                 cookie?: never | null;
             };
-            requestBody?: {
+            requestBody: {
                 content: {
                     "application/json": {
                         /** Format: int32 */
                         status?: number | null;
                     };
                 };
-            } | null;
+            };
             responses: {
                 /** @description 調理状態の変更に成功 */
                 201: {
@@ -83,21 +83,21 @@ interface paths {
                 path?: never | null;
                 cookie?: never | null;
             };
-            requestBody?: {
+            requestBody: {
                 content: {
                     "application/json": {
                         /** Format: int32 */
                         size: number;
                         toppings?: {
                             /** Format: int32 */
-                            id?: number | null;
+                            id: number;
                             /** Format: int32 */
-                            amount?: number | null;
-                        } | null;
+                            amount: number;
+                        }[] | null;
                         snsFollowed: boolean;
                     };
                 };
-            } | null;
+            };
             responses: {
                 /** @description 価格を返す */
                 200: {
@@ -215,7 +215,7 @@ interface paths {
                 path?: never | null;
                 cookie?: never | null;
             };
-            requestBody?: {
+            requestBody: {
                 content: {
                     "application/json": {
                         call_num: number;
@@ -241,7 +241,7 @@ interface paths {
                         }[];
                     };
                 };
-            } | null;
+            };
             responses: {
                 /** @description 注文の追加が成功 */
                 201: {
