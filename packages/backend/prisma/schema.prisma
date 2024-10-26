@@ -47,6 +47,11 @@ model orders {
   dons       dons[]
 }
 
+model options {
+  id    Int    @id @default(autoincrement())
+  label String @db.VarChar(255)
+}
+
 model sizes {
   id          Int           @id @default(autoincrement())
   label       String        @db.VarChar(255)

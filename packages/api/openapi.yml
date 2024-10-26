@@ -320,6 +320,9 @@ components:
           type: integer
         label: 
           type: string
+      required:
+        - id
+        - label
     Order:
       type: object
       properties:
