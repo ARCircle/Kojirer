@@ -24,9 +24,23 @@ const SelectDon = () => {
   return (
     <Box border='2px'>
       <Center>丼の注文内容をここで決める</Center>
-      <SelectOption name="カラメ" items={['無', '並', 'マシ', 'マシマシ']} />
-      <SelectOption name="アブラ" items={['無', '並', 'マシ', 'マシマシ']} />
-      <SelectOption name="にんにく" items={['無', '並', 'マシ', 'マシマシ']} />
+      <Box>
+        <Center><Heading size='md'>オプションを選択</Heading></Center>
+        <Center>
+          <SelectOption name="カラメ" items={['無', '並', 'マシ', 'マシマシ']} />
+          <SelectOption name="アブラ" items={['無', '並', 'マシ', 'マシマシ']} />
+          <SelectOption name="にんにく" items={['無', '並', 'マシ', 'マシマシ']} />
+        </Center>
+      </Box>
+      <Box>
+        <Center><Heading size='md'>トッピングを選択</Heading></Center>
+        <Center>
+          <SelectOption name="マヨネーズ" items={['無', '並', 'マシ', 'マシマシ']} />
+          <SelectOption name="フライドオニオン" items={['無', '並', 'マシ', 'マシマシ']} />
+          <SelectOption name="カレー粉" items={['無', '並', 'マシ', 'マシマシ']} />
+          <SelectOption name="レモン果汁" items={['無', '並', 'マシ', 'マシマシ']} />
+        </Center>
+      </Box>
     </Box>
   )
 }
