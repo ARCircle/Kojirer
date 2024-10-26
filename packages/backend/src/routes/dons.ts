@@ -1,6 +1,6 @@
 import express, { Request } from 'express';
 import prisma from '@/lib/prismaClient';
-import { asyncWrapper } from '@/utils/wrappers';
+import { typedAsyncWrapper } from '@/utils/wrappers';
 import { ApiError } from '@/utils/ApiError';
 import { bigint2number } from '@/utils/typeConverters';
 
@@ -17,7 +17,7 @@ interface PriceBody {
 
 const router = express.Router();
 
-router.post('/price', asyncWrapper(async (req: Request<any, any, PriceBody>, res, next) => {
+router.post('/price', typedAsyncWrapper<"/dons/price", "post">(async (req, res, next) => {
   const reqSize = req.body.size;
   const reqToppings = req.body.toppings || [];
   const isFollowed = !!req.body.isFollowed;
