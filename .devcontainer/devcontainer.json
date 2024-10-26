@@ -10,7 +10,8 @@
       "extensions": [
         "prisma.prisma",
         "prisma.prisma-insider",
-        "knisterpeter.vscode-commitizen"
+        "knisterpeter.vscode-commitizen",
+        "42crunch.vscode-openapi"
       ]
     }
   },

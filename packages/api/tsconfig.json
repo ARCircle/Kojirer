@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "es2020",
+
+    /* Modules */
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*", "./dist/*"]
+    },
+    "resolveJsonModule": true,
+    "declaration": true, 
+    "declarationMap": true,
+    "sourceMap": true,
+
+    /* Emit */
+    "outDir": "dist",
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "src/schemaFormatter.ts",
+    "src/typesIndexFormatter.ts",
+    "tsup.config.ts"
+  ],
+  "include": ["./src/**/*.ts"]
+}
