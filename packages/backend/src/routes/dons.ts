@@ -27,11 +27,11 @@ router.post('/price', typedAsyncWrapper<"/dons/price", "post">(async (req, res) 
     throw ApiError.invalidParams();
   }
 
-  const size = await prisma.sizes.findFirst({ 
-    where: { 
+  const size = await prisma.sizes.findFirst({
+    where: {
       id: reqSize,
-    }, 
-    include: { 
+    },
+    include: {
       size_prices: {
         select: {
           price: true
@@ -70,18 +70,18 @@ router.post('/price', typedAsyncWrapper<"/dons/price", "post">(async (req, res) 
     return sum + price * amount;
   }, 0);
 
-  const discount = isFollowed 
+  const discount = isFollowed
   ? -1 * toppingsPrices.reduce((lowestPrice, topping) => {
       const price = topping.topping_prices[0].price;
       if (lowestPrice < price) {
         return price;
-      } 
+      }
       else {
         return lowestPrice;
       }
     }, 0)
   : 0;
-  
+
   const price = donPrice + toppingsPrice + discount;
 
   res.status(200).send({ price });
@@ -105,7 +105,7 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     throw ApiError.invalidParams();
   }
 
-  
+
   //そのIDのDonを取得する
   const don = await prisma.dons.findUnique({
     where: {
@@ -122,11 +122,33 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     ...don,
     size: don.size_id,
     id: bigint2number(don.id),
-    order_id: bigint2number(don.order_id)
   };
 
   //とりあえずJSONで送る
   res.status(200).json(resDon);
+
+}));
+
+router.get('/status', typedAsyncWrapper<"/dons/status/", "get">(async (req, res, next) => {
+  const status = req.query.status;
+  const limit = req.query.limit? Number(req.query.limit) : 10;
+
+  const statusDons = await prisma.dons.findMany({
+    where: {
+      status: status,
+    },
+    take: limit,
+  });
+
+
+  const resDons = statusDons.map(don => ({
+    ...don,
+    id: bigint2number(don.id),
+    size: don.size_id,
+    createdAt: don.created_at,
+  }));
+
+  res.status(200).json(resDons);
 
 }));
 

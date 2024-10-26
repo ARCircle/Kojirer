@@ -129,14 +129,13 @@ export interface paths {
         /** @description 特定の状態の丼を取得する */
         get: {
             parameters: {
-                query?: {
+                query: {
+                    status: number;
                     /** @description 取得件数上限 */
                     limit?: number | null;
-                } | null;
-                header?: never | null;
-                path: {
-                    status: number;
                 };
+                header?: never | null;
+                path?: never | null;
                 cookie?: never | null;
             };
             requestBody?: never | null;
