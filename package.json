@@ -2,12 +2,13 @@
   "name": "kojirer",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "./node_modules/.bin/env-cmd -f .env node ./scripts/build.mjs",
     "start": "cd packages/backend/built && ../../../node_modules/.bin/env-cmd -f ../../../.env node index.js",
     "clean": "node ./scripts/clean.mjs",
     "dev": "./node_modules/.bin/env-cmd -f .env node ./scripts/dev.mjs",
+    "api": "npm run build -w packages/api",
     "migrate:create": "./node_modules/.bin/env-cmd -f .env npm run migrate:create -w packages/backend",
     "migrate:exe": "./node_modules/.bin/env-cmd -f .env npm run migrate:exe    -w packages/backend",
     "migrate:dev": "npm run migrate:exe",
@@ -19,7 +20,8 @@
   "license": "ISC",
   "workspaces": [
     "packages/frontend",
-    "packages/backend"
+    "packages/backend",
+    "packages/api"
   ],
   "dependencies": {
     "env-cmd": "^10.1.0"
