@@ -1,4 +1,5 @@
 import express from "express";
+import { ApiBody, ApiPath, ApiPathParam, ApiQueryParam, ApiResponse, HttpMethod } from '@/utils/schema';
 
 type Handler<T = express.Request, U = express.Response> = (
   req: T,
@@ -12,3 +13,11 @@ export const asyncWrapper = <T = express.Request, U = express.Response>(handler:
     .catch(next);
   }
 }
+
+export const typedAsyncWrapper = <Path extends ApiPath, Method extends HttpMethod> (
+  handler: (
+    req: express.Request<ApiPathParam<Path, Method>, any, ApiBody<Path, Method>, ApiQueryParam<Path, Method>>,
+    res: express.Response<ApiResponse<Path, Method>>,
+    next: express.NextFunction,
+  ) => Promise<any>
+) => asyncWrapper(handler);
