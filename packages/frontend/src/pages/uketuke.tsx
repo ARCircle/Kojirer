@@ -12,6 +12,7 @@ type ToppingProps = {
   name: string
   value: number
   setValue: (value: number) => void
+  mode: boolean
 }
 
 const SelectOption: React.FC<OptionProps> = ({ name, items, value, setValue }: OptionProps) => {
@@ -31,7 +32,7 @@ const SelectOption: React.FC<OptionProps> = ({ name, items, value, setValue }: O
   )
 }
 
-const SelectTopping: React.FC<ToppingProps> = ({ name, value, setValue }: ToppingProps) => {
+const SelectTopping: React.FC<ToppingProps> = ({ name, value, setValue, mode }: ToppingProps) => {
   const { getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
     value,
     min: 0,
@@ -44,7 +45,7 @@ const SelectTopping: React.FC<ToppingProps> = ({ name, value, setValue }: Toppin
   return (
     <Stack>
       <Button {...inc}>{name} ({value})</Button>
-      <Button {...dec}>-</Button>
+      {mode ? <Button {...dec}>-</Button> : <></>}
     </Stack>
   )
 }
@@ -58,6 +59,7 @@ const SelectDon = () => {
   const [friedOnion, setFriedOnion] = React.useState(0);
   const [curryPowder, setCurryPowder] = React.useState(0);
   const [lemonJuice, setLemonJuice] = React.useState(0);
+  const [doDecrement, setDoDecrement] = React.useState(false);
 
   return (
     <Box border='2px'>
@@ -72,22 +74,13 @@ const SelectDon = () => {
       </Box>
       <Box>
         <Center><Heading size='md'>トッピングを選択</Heading></Center>
+        <Center><Button onClick={() => setDoDecrement(!doDecrement)}>デクリメントモード ({doDecrement.toString()})</Button></Center>
         <Center>
-          <SelectTopping name="マヨネーズ" value={mayonezu} setValue={setMayonezu} />
-          <SelectTopping name="フライドオニオン" value={friedOnion} setValue={setFriedOnion} />
-          <SelectTopping name="カレー粉" value={curryPowder} setValue={setCurryPowder} />
-          <SelectTopping name="レモン果汁" value={lemonJuice} setValue={setLemonJuice} />
+          <SelectTopping name="マヨネーズ" value={mayonezu} setValue={setMayonezu} mode={doDecrement} />
+          <SelectTopping name="フライドオニオン" value={friedOnion} setValue={setFriedOnion} mode={doDecrement} />
+          <SelectTopping name="カレー粉" value={curryPowder} setValue={setCurryPowder} mode={doDecrement} />
+          <SelectTopping name="レモン果汁" value={lemonJuice} setValue={setLemonJuice} mode={doDecrement} />
         </Center>
-      </Box>
-      <Box>
-        <Heading>デバッグ</Heading>
-        <Box>カラメ:  {karame}</Box>
-        <Box>アブラ: {abura}</Box>
-        <Box>にんにく: {niniku}</Box>
-        <Box>マヨネーズ: {mayonezu}</Box>
-        <Box>フライドオニオン: {friedOnion}</Box>
-        <Box>カレー粉: {curryPowder}</Box>
-        <Box>レモン果汁: {lemonJuice}</Box>
       </Box>
     </Box>
   )
