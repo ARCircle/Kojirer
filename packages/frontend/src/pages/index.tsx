@@ -6,6 +6,7 @@ export default function Home() {
       <h1>Home</h1>
       <Button>Button</Button>
       <Link href='/yobidashi'>yobidashi</Link>
+      <Link href='/uketuke'>受付画面</Link>
     </>
   );
 }
