@@ -9,3 +9,5 @@ router.get('/', typedAsyncWrapper<"/options", "get">(async (req, res) => {
 
   res.send(options);
 }));
+
+export default router;
