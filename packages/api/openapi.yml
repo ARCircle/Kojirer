@@ -288,6 +288,7 @@ components:
               - amount
       required:
         - id
+        - orderId
         - size
         - yasai
         - ninniku
