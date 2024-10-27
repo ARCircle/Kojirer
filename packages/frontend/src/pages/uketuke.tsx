@@ -40,6 +40,7 @@ type SelectDonProps = {
 
 type OrderContentsProps = {
   dons: Don[]
+  setId: (value: number) => void
 }
 
 const SelectOption: React.FC<OptionProps> = ({ name, items, value, setValue }: OptionProps) => {
@@ -104,7 +105,12 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
         lemonJuice: lemonJuice
       }
     }
-    setDons([...dons, selectedDon])
+    if (dons.length === id) {
+      setDons([...dons, selectedDon])
+    }
+    else {
+      setDons(dons.map((don) => (don.id === id) ? selectedDon : don))
+    }
 
     setKarame('')
     setAbura('')
@@ -115,12 +121,33 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
     setLemonJuice(0)
     setDoDecrement(false)
 
-    setId(id + 1)
+    setId(dons.length)
   }
+
+  const initDon = React.useCallback(() => {
+    if (dons.length === id) {
+      // 追加モード
+      return
+    }
+
+    // 編集モード
+    setKarame(dons[id].options.karame)
+    setAbura(dons[id].options.abura)
+    setNiniku(dons[id].options.niniku)
+    setMayonezu(dons[id].toppings.mayonezu)
+    setFriedOnion(dons[id].toppings.friedOnion)
+    setCurryPowder(dons[id].toppings.curryPowder)
+    setLemonJuice(dons[id].toppings.lemonJuice)
+  }, [dons, id])
+
+  React.useEffect(() => {
+    initDon()
+  }, [id, initDon])
 
   return (
     <Box border='2px'>
-      <Center>丼の注文内容をここで決める</Center>
+      <Center><Heading>丼{id}を選択中</Heading></Center>
+      <Center><Heading size='md'>価格: ¥0</Heading></Center>
       <Box>
         <Center><Heading size='md'>オプションを選択</Heading></Center>
         <Center>
@@ -144,7 +171,7 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
   )
 }
 
-const OrderContents: React.FC<OrderContentsProps> = ({ dons }: OrderContentsProps) => {
+const OrderContents: React.FC<OrderContentsProps> = ({ dons, setId }: OrderContentsProps) => {
   return (
     <Box>
       <Center><Heading size='lg'>注文情報</Heading></Center>
@@ -162,7 +189,7 @@ const OrderContents: React.FC<OrderContentsProps> = ({ dons }: OrderContentsProp
                 <Text>フライドオニオン: {don.toppings.friedOnion}</Text>
                 <Text>カレー粉: {don.toppings.curryPowder}</Text>
                 <Text>レモン果汁: {don.toppings.lemonJuice}</Text>
-                <Center><Button colorScheme='green'>編集する</Button></Center>
+                <Center><Button colorScheme='green' onClick={() => setId(don.id)}>編集する</Button></Center>
               </CardBody>
             </Card>
           ))}
@@ -182,7 +209,7 @@ const Uketuke: React.FC = () => {
     <>
       <Center><Heading>受付画面</Heading></Center>
       <SelectDon id={DonId} setId={setDonId} dons={Dons} setDons={setDons} />
-      <OrderContents dons={Dons} />
+      <OrderContents dons={Dons} setId={setDonId} />
     </>
   )
 }
