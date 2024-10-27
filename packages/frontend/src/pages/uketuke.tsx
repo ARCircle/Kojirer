@@ -107,9 +107,11 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
     }
     if (dons.length === id) {
       setDons([...dons, selectedDon])
+      setId(dons.length + 1)
     }
     else {
       setDons(dons.map((don) => (don.id === id) ? selectedDon : don))
+      setId(dons.length)
     }
 
     setKarame('')
@@ -120,8 +122,6 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
     setCurryPowder(0)
     setLemonJuice(0)
     setDoDecrement(false)
-
-    setId(dons.length)
   }
 
   const initDon = React.useCallback(() => {
@@ -178,7 +178,7 @@ const OrderContents: React.FC<OrderContentsProps> = ({ dons, setId }: OrderConte
       <Center>
         <HStack>
           {dons.map((don) => (
-            <Card>
+            <Card key={don.id}>
               <CardHeader><Center><Heading>丼{don.id}</Heading></Center></CardHeader>
               <CardBody>
                 <Text>価格: ¥{don.price}</Text>
