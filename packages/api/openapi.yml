@@ -233,6 +233,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Order"
+  "/order/status":
+    get:
+      tags:
+        - order
+      description: |
+                  don のステータスに応じて Order を取得する。各ステータスの動作は以下の通り
+                  1: 一つでも調理中の don がある Order を全て取得
+                  2: 全ての don が調理済み かつ 受け渡しが完了していない Order を取得
+                  3: オーダー内の全ての don が受け渡し完了の Order を取得
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+      responses:
+        '200':
+          description: ステータスに応じた Order を返す
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+
   "/toppings":
     get:
       tags:
