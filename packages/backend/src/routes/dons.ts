@@ -87,33 +87,39 @@ router.post('/price', typedAsyncWrapper<"/dons/price", "post">(async (req, res) 
   res.status(200).send({ price });
 }));
 
-//GetDonByID
-//IDが指定されなかった場合，エラーメッセージを返す．
-router.get('/', asyncWrapper(async (req, res, next) => {
-  throw ApiError.invalidParams;
+
+router.get('/', typedAsyncWrapper<"/dons", "get">(async (req, res, next) => {
+  const dons = await prisma.dons.findMany();
+
+  const resDons = dons.map(don => ({
+    ...don,
+    id: bigint2number(don.id),
+    size: don.size_id,
+    order_id: bigint2number(don.order_id)
+  }));
+
+  res.status(200).json(resDons);
 
 }));
 
-//あるIDのDonの詳細を返す
-router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next) => {
 
-  //クエリパラメータを取得．
+router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next) => {
   const id = req.params.id;
 
-  //idが非負の整数に変換できるデータか，正規表現で検証する
+  // idが非負の整数に変換できるデータか，正規表現で検証する
   if( !/^\d+$/.test(`${id}`) ){
     throw ApiError.invalidParams();
   }
 
 
-  //そのIDのDonを取得する
+  // そのIDのDonを取得する
   const don = await prisma.dons.findUnique({
     where: {
       id: Number(id),
     },
   });
 
-  //そのIDのDonがない場合，エラーを返す．
+  // そのIDのDonがない場合，エラーを返す．
   if(!don){
     throw ApiError.internalProblems();
   }
@@ -125,10 +131,11 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     orderId: bigint2number(don.order_id),
   };
 
-  //とりあえずJSONで送る
+  // とりあえずJSONで送る
   res.status(200).json(resDon);
 
 }));
+
 
 router.get('/status', typedAsyncWrapper<"/dons/status/", "get">(async (req, res, next) => {
   const status = req.query.status;
@@ -152,6 +159,40 @@ router.get('/status', typedAsyncWrapper<"/dons/status/", "get">(async (req, res,
 
   res.status(200).json(resDons);
 
+}));
+
+
+router.put('/:id', typedAsyncWrapper<"/dons/{id}", "put">(async (req, res, next) => {
+  const id = req.params.id;
+  const status = req.body.status;
+
+  if (status != 1 && status != 2) {
+    if (status != 3) {
+      throw ApiError.invalidParams('You can only update status to 1, 2.');
+    }
+    if (status == 3) {
+      throw ApiError.invalidParams('Status 3 cannot be updated.');
+    }
+  }
+
+  const nextStatus = status + 1;
+
+  const updatedDon = await prisma.dons.update({
+    where: {
+      id: id,
+    },
+    data: {
+      status: nextStatus,
+    },
+  })
+
+  const response = {
+    ...updatedDon,
+    id: bigint2number(updatedDon.id),
+    size: updatedDon.size_id,
+  }
+
+  res.status(200).json(response);
 }));
 
 

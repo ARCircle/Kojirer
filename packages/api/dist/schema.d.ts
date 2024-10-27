@@ -1,4 +1,40 @@
 interface paths {
+    "/dons": {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        /** @description 全ての丼を取得 */
+        get: {
+            parameters: {
+                query?: never | null;
+                header?: never | null;
+                path?: never | null;
+                cookie?: never | null;
+            };
+            requestBody?: never | null;
+            responses: {
+                /** @description 成功 */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Don"][];
+                    };
+                };
+            };
+        };
+        put?: never | null;
+        post?: never | null;
+        delete?: never | null;
+        options?: never | null;
+        head?: never | null;
+        patch?: never | null;
+        trace?: never | null;
+    };
     "/dons/{id}": {
         parameters: {
             query?: never | null;
@@ -43,7 +79,7 @@ interface paths {
                 content: {
                     "application/json": {
                         /** Format: int32 */
-                        status?: number | null;
+                        status: number;
                     };
                 };
             };
@@ -217,7 +253,7 @@ interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        call_num: number;
+                        callNum: number;
                         dons: {
                             /** Format: int32 */
                             size: number;
@@ -334,8 +370,11 @@ type webhooks = Record<string, never>;
 interface components {
     schemas: {
         Don: {
+            /** Format: int32 */
             id: number;
             orderId: number;
+            /** Format: int32 */
+            callNum?: number | null;
             /** Format: int32 */
             size: number;
             /** Format: int32 */
@@ -366,17 +405,17 @@ interface components {
             detail: string;
         };
         Option: {
-            id?: number | null;
-            label?: string | null;
+            id: number;
+            label: string;
         };
         Order: {
             /** Format: int32 */
             id: number;
             /** Format: int32 */
-            callNum?: number | null;
+            callNum: number;
             /** Format: date-time */
             createdAt: Date;
-            dons?: components["schemas"]["Don"] | null;
+            dons?: components["schemas"]["Don"][] | null;
         };
         Topping: {
             /** Format: int32 */
