@@ -307,6 +307,84 @@ export interface paths {
         patch?: never | null;
         trace?: never | null;
     };
+    "/order/status": {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        get?: never | null;
+        /** @description 1つの order の中の全ての don の状態を targetStatus に更新する
+         *     order 単位で変更可能な status は 2 -> 3 or 3 -> 2 のみ.
+         *      */
+        put: {
+            parameters: {
+                query?: never | null;
+                header?: never | null;
+                path?: never | null;
+                cookie?: never | null;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** Format: int32 */
+                        targetStatus: number;
+                        /** Format: int32 */
+                        orderId: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description 更新後の Order を返す */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Order"];
+                    };
+                };
+            };
+        };
+        /** @description don のステータスに応じて Order を取得する。各ステータスの動作は以下の通り
+         *     1: 一つでも調理中の don がある Order を全て取得
+         *     2: 全ての don が調理済み かつ 受け渡しが完了していない Order を取得
+         *     3: オーダー内の全ての don が受け渡し完了の Order を取得
+         *      */
+        post: {
+            parameters: {
+                query?: never | null;
+                header?: never | null;
+                path?: never | null;
+                cookie?: never | null;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** Format: int32 */
+                        status: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description ステータスに応じた Order を返す */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Order"][];
+                    };
+                };
+            };
+        };
+        delete?: never | null;
+        options?: never | null;
+        head?: never | null;
+        patch?: never | null;
+        trace?: never | null;
+    };
     "/toppings": {
         parameters: {
             query?: never | null;
@@ -387,6 +465,8 @@ export interface components {
             /** Format: int32 */
             callNum: number;
             /** Format: int32 */
+            status: number;
+            /** Format: int32 */
             orderId: number;
             /** Format: int32 */
             size: number;
@@ -428,7 +508,11 @@ export interface components {
             callNum: number;
             /** Format: date-time */
             createdAt: Date;
-            dons?: components["schemas"]["Don"][] | null;
+            /** Format: int32 */
+            donsCount: number;
+            /** Format: int32 */
+            cookingDonsCount: number;
+            dons: components["schemas"]["Don"][];
         };
         Topping: {
             /** Format: int32 */

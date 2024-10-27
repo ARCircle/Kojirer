@@ -235,6 +235,65 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Order"
+  "/order/status":
+    post:
+      tags:
+        - order
+      description: |
+                  don のステータスに応じて Order を取得する。各ステータスの動作は以下の通り
+                  1: 一つでも調理中の don がある Order を全て取得
+                  2: 全ての don が調理済み かつ 受け渡しが完了していない Order を取得
+                  3: オーダー内の全ての don が受け渡し完了の Order を取得
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+              required:
+                - status
+      responses:
+        '200':
+          description: ステータスに応じた Order を返す
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    put:
+      tags:
+        - order
+      description: |
+        1つの order の中の全ての don の状態を targetStatus に更新する
+        order 単位で変更可能な status は 2 -> 3 or 3 -> 2 のみ.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targetStatus:
+                  type: integer
+                  format: int32
+                orderId:
+                  type: integer
+                  format: int32
+              required:
+                - targetStatus
+                - orderId
+      responses:
+        '200':
+          description: 更新後の Order を返す
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
   "/toppings":
     get:
       tags:
@@ -270,6 +329,9 @@ components:
           type: integer
           format: int32
         callNum:
+          type: integer
+          format: int32
+        status:
           type: integer
           format: int32
         orderId:
@@ -312,6 +374,7 @@ components:
       required:
         - id
         - orderId
+        - status
         - callNum
         - size
         - yasai
@@ -360,6 +423,12 @@ components:
         createdAt:
           type: string
           format: date-time
+        donsCount:
+          type: integer
+          format: int32
+        cookingDonsCount:
+          type: integer
+          format: int32
         dons:
           type: array
           items:
@@ -368,7 +437,9 @@ components:
         - id
         - callNum
         - createdAt
-        - order
+        - donsCount
+        - cookingDonsCount
+        - dons
     Topping:
       type: object
       properties:
