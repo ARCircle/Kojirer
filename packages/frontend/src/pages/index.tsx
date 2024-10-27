@@ -8,6 +8,7 @@ export default function Home() {
       <Button>Button</Button>
       <Link to='/yobidashi'>yobidashi</Link>
       <Link to='/kitchen'>kitchen</Link>
+      <Link to='/uketuke'>受付画面</Link>
     </>
   );
 }
