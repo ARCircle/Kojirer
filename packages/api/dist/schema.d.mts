@@ -165,14 +165,13 @@ interface paths {
         /** @description 特定の状態の丼を取得する */
         get: {
             parameters: {
-                query?: {
+                query: {
+                    status: number;
                     /** @description 取得件数上限 */
                     limit?: number | null;
-                } | null;
-                header?: never | null;
-                path: {
-                    status: number;
                 };
+                header?: never | null;
+                path?: never | null;
                 cookie?: never | null;
             };
             requestBody?: never | null;
@@ -183,7 +182,7 @@ interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["Order"][];
+                        "application/json": components["schemas"]["Don"][];
                     };
                 };
             };
@@ -254,7 +253,7 @@ interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        call_num: number;
+                        callNum: number;
                         dons: {
                             /** Format: int32 */
                             size: number;
@@ -371,7 +370,10 @@ type webhooks = Record<string, never>;
 interface components {
     schemas: {
         Don: {
+            /** Format: int32 */
             id: number;
+            /** Format: int32 */
+            callNum?: number | null;
             /** Format: int32 */
             size: number;
             /** Format: int32 */
@@ -409,10 +411,10 @@ interface components {
             /** Format: int32 */
             id: number;
             /** Format: int32 */
-            callNum?: number | null;
+            callNum: number;
             /** Format: date-time */
             createdAt: Date;
-            dons?: components["schemas"]["Don"] | null;
+            dons?: components["schemas"]["Don"][] | null;
         };
         Topping: {
             /** Format: int32 */

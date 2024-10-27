@@ -61,6 +61,12 @@ Kojirerのコア部分．基本的にここをいじくることになる．
 #### Routeの追加
 tsファイルを`src/routes`に追加すると，そのファイル名のパスが作られる．
 
+### APIスキーマ編集
+バックエンド側の型再生成
+```bash
+npm run api
+```
+
 #### DBマイグレーション
 データベースへのテーブルの追加や編集といったスキーマへの操作を記録し，それらを逐次実行することで，開発者間で環境を揃えることをマイグレーションという．
 
@@ -73,7 +79,7 @@ tsファイルを`src/routes`に追加すると，そのファイル名のパス
 #### 開発用データのInsert
 `.devcontainer`の外，すなわちWSL上の`Kojirer`ディレクトリにおいて，以下のコマンドを実行．
 ```bash
- docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql 
+ docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
 ```
 
 ### pakages/frontend
