@@ -270,6 +270,9 @@ components:
         callNum:
           type: integer
           format: int32
+        orderId:
+          type: integer
+          format: int32
         size:
           type: integer
           format: int32
@@ -306,6 +309,8 @@ components:
               - amount
       required:
         - id
+        - orderId
+        - callNum
         - size
         - yasai
         - ninniku

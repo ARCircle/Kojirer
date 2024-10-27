@@ -89,13 +89,20 @@ router.post('/price', typedAsyncWrapper<"/dons/price", "post">(async (req, res) 
 
 
 router.get('/', typedAsyncWrapper<"/dons", "get">(async (req, res, next) => {
-  const dons = await prisma.dons.findMany();
+  const dons = await prisma.dons.findMany(
+    {
+      include: {
+        orders: true,
+      },
+    }
+  );
 
   const resDons = dons.map(don => ({
     ...don,
     id: bigint2number(don.id),
     size: don.size_id,
-    order_id: bigint2number(don.order_id)
+    orderId: bigint2number(don.order_id),
+    callNum: don.orders.call_num,
   }));
 
   res.status(200).json(resDons);
@@ -111,10 +118,17 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     throw ApiError.invalidParams();
   }
 
+
   // そのIDのDonを取得する
   const don = await prisma.dons.findUnique({
     where: {
       id: Number(id),
+    },
+  });
+
+  const order = await prisma.orders.findFirstOrThrow({
+    where: {
+      id: Number(don?.order_id),
     },
   });
 
@@ -127,13 +141,45 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     ...don,
     size: don.size_id,
     id: bigint2number(don.id),
-    order_id: bigint2number(don.order_id)
+    orderId: bigint2number(don.order_id),
+    callNum: order.call_num,
   };
 
   // とりあえずJSONで送る
   res.status(200).json(resDon);
 
 }));
+
+
+router.get('/status', typedAsyncWrapper<"/dons/status/", "get">(async (req, res, next) => {
+  const status = req.query.status;
+  const limit = req.query.limit? Number(req.query.limit) : 10;
+
+  const statusDons = await prisma.dons.findMany({
+    where: {
+      status: status,
+    },
+    take: limit,
+    include: {
+      orders: true,
+    },
+  });
+
+
+  const resDons = statusDons.map(don => ({
+    ...don,
+    id: bigint2number(don.id),
+    createdAt: don.created_at,
+    size: don.size_id,
+    orderId: bigint2number(don.order_id),
+    callNum: don.orders.call_num,
+  }));
+
+
+  res.status(200).json(resDons);
+
+}));
+
 
 router.put('/:id', typedAsyncWrapper<"/dons/{id}", "put">(async (req, res, next) => {
   const id = req.params.id;
@@ -157,15 +203,21 @@ router.put('/:id', typedAsyncWrapper<"/dons/{id}", "put">(async (req, res, next)
     data: {
       status: nextStatus,
     },
+    include: {
+      orders: true,
+    },
   })
 
   const response = {
     ...updatedDon,
     id: bigint2number(updatedDon.id),
     size: updatedDon.size_id,
+    orderId: bigint2number(updatedDon.order_id),
+    callNum: updatedDon.orders.call_num,
   }
 
   res.status(200).json(response);
 }));
+
 
 export default router;
