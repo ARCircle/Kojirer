@@ -1,4 +1,4 @@
-import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput } from '@chakra-ui/react'
+import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput, Card, HStack } from '@chakra-ui/react'
 import React from 'react'
 
 type OptionProps = {
@@ -86,14 +86,34 @@ const SelectDon = () => {
   )
 }
 
+const OrderContents = () => {
+  return (
+    <Box>
+      <Center><Heading size='lg'>注文情報</Heading></Center>
+      <Center>
+        <HStack>
+          {[...Array(5).keys()].map((i) => (
+            <Card>
+              <Center>丼の情報{i}</Center>
+            </Card>
+          ))}
+        </HStack>
+      </Center>
+      <Center>
+        <Button colorScheme='blue'>確定する</Button>
+      </Center>
+    </Box>
+  )
+}
+
 const Uketuke: React.FC = () => {
   return (
     <>
       <Center><Heading>受付画面</Heading></Center>
       <SelectDon />
+      <OrderContents />
     </>
   )
 }
 
 export default Uketuke
-
