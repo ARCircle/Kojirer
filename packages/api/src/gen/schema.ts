@@ -182,7 +182,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["Order"][];
+                        "application/json": components["schemas"]["Don"][];
                     };
                 };
             };
