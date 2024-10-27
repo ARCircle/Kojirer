@@ -1,4 +1,4 @@
-import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput, Card, HStack } from '@chakra-ui/react'
+import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput, Card, HStack, CardHeader, CardBody, Text } from '@chakra-ui/react'
 import React from 'react'
 
 type Don = {
@@ -152,7 +152,18 @@ const OrderContents: React.FC<OrderContentsProps> = ({ dons }: OrderContentsProp
         <HStack>
           {dons.map((don) => (
             <Card>
-              <Center>丼の情報:{don.id}</Center>
+              <CardHeader><Center><Heading>丼{don.id}</Heading></Center></CardHeader>
+              <CardBody>
+                <Text>価格: ¥{don.price}</Text>
+                <Text>カラメ: {don.options.karame}</Text>
+                <Text>アブラ: {don.options.abura}</Text>
+                <Text>にんにく: {don.options.niniku}</Text>
+                <Text>マヨネーズ: {don.toppings.mayonezu}</Text>
+                <Text>フライドオニオン: {don.toppings.friedOnion}</Text>
+                <Text>カレー粉: {don.toppings.curryPowder}</Text>
+                <Text>レモン果汁: {don.toppings.lemonJuice}</Text>
+                <Center><Button colorScheme='green'>編集する</Button></Center>
+              </CardBody>
             </Card>
           ))}
         </HStack>
