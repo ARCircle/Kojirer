@@ -72,8 +72,7 @@ const SelectTopping: React.FC<ToppingProps> = ({ name, value, setValue, mode }: 
   const dec = getDecrementButtonProps()
   return (
     <Stack>
-      <Button {...inc}>{name} ({value})</Button>
-      {mode ? <Button {...dec}>-</Button> : <></>}
+      <Button {...(mode ? dec : inc)} colorScheme={mode && value !== 0 ? 'red' : 'gray'}>{name} ({value})</Button>
     </Stack>
   )
 }
@@ -90,6 +89,7 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
   const [doDecrement, setDoDecrement] = React.useState(false);
 
   const submitDon = () => {
+    // [TODO] 丼の情報が変わるたびにBEから価格を取得するようにする
     const selectedDon: Don = {
       id: id,
       price: 0,
