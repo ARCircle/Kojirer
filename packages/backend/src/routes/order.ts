@@ -1,8 +1,13 @@
 import prisma from '@/lib/prismaClient';
+import { orders } from '@prisma/client';
 import { bigint2number } from '@/utils/typeConverters';
 import { typedAsyncWrapper } from '@/utils/wrappers';
 import express from 'express';
 import util from 'util';
+
+const COOKING = 1;
+const CALLING = 2;
+const FINISHED = 3;
 
 /**
  * モデル
@@ -24,7 +29,9 @@ interface Don {
 
 // 注文のモデル
 interface Order {
+  id: number;
   call_num: number;
+  created_at: Date;
   dons: Don[];
 }
 
@@ -150,6 +157,56 @@ async function saveOrder(req: express.Request, res: express.Response, next: expr
 
 router.get("/status", typedAsyncWrapper<"/order/status", "get">(async (req, res, next) => {
   const status = req.body.status;
+
+  let statusOrders: orders[] = [];
+
+  switch (status) {
+    case COOKING:
+      // 一つでも調理中の丼があれば，Order は調理中とする
+      statusOrders = await prisma.orders.findMany({
+        where: {
+          dons: {
+            some: {
+              status: COOKING
+            }
+          }
+        }
+      });
+    case CALLING:
+      // 全ての丼が呼び出し中であれば，Order は呼び出し中とする
+      statusOrders =　await prisma.orders.findMany({
+        where: {
+          dons: {
+            every: {
+              status: CALLING
+            }
+          }
+        }
+      });
+    case FINISHED:
+      // 全ての丼が完了していれば，Order は完了とする
+      statusOrders = await prisma.orders.findMany({
+        where: {
+          dons: {
+            every: {
+              status: FINISHED
+            }
+          }
+        }
+      });
+    default:
+      break;
+  }
+
+  const response = statusOrders.map(order => ({
+    ...order,
+    id: bigint2number(order.id),
+    callNum: order.call_num,
+    createdAt: order.created_at
+  }));
+
+  res.status(200).json(response);
+
 }));
 
 export default router;
