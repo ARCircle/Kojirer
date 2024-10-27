@@ -4,6 +4,7 @@ import { bigint2number } from '@/utils/typeConverters';
 import { typedAsyncWrapper } from '@/utils/wrappers';
 import express from 'express';
 import util from 'util';
+import { ApiError } from '@/utils/ApiError';
 
 const COOKING = 1;
 const CALLING = 2;
@@ -207,6 +208,57 @@ router.get("/status", typedAsyncWrapper<"/order/status", "get">(async (req, res,
 
   res.status(200).json(response);
 
+}));
+
+router.put("/status", typedAsyncWrapper<"/order/status", "put">(async (req, res, next) => {
+  const orderId = req.body.orderId;
+  const targetStatus = req.body.targetStatus;
+
+  const orderDons = await prisma.dons.findMany({
+    where: {
+      order_id: BigInt(orderId)
+    }
+  });
+
+  if (targetStatus == 3) {
+    // 全ての don が 2 でない場合はエラー
+    if (orderDons.some(don => don.status != 2)) {
+      throw ApiError.invalidParams('you can only update status to 3 when all dons are 2');
+    }
+  }
+  if (targetStatus == 2) {
+    // 全ての don が 3 でない場合はエラー
+    if (orderDons.some(don => don.status != 3)) {
+      throw ApiError.invalidParams('you can only update status to 2 when all dons are 3');
+    }
+  }
+
+  const updatedOrder = await prisma.orders.update({
+    where: {
+      id: BigInt(orderId)
+    },
+    data: {
+      dons: {
+        updateMany: {
+          where: {
+            order_id: BigInt(orderId)
+          },
+          data: {
+            status: targetStatus
+          }
+        }
+      }
+    }
+  });
+
+  const response = {
+    ...updatedOrder,
+    id: bigint2number(updatedOrder.id),
+    callNum: updatedOrder.call_num,
+    createdAt: updatedOrder.created_at
+  };
+
+  res.status(200).json(response);
 }));
 
 export default router;
