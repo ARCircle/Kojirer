@@ -4,7 +4,7 @@ import React from 'react'
 type Don = {
   id: number
   price: number
-  options: {
+  customizes: {
     karame: string
     abura: string
     niniku: string
@@ -17,7 +17,7 @@ type Don = {
   }
 }
 
-type OptionProps = {
+type CustomizeProps = {
   name: string
   items: string[]
   value: string
@@ -43,7 +43,7 @@ type OrderContentsProps = {
   setId: (value: number) => void
 }
 
-const SelectOption: React.FC<OptionProps> = ({ name, items, value, setValue }: OptionProps) => {
+const SelectCustomize: React.FC<CustomizeProps> = ({ name, items, value, setValue }: CustomizeProps) => {
   return (
     <Box>
       <Center><Heading size='sm'>{name}({value})</Heading></Center>
@@ -93,7 +93,7 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
     const selectedDon: Don = {
       id: id,
       price: 0,
-      options: {
+      customizes: {
         karame: karame,
         abura: abura,
         niniku: niniku
@@ -131,9 +131,9 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
     }
 
     // 編集モード
-    setKarame(dons[id].options.karame)
-    setAbura(dons[id].options.abura)
-    setNiniku(dons[id].options.niniku)
+    setKarame(dons[id].customizes.karame)
+    setAbura(dons[id].customizes.abura)
+    setNiniku(dons[id].customizes.niniku)
     setMayonezu(dons[id].toppings.mayonezu)
     setFriedOnion(dons[id].toppings.friedOnion)
     setCurryPowder(dons[id].toppings.curryPowder)
@@ -149,11 +149,11 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
       <Center><Heading>丼{id}を選択中</Heading></Center>
       <Center><Heading size='md'>価格: ¥0</Heading></Center>
       <Box>
-        <Center><Heading size='md'>オプションを選択</Heading></Center>
+        <Center><Heading size='md'>カスタマイズを選択</Heading></Center>
         <Center>
-          <SelectOption name="カラメ" items={['無', '並', 'マシ', 'マシマシ']} value={karame} setValue={setKarame} />
-          <SelectOption name="アブラ" items={['無', '並', 'マシ', 'マシマシ']} value={abura} setValue={setAbura} />
-          <SelectOption name="にんにく" items={['無', '並', 'マシ', 'マシマシ']} value={niniku} setValue={setNiniku} />
+          <SelectCustomize name="カラメ" items={['無', '並', 'マシ', 'マシマシ']} value={karame} setValue={setKarame} />
+          <SelectCustomize name="アブラ" items={['無', '並', 'マシ', 'マシマシ']} value={abura} setValue={setAbura} />
+          <SelectCustomize name="にんにく" items={['無', '並', 'マシ', 'マシマシ']} value={niniku} setValue={setNiniku} />
         </Center>
       </Box>
       <Box>
@@ -182,9 +182,9 @@ const OrderContents: React.FC<OrderContentsProps> = ({ dons, setId }: OrderConte
               <CardHeader><Center><Heading>丼{don.id}</Heading></Center></CardHeader>
               <CardBody>
                 <Text>価格: ¥{don.price}</Text>
-                <Text>カラメ: {don.options.karame}</Text>
-                <Text>アブラ: {don.options.abura}</Text>
-                <Text>にんにく: {don.options.niniku}</Text>
+                <Text>カラメ: {don.customizes.karame}</Text>
+                <Text>アブラ: {don.customizes.abura}</Text>
+                <Text>にんにく: {don.customizes.niniku}</Text>
                 <Text>マヨネーズ: {don.toppings.mayonezu}</Text>
                 <Text>フライドオニオン: {don.toppings.friedOnion}</Text>
                 <Text>カレー粉: {don.toppings.curryPowder}</Text>
