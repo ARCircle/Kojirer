@@ -1,6 +1,7 @@
 import express from "express";
 import fs from 'fs';
 import path from 'path';
+import cors from 'cors';
 import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
@@ -10,6 +11,7 @@ const port = 52600;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public'))); 
 app.use(express.static(path.join(__dirname, 'web'))); 
+app.use(cors())
 
 // routesのファイル名の配列を取得
 const filenames = fs.readdirSync(path.join(__dirname, 'routes'));
