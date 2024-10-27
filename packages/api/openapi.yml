@@ -13,24 +13,38 @@ tags:
   - name: order
 
 paths:
+  "/dons":
+    get:
+      tags:
+        - don
+      description: 全ての丼を取得
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Don"
   "/dons/{id}":
     get:
-      tags: 
+      tags:
         - don
       description: 特定のidの丼の詳細を取得
       parameters:
         - name: id
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
             format: int32
       responses:
-        '200': 
+        '200':
           description: 丼の詳細を返す
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: "#/components/schemas/Don"
     put:
       tags:
@@ -40,7 +54,7 @@ paths:
         - name: id
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
             format: int32
       requestBody:
@@ -50,32 +64,32 @@ paths:
             schema:
               type: object
               properties:
-                status: 
+                status:
                   type: integer
                   format: int32
               required:
                 - donId
-                  afterStatus
+                - status
       responses:
-        '201': 
+        '201':
           description: 調理状態の変更に成功
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: "#/components/schemas/Don"
   "/dons/price":
     post:
-      tags: 
+      tags:
         - don
       description: 特定の条件の場合の丼の値段を取得
       requestBody:
         required: true
         content:
           application/json:
-            schema: 
+            schema:
               type: object
               properties:
-                size: 
+                size:
                   type: integer
                   format: int32
                 toppings:
@@ -83,10 +97,10 @@ paths:
                   items:
                     type: object
                     properties:
-                      id: 
+                      id:
                         type: integer
                         format: int32
-                      amount: 
+                      amount:
                         type: integer
                         format: int32
                     required:
@@ -98,18 +112,18 @@ paths:
                 - size
                 - snsFollowed
       responses:
-        '200': 
+        '200':
           description: 価格を返す
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
-                  price: 
+                  price:
                     type: integer
                     format: int32
   "/dons/status/":
-    get: 
+    get:
       tags:
         - don
       description: 特定の状態の丼を取得する
@@ -117,7 +131,7 @@ paths:
         - name: status
           in: path
           required: true
-          schema: 
+          schema:
             type: integer
             format: int32
             description: 調理状態
@@ -134,7 +148,7 @@ paths:
           description: 注文の一覧を正常に取得
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/Order"
@@ -147,24 +161,24 @@ paths:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Option'
   "/order":
     post:
-      tags: 
-        - order 
+      tags:
+        - order
       summary: 新規注文を追加
       description: 新規注文を含むリクエストに対して，DBにその内容を保存し，作成した内容をレスポンスする
       requestBody:
         required: true
         content:
           application/json:
-            schema: 
+            schema:
               type: object
               properties:
                 call_num:
                   type: integer
-                dons: 
+                dons:
                   type: array
                   items:
                     type: object
@@ -184,19 +198,19 @@ paths:
                       abura:
                         type: integer
                         format: int32
-                      snsFollowed: 
+                      snsFollowed:
                         type: boolean
                       toppings:
                         type: array
                         items:
                           type: object
                           properties:
-                            id: 
+                            id:
                               type: integer
                               format: int32
                             label:
                               type: string
-                            amount: 
+                            amount:
                               type: integer
                               format: int32
                           required:
@@ -217,31 +231,31 @@ paths:
           description: 注文の追加が成功
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: "#/components/schemas/Order"
   "/toppings":
     get:
-      tags: 
+      tags:
         - topping
       responses:
         '200':
           description: すべてのトッピングを返す
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/Topping"
   "/toppings/available":
     get:
-      tags: 
+      tags:
         - topping
       responses:
         '200':
           description: すべてのトッピングを返す
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/Topping"
@@ -267,19 +281,19 @@ components:
         abura:
           type: integer
           format: int32
-        snsFollowed: 
+        snsFollowed:
           type: boolean
         toppings:
           type: array
           items:
             type: object
             properties:
-              id: 
+              id:
                 type: integer
                 format: int32
               label:
                 type: string
-              amount: 
+              amount:
                 type: integer
                 format: int32
             required:
@@ -293,19 +307,19 @@ components:
         - ninniku
         - karame
         - abura
-    Error: 
+    Error:
       type: object
-      properties: 
+      properties:
         title:
           type: string
           description: エラーを簡潔に表現したコード
-        type: 
+        type:
           type: string
           description: エラーの詳細ドキュメントを指すURL
         status:
           type: number
           description: HTTPステータスコード
-        detail: 
+        detail:
           type: string
           description: 開発者向けの詳細文
       required:
@@ -316,9 +330,9 @@ components:
     Option:
       type: object
       properties:
-        id: 
+        id:
           type: integer
-        label: 
+        label:
           type: string
     Order:
       type: object
@@ -342,7 +356,7 @@ components:
     Topping:
       type: object
       properties:
-        id: 
+        id:
           type: integer
           format: int32
         label:
@@ -350,5 +364,5 @@ components:
         price:
           type: integer
           format: int32
-    
+
 

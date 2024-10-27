@@ -1,4 +1,40 @@
 export interface paths {
+    "/dons": {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        /** @description 全ての丼を取得 */
+        get: {
+            parameters: {
+                query?: never | null;
+                header?: never | null;
+                path?: never | null;
+                cookie?: never | null;
+            };
+            requestBody?: never | null;
+            responses: {
+                /** @description 成功 */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Don"][];
+                    };
+                };
+            };
+        };
+        put?: never | null;
+        post?: never | null;
+        delete?: never | null;
+        options?: never | null;
+        head?: never | null;
+        patch?: never | null;
+        trace?: never | null;
+    };
     "/dons/{id}": {
         parameters: {
             query?: never | null;
@@ -43,7 +79,7 @@ export interface paths {
                 content: {
                     "application/json": {
                         /** Format: int32 */
-                        status?: number | null;
+                        status: number;
                     };
                 };
             };
