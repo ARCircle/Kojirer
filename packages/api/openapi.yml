@@ -176,7 +176,7 @@ paths:
             schema:
               type: object
               properties:
-                call_num:
+                callNum:
                   type: integer
                 dons:
                   type: array
@@ -224,7 +224,7 @@ paths:
                       - karame
                       - abura
               required:
-                - call_num
+                - callNum
                 - dons
       responses:
         '201':
@@ -267,7 +267,7 @@ components:
         id:
           type: integer
           format: int32
-        order_id:
+        callNum:
           type: integer
           format: int32
         size:
@@ -356,7 +356,7 @@ components:
             $ref: "#/components/schemas/Don"
       required:
         - id
-        - call_num
+        - callNum
         - createdAt
         - order
     Topping:
