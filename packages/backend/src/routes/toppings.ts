@@ -42,7 +42,7 @@ router.get('/available', asyncWrapper(async (req, res, next) => {
 }));
 
 //get all
-router.get('/all', asyncWrapper(async (req, res, next) => {
+router.get('/', asyncWrapper(async (req, res, next) => {
   const toppings = await prisma.toppings.findMany({
     //include topping_prices table
     include: {

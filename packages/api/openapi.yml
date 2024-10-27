@@ -123,26 +123,28 @@ paths:
                     type: integer
                     format: int32
   "/dons/status/":
-    get:
+    post:
       tags:
         - don
       description: 特定の状態の丼を取得する
-      parameters:
-        - name: status
-          in: query
-          required: true
-          schema:
-            type: integer
-            format: int32
-            description: 調理状態
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-            default: 10
-          description: 取得件数上限
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+                  description: 調理状態
+                limit:
+                  type: integer
+                  format: int32
+                  default: 10
+                  description: 取得件数上限
+              required:
+                - status
       responses:
         '200':
           description: 注文の一覧を正常に取得

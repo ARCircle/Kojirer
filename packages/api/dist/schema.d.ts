@@ -162,19 +162,33 @@ interface paths {
             path?: never | null;
             cookie?: never | null;
         };
+        get?: never | null;
+        put?: never | null;
         /** @description 特定の状態の丼を取得する */
-        get: {
+        post: {
             parameters: {
-                query: {
-                    status: number;
-                    /** @description 取得件数上限 */
-                    limit?: number | null;
-                };
+                query?: never | null;
                 header?: never | null;
                 path?: never | null;
                 cookie?: never | null;
             };
-            requestBody?: never | null;
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: int32
+                         * @description 調理状態
+                         */
+                        status: number;
+                        /**
+                         * Format: int32
+                         * @description 取得件数上限
+                         * @default 10
+                         */
+                        limit?: number | null;
+                    };
+                };
+            };
             responses: {
                 /** @description 注文の一覧を正常に取得 */
                 200: {
@@ -187,8 +201,6 @@ interface paths {
                 };
             };
         };
-        put?: never | null;
-        post?: never | null;
         delete?: never | null;
         options?: never | null;
         head?: never | null;
