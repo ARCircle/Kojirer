@@ -146,7 +146,7 @@ interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["Don"][];
+                        "application/json": components["schemas"]["Order"][];
                     };
                 };
             };
@@ -335,7 +335,6 @@ interface components {
     schemas: {
         Don: {
             id: number;
-            orderId: number;
             /** Format: int32 */
             size: number;
             /** Format: int32 */
