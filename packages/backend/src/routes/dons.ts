@@ -98,15 +98,17 @@ router.get('/', typedAsyncWrapper<"/dons", "get">(async (req, res, next) => {
   );
 
   const resDons = dons.map(don => ({
-    ...don,
-    id: bigint2number(don.id),
     size: don.size_id,
-    orderId: bigint2number(don.order_id),
     callNum: don.orders.call_num,
+    orderId: bigint2number(don.order_id),
+    id: bigint2number(don.id),
+    createdAt: don.created_at,
+    yasai: don.yasai,
+    ninniku: don.ninniku,
+    abura: don.abura,
+    karame: don.karame,
   }));
-
-  res.status(200).json(resDons);
-
+  res.status(200).send(resDons);
 }));
 
 
@@ -138,22 +140,25 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
   }
 
   const resDon = {
-    ...don,
     size: don.size_id,
     id: bigint2number(don.id),
     orderId: bigint2number(don.order_id),
     callNum: order.call_num,
+    createdAt: don.created_at,
+    yasai: don.yasai,
+    ninniku: don.ninniku,
+    abura: don.abura,
+    karame: don.karame,
   };
 
-  // とりあえずJSONで送る
-  res.status(200).json(resDon);
+  res.status(200).send(resDon);
 
 }));
 
 
-router.get('/status', typedAsyncWrapper<"/dons/status/", "get">(async (req, res, next) => {
-  const status = req.query.status;
-  const limit = req.query.limit? Number(req.query.limit) : 10;
+router.post('/status/', typedAsyncWrapper<"/dons/status/", "post">(async (req, res, next) => {
+  const status = req.body.status;
+  const limit = req.body.limit ? Number(req.body.limit) : 10;
 
   const statusDons = await prisma.dons.findMany({
     where: {
@@ -167,12 +172,15 @@ router.get('/status', typedAsyncWrapper<"/dons/status/", "get">(async (req, res,
 
 
   const resDons = statusDons.map(don => ({
-    ...don,
     id: bigint2number(don.id),
     createdAt: don.created_at,
     size: don.size_id,
     orderId: bigint2number(don.order_id),
     callNum: don.orders.call_num,
+    yasai: don.yasai,
+    ninniku: don.ninniku,
+    abura: don.abura,
+    karame: don.karame,
   }));
 
 
@@ -209,11 +217,15 @@ router.put('/:id', typedAsyncWrapper<"/dons/{id}", "put">(async (req, res, next)
   })
 
   const response = {
-    ...updatedDon,
     id: bigint2number(updatedDon.id),
     size: updatedDon.size_id,
     orderId: bigint2number(updatedDon.order_id),
     callNum: updatedDon.orders.call_num,
+    createdAt: updatedDon.created_at,
+    yasai: updatedDon.yasai,
+    ninniku: updatedDon.ninniku,
+    abura: updatedDon.abura,
+    karame: updatedDon.karame,
   }
 
   res.status(200).json(response);
