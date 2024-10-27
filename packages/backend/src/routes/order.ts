@@ -1,5 +1,5 @@
 import prisma from '@/lib/prismaClient';
-import { orders } from '@prisma/client';
+import { dons } from '@prisma/client';
 import { bigint2number } from '@/utils/typeConverters';
 import { typedAsyncWrapper } from '@/utils/wrappers';
 import express from 'express';
@@ -35,6 +35,14 @@ interface Order {
   created_at: Date;
   dons: Don[];
 }
+
+type orders = {
+  id: bigint;
+  created_at: Date;
+  call_num: number;
+  dons: dons[]; // prismのorders型そのまま使うとdonsがなかったので独自定義
+};
+
 
 /**
  * ルーティング
@@ -156,7 +164,7 @@ async function saveOrder(req: express.Request, res: express.Response, next: expr
   }
 }
 
-router.get("/status", typedAsyncWrapper<"/order/status", "get">(async (req, res, next) => {
+router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, res, next) => {
   const status = req.body.status;
 
   let statusOrders: orders[] = [];
@@ -171,8 +179,12 @@ router.get("/status", typedAsyncWrapper<"/order/status", "get">(async (req, res,
               status: COOKING
             }
           }
+        },
+        include: {
+          dons: true
         }
       });
+      break;
     case CALLING:
       // 全ての丼が呼び出し中であれば，Order は呼び出し中とする
       statusOrders =　await prisma.orders.findMany({
@@ -182,8 +194,12 @@ router.get("/status", typedAsyncWrapper<"/order/status", "get">(async (req, res,
               status: CALLING
             }
           }
+        },
+        include: {
+          dons: true
         }
       });
+      break;
     case FINISHED:
       // 全ての丼が完了していれば，Order は完了とする
       statusOrders = await prisma.orders.findMany({
@@ -193,17 +209,34 @@ router.get("/status", typedAsyncWrapper<"/order/status", "get">(async (req, res,
               status: FINISHED
             }
           }
+        },
+        include: {
+          dons: true
         }
       });
+      break;
     default:
       break;
   }
 
   const response = statusOrders.map(order => ({
-    ...order,
     id: bigint2number(order.id),
     callNum: order.call_num,
-    createdAt: order.created_at
+    createdAt: order.created_at,
+    dons: order.dons.map(don => ({
+      id: bigint2number(don.id),
+      yasai: don.yasai,
+      ninniku: don.ninniku,
+      karame: don.karame,
+      abura: don.abura,
+      snsFollowed: don.sns_followed,
+      callNum: order.call_num,
+      orderId: bigint2number(don.order_id),
+      size: don.size_id,
+      status: don.status,
+    })),
+    donsCount: order.dons.length,
+    cookingDonsCount: order.dons.reduce((count, don) => don.status === COOKING ? count + 1 : count, 0), // 調理中の丼の数
   }));
 
   res.status(200).json(response);
@@ -248,14 +281,30 @@ router.put("/status", typedAsyncWrapper<"/order/status", "put">(async (req, res,
           }
         }
       }
+    },
+    include: {
+      dons: true
     }
   });
 
   const response = {
-    ...updatedOrder,
     id: bigint2number(updatedOrder.id),
     callNum: updatedOrder.call_num,
-    createdAt: updatedOrder.created_at
+    createdAt: updatedOrder.created_at,
+    dons: updatedOrder.dons.map(don => ({
+      id: bigint2number(don.id),
+      yasai: don.yasai,
+      ninniku: don.ninniku,
+      karame: don.karame,
+      abura: don.abura,
+      snsFollowed: don.sns_followed,
+      callNum: updatedOrder.call_num,
+      orderId: bigint2number(don.order_id),
+      size: don.size_id,
+      status: don.status,
+    })),
+    donsCount: updatedOrder.dons.length,
+    cookingDonsCount: updatedOrder.dons.filter(don => don.status == COOKING).length,
   };
 
   res.status(200).json(response);

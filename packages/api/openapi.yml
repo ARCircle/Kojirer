@@ -234,7 +234,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Order"
   "/order/status":
-    get:
+    post:
       tags:
         - order
       description: |
@@ -329,6 +329,9 @@ components:
         callNum:
           type: integer
           format: int32
+        status:
+          type: integer
+          format: int32
         orderId:
           type: integer
           format: int32
@@ -369,6 +372,7 @@ components:
       required:
         - id
         - orderId
+        - status
         - callNum
         - size
         - yasai
@@ -417,6 +421,12 @@ components:
         createdAt:
           type: string
           format: date-time
+        donsCount:
+          type: integer
+          format: int32
+        cookingDonsCount:
+          type: integer
+          format: int32
         dons:
           type: array
           items:
@@ -425,7 +435,9 @@ components:
         - id
         - callNum
         - createdAt
-        - order
+        - donsCount
+        - cookingDonsCount
+        - dons
     Topping:
       type: object
       properties:
