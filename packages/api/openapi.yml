@@ -251,6 +251,8 @@ paths:
                 status:
                   type: integer
                   format: int32
+              required:
+                - status
       responses:
         '200':
           description: ステータスに応じた Order を返す

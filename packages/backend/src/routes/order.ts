@@ -1,5 +1,6 @@
 import prisma from '@/lib/prismaClient';
 import { bigint2number } from '@/utils/typeConverters';
+import { typedAsyncWrapper } from '@/utils/wrappers';
 import express from 'express';
 import util from 'util';
 
@@ -146,5 +147,9 @@ async function saveOrder(req: express.Request, res: express.Response, next: expr
     next(e);
   }
 }
+
+router.get("/status", typedAsyncWrapper<"/order/status", "get">(async (req, res, next) => {
+  const status = req.body.status;
+}));
 
 export default router;

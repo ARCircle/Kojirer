@@ -318,7 +318,7 @@ interface paths {
                 content: {
                     "application/json": {
                         /** Format: int32 */
-                        status?: number | null;
+                        status: number;
                     };
                 };
             } | null;
