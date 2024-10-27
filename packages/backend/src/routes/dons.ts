@@ -122,6 +122,7 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     ...don,
     size: don.size_id,
     id: bigint2number(don.id),
+    orderId: bigint2number(don.order_id),
   };
 
   //とりあえずJSONで送る
@@ -144,8 +145,9 @@ router.get('/status', typedAsyncWrapper<"/dons/status/", "get">(async (req, res,
   const resDons = statusDons.map(don => ({
     ...don,
     id: bigint2number(don.id),
-    size: don.size_id,
     createdAt: don.created_at,
+    size: don.size_id,
+    orderId: bigint2number(don.order_id),
   }));
 
   res.status(200).json(resDons);
