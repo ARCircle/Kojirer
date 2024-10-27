@@ -124,13 +124,7 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
     setDoDecrement(false)
   }
 
-  const initDon = React.useCallback(() => {
-    if (dons.length === id) {
-      // 追加モード
-      return
-    }
-
-    // 編集モード
+  const restoreDon = React.useCallback(() => {
     setKarame(dons[id].customizes.karame)
     setAbura(dons[id].customizes.abura)
     setNiniku(dons[id].customizes.niniku)
@@ -141,8 +135,10 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
   }, [dons, id])
 
   React.useEffect(() => {
-    initDon()
-  }, [id, initDon])
+    if (dons.length !== id) {
+      restoreDon()
+    }
+  }, [id, restoreDon, dons.length])
 
   return (
     <Box border='2px'>
