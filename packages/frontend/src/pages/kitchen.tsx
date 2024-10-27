@@ -83,41 +83,44 @@ const DonCard = (don: Don) => {
   }
 
   return (
-    <Card variant='outline' borderWidth='3px' width="300px">
-      {/* header */}
-      <CardHeader bg="cyan" margin='10px' borderRadius="md">
-        <Heading
-          size='3xl'
-          fontWeight="bold"
-          textAlign="center"
-        >
-          {id}
-        </Heading>
-      </CardHeader>
+    <Box width="300px">
+      <Card variant='outline' borderWidth='3px' width="300px">
+        {/* header */}
+        <CardHeader bg="cyan" margin='10px' borderRadius="md">
+          <Heading
+            size='3xl'
+            fontWeight="bold"
+            textAlign="center"
+          >
+            {id}
+          </Heading>
+        </CardHeader>
 
-      {/* body */}
-      <CardBody>
-        <Stack divider={<StackDivider />} spacing='4'>
-          {/* customizes */}
-          <Stack spacing='4'>
-            {
-              renderCustomiseContent(don["customise"])
-            }
+        {/* body */}
+        <CardBody>
+          <Stack divider={<StackDivider />} spacing='4'>
+            {/* customizes */}
+            <Stack spacing='4'>
+              {
+                renderCustomiseContent(don["customise"])
+              }
+            </Stack>
+            {/* toppings */}
+            <Stack spacing='4'>
+              {
+                renderToppingsContent(don["toppings"])
+              }
+            </Stack>
           </Stack>
-          {/* toppings */}
-          <Stack spacing='4'>
-            {
-              renderToppingsContent(don["toppings"])
-            }
-          </Stack>
-        </Stack>
-      </CardBody>
-    </Card>
+        </CardBody>
+      </Card>
+    </Box>
+    
   )
 }
 
-const exampleDon: Don = {
-  id: 1,
+const createExampleDon = (id: number): Don => ({
+  id,
   status: 2,
   customise: {
     "ヤサイ": 2,
@@ -131,17 +134,22 @@ const exampleDon: Don = {
     "カレー粉": 1,
     "フライドオニオン": 2,
   },
+});
+const createExampleDons = (count: number): Don[] => {
+  return Array.from({ length: count }, (_, index) => createExampleDon(index + 1));
 };
 
 
 const KitchenUI = () => {
+  const exampleDons = createExampleDons(20);
   return (
-    <Box p={5}>
+    <Box p={5} overflowX="auto">
       {/* <Heading textAlign="center" mb={6}>調理場端末</Heading> */}
 
-      <HStack spacing={8} justify="flex-end">
-      <DonCard {...exampleDon}></DonCard>
-      <DonCard {...exampleDon}></DonCard>
+      <HStack spacing={6} justify="flex-end" width="max-content" direction="row-reverse">
+      {exampleDons.reverse().map(don => (
+          <DonCard key={don.id} {...don} />
+        ))}
     </HStack>
     </Box>
   );
