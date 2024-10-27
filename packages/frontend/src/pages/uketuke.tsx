@@ -1,6 +1,22 @@
 import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput, Card, HStack } from '@chakra-ui/react'
 import React from 'react'
 
+type Don = {
+  id: number
+  price: number
+  options: {
+    karame: string
+    abura: string
+    niniku: string
+  }
+  toppings: {
+    mayonezu: number
+    friedOnion: number
+    curryPowder: number
+    lemonJuice: number
+  }
+}
+
 type OptionProps = {
   name: string
   items: string[]
@@ -13,6 +29,17 @@ type ToppingProps = {
   value: number
   setValue: (value: number) => void
   mode: boolean
+}
+
+type SelectDonProps = {
+  id: number
+  setId: (value: number) => void
+  dons: Don[]
+  setDons: (value: Don[]) => void
+}
+
+type OrderContentsProps = {
+  dons: Don[]
 }
 
 const SelectOption: React.FC<OptionProps> = ({ name, items, value, setValue }: OptionProps) => {
@@ -50,7 +77,7 @@ const SelectTopping: React.FC<ToppingProps> = ({ name, value, setValue, mode }: 
   )
 }
 
-const SelectDon = () => {
+const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: SelectDonProps) => {
 
   const [karame, setKarame] = React.useState('');
   const [abura, setAbura] = React.useState('');
@@ -60,6 +87,36 @@ const SelectDon = () => {
   const [curryPowder, setCurryPowder] = React.useState(0);
   const [lemonJuice, setLemonJuice] = React.useState(0);
   const [doDecrement, setDoDecrement] = React.useState(false);
+
+  const submitDon = () => {
+    const selectedDon: Don = {
+      id: id,
+      price: 0,
+      options: {
+        karame: karame,
+        abura: abura,
+        niniku: niniku
+      },
+      toppings: {
+        mayonezu: mayonezu,
+        friedOnion: friedOnion,
+        curryPowder: curryPowder,
+        lemonJuice: lemonJuice
+      }
+    }
+    setDons([...dons, selectedDon])
+
+    setKarame('')
+    setAbura('')
+    setNiniku('')
+    setMayonezu(0)
+    setFriedOnion(0)
+    setCurryPowder(0)
+    setLemonJuice(0)
+    setDoDecrement(false)
+
+    setId(id + 1)
+  }
 
   return (
     <Box border='2px'>
@@ -82,19 +139,20 @@ const SelectDon = () => {
           <SelectTopping name="レモン果汁" value={lemonJuice} setValue={setLemonJuice} mode={doDecrement} />
         </Center>
       </Box>
+      <Center><Button colorScheme='blue' onClick={submitDon}>確定する</Button></Center>
     </Box>
   )
 }
 
-const OrderContents = () => {
+const OrderContents: React.FC<OrderContentsProps> = ({ dons }: OrderContentsProps) => {
   return (
     <Box>
       <Center><Heading size='lg'>注文情報</Heading></Center>
       <Center>
         <HStack>
-          {[...Array(5).keys()].map((i) => (
+          {dons.map((don) => (
             <Card>
-              <Center>丼の情報{i}</Center>
+              <Center>丼の情報:{don.id}</Center>
             </Card>
           ))}
         </HStack>
@@ -107,11 +165,13 @@ const OrderContents = () => {
 }
 
 const Uketuke: React.FC = () => {
+  const [Dons, setDons] = React.useState<Don[]>([])
+  const [DonId, setDonId] = React.useState(0)
   return (
     <>
       <Center><Heading>受付画面</Heading></Center>
-      <SelectDon />
-      <OrderContents />
+      <SelectDon id={DonId} setId={setDonId} dons={Dons} setDons={setDons} />
+      <OrderContents dons={Dons} />
     </>
   )
 }
