@@ -89,13 +89,20 @@ router.post('/price', typedAsyncWrapper<"/dons/price", "post">(async (req, res) 
 
 
 router.get('/', typedAsyncWrapper<"/dons", "get">(async (req, res, next) => {
-  const dons = await prisma.dons.findMany();
+  const dons = await prisma.dons.findMany(
+    {
+      include: {
+        orders: true,
+      },
+    }
+  );
 
   const resDons = dons.map(don => ({
     ...don,
     id: bigint2number(don.id),
     size: don.size_id,
-    order_id: bigint2number(don.order_id)
+    orderId: bigint2number(don.order_id),
+    callNum: don.orders.call_num,
   }));
 
   res.status(200).json(resDons);
@@ -119,7 +126,11 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     },
   });
 
-  const donCallNum = await prisma.dons.
+  const order = await prisma.orders.findFirstOrThrow({
+    where: {
+      id: Number(don?.order_id),
+    },
+  });
 
   // そのIDのDonがない場合，エラーを返す．
   if(!don){
@@ -131,6 +142,7 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     size: don.size_id,
     id: bigint2number(don.id),
     orderId: bigint2number(don.order_id),
+    callNum: order.call_num,
   };
 
   // とりあえずJSONで送る
@@ -148,6 +160,9 @@ router.get('/status', typedAsyncWrapper<"/dons/status/", "get">(async (req, res,
       status: status,
     },
     take: limit,
+    include: {
+      orders: true,
+    },
   });
 
 
@@ -157,7 +172,9 @@ router.get('/status', typedAsyncWrapper<"/dons/status/", "get">(async (req, res,
     createdAt: don.created_at,
     size: don.size_id,
     orderId: bigint2number(don.order_id),
+    callNum: don.orders.call_num,
   }));
+
 
   res.status(200).json(resDons);
 
@@ -186,12 +203,17 @@ router.put('/:id', typedAsyncWrapper<"/dons/{id}", "put">(async (req, res, next)
     data: {
       status: nextStatus,
     },
+    include: {
+      orders: true,
+    },
   })
 
   const response = {
     ...updatedDon,
     id: bigint2number(updatedDon.id),
     size: updatedDon.size_id,
+    orderId: bigint2number(updatedDon.order_id),
+    callNum: updatedDon.orders.call_num,
   }
 
   res.status(200).json(response);
