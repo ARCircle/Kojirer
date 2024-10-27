@@ -119,6 +119,8 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     },
   });
 
+  const donCallNum = await prisma.dons.
+
   // そのIDのDonがない場合，エラーを返す．
   if(!don){
     throw ApiError.internalProblems();

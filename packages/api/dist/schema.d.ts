@@ -373,7 +373,9 @@ interface components {
             /** Format: int32 */
             id: number;
             /** Format: int32 */
-            callNum?: number | null;
+            callNum: number;
+            /** Format: int32 */
+            orderId: number;
             /** Format: int32 */
             size: number;
             /** Format: int32 */
