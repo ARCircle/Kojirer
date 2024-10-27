@@ -334,7 +334,38 @@ interface paths {
                 };
             };
         };
-        put?: never | null;
+        /** @description 1つの order の中の全ての don の状態を targetStatus に更新する
+         *     order 単位で変更可能な status は 2 -> 3 or 3 -> 2 のみ.
+         *      */
+        put: {
+            parameters: {
+                query?: never | null;
+                header?: never | null;
+                path?: never | null;
+                cookie?: never | null;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** Format: int32 */
+                        targetStatus: number;
+                        /** Format: int32 */
+                        orderId: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description 更新後の Order を返す */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Order"];
+                    };
+                };
+            };
+        };
         post?: never | null;
         delete?: never | null;
         options?: never | null;
