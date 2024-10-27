@@ -1,5 +1,4 @@
--- 外部キー制約を一時的に無効化
-SET FOREIGN_KEY_CHECKS = 0;
+BEGIN;
 
 -- Truncate tables to remove existing data
 TRUNCATE TABLE sizes RESTART IDENTITY CASCADE;
@@ -10,8 +9,6 @@ TRUNCATE TABLE orders RESTART IDENTITY CASCADE;
 TRUNCATE TABLE dons RESTART IDENTITY CASCADE;
 TRUNCATE TABLE adding RESTART IDENTITY CASCADE;
 
--- 外部キー制約を再度有効化
-SET FOREIGN_KEY_CHECKS = 1;
 
 -- Insert new data
 INSERT INTO sizes (label) VALUES
@@ -59,3 +56,8 @@ INSERT INTO adding (don_id, topping_id, amount) VALUES
   (2, 1, 1),
   (2, 2, 1),
   (4, 4, 1);
+
+
+
+
+COMMIT;
