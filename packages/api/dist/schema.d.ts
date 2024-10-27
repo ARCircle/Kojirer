@@ -404,8 +404,8 @@ interface components {
             detail: string;
         };
         Option: {
-            id?: number | null;
-            label?: string | null;
+            id: number;
+            label: string;
         };
         Order: {
             /** Format: int32 */
