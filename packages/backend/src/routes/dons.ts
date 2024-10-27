@@ -107,6 +107,7 @@ router.get('/', typedAsyncWrapper<"/dons", "get">(async (req, res, next) => {
     ninniku: don.ninniku,
     abura: don.abura,
     karame: don.karame,
+    status: don.status,
   }));
   res.status(200).send(resDons);
 }));
@@ -149,6 +150,7 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     ninniku: don.ninniku,
     abura: don.abura,
     karame: don.karame,
+    status: don.status,
   };
 
   res.status(200).send(resDon);
@@ -181,6 +183,7 @@ router.post('/status/', typedAsyncWrapper<"/dons/status/", "post">(async (req, r
     ninniku: don.ninniku,
     abura: don.abura,
     karame: don.karame,
+    status: don.status,
   }));
 
 
@@ -226,6 +229,7 @@ router.put('/:id', typedAsyncWrapper<"/dons/{id}", "put">(async (req, res, next)
     ninniku: updatedDon.ninniku,
     abura: updatedDon.abura,
     karame: updatedDon.karame,
+    status: updatedDon.status,
   }
 
   res.status(200).json(response);
