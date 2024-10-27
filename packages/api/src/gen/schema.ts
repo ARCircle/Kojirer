@@ -314,14 +314,14 @@ export interface paths {
                 path?: never | null;
                 cookie?: never | null;
             };
-            requestBody?: {
+            requestBody: {
                 content: {
                     "application/json": {
                         /** Format: int32 */
                         status: number;
                     };
                 };
-            } | null;
+            };
             responses: {
                 /** @description ステータスに応じた Order を返す */
                 200: {

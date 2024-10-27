@@ -243,6 +243,7 @@ paths:
                   2: 全ての don が調理済み かつ 受け渡しが完了していない Order を取得
                   3: オーダー内の全ての don が受け渡し完了の Order を取得
       requestBody:
+        required: true
         content:
           application/json:
             schema:
