@@ -295,6 +295,53 @@ interface paths {
         patch?: never | null;
         trace?: never | null;
     };
+    "/order/status": {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        /** @description don のステータスに応じて Order を取得する。各ステータスの動作は以下の通り
+         *     1: 一つでも調理中の don がある Order を全て取得
+         *     2: 全ての don が調理済み かつ 受け渡しが完了していない Order を取得
+         *     3: オーダー内の全ての don が受け渡し完了の Order を取得
+         *      */
+        get: {
+            parameters: {
+                query?: never | null;
+                header?: never | null;
+                path?: never | null;
+                cookie?: never | null;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        /** Format: int32 */
+                        status?: number | null;
+                    };
+                };
+            } | null;
+            responses: {
+                /** @description ステータスに応じた Order を返す */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Order"][];
+                    };
+                };
+            };
+        };
+        put?: never | null;
+        post?: never | null;
+        delete?: never | null;
+        options?: never | null;
+        head?: never | null;
+        patch?: never | null;
+        trace?: never | null;
+    };
     "/toppings": {
         parameters: {
             query?: never | null;
