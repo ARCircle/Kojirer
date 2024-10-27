@@ -5,8 +5,8 @@ import generouted from '@generouted/react-router/plugin';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
     generouted(),
+    react(),
   ],
   resolve: { 
     alias: { // エイリアスの名前解決 ./srcを@/にに変換する
