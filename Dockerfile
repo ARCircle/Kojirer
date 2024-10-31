@@ -4,19 +4,11 @@ FROM node:20-slim AS builder
 # 作業ディレクトリを指定 (ディレクトリがない場合は作成)
 WORKDIR /kojirer
 
-# 依存関係をインストールするために package.json ファイルをコピー
-COPY package.json package-lock.json ./
-
-# 各パッケージの package.json をコピー
-COPY packages/backend/package.json packages/backend/
-COPY packages/frontend/package.json packages/frontend/
-COPY packages/api/package.json packages/api/
-
-# アプリの依存関係をインストール
-RUN npm install --production
-
 # ソースコード全体をビルド環境にコピー
 COPY . .
+
+# アプリの依存関係をインストール
+RUN npm install
 
 # ビルド
 RUN npm run build
