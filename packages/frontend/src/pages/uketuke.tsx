@@ -1,5 +1,5 @@
-import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput, Card, HStack, CardHeader, CardBody, Text } from '@chakra-ui/react'
-import fetchClient from '@/utils/client'
+import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput, Card, HStack, CardHeader, CardBody, Text, useToast } from '@chakra-ui/react'
+import { client } from '@/utils/client'
 import React from 'react'
 
 type Don = {
@@ -89,6 +89,7 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
   const [curryPowder, setCurryPowder] = React.useState(0);
   const [lemonJuice, setLemonJuice] = React.useState(0);
   const [doDecrement, setDoDecrement] = React.useState(false);
+  const toast = useToast();
 
   const submitDon = () => {
     // [TODO] 丼の情報が変わるたびにBEから価格を取得するようにする
@@ -148,14 +149,18 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
       )),
       snsFollowed: false
     }
-    const res = await fetchClient.POST("/dons/price", { body: data })
+    const res = await client.POST("/dons/price", { body: data })
     if (res.data && res.data.price) {
       setPrice(res.data.price)
     } else {
-      console.error('Failed to fetch price: response data is undefined')
+      toast({
+        title: '価格の取得に失敗しました',
+        status: 'error',
+        variant: 'left-accent'
+      })
     }
 
-  }, [mayonezu, friedOnion, curryPowder, lemonJuice])
+  }, [mayonezu, friedOnion, curryPowder, lemonJuice, toast])
 
   React.useEffect(() => {
     if (dons.length !== id) {
