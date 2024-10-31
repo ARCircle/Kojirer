@@ -27,10 +27,10 @@ INSERT INTO toppings (label) VALUES
 
 INSERT INTO topping_prices (topping_id, price, since) VALUES
   (1, 50, '2024-10-30 00:00:00 JST'),
-  (1, 50, '2024-10-30 00:00:00 JST'),
-  (1, 50, '2024-10-30 00:00:00 JST'),
-  (1, 50, '2024-10-30 00:00:00 JST'),
-  (1, 50, '2024-10-30 00:00:00 JST');
+  (2, 50, '2024-10-30 00:00:00 JST'),
+  (3, 50, '2024-10-30 00:00:00 JST'),
+  (4, 50, '2024-10-30 00:00:00 JST'),
+  (5, 50, '2024-10-30 00:00:00 JST');
 
 INSERT INTO sizes (label) VALUES
   ('並');
