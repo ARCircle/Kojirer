@@ -7,6 +7,8 @@ services:
       target: ${TARGET:-prod}
     container_name: kojirer
     restart: always
+    environment:
+      NODE_PATH: "./packages/backend/src"
     ports:
       - "52600:52600"
       - "52800:52800"
