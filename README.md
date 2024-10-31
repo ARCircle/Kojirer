@@ -95,5 +95,5 @@ docker-compose up -d --build
 ```
 
 ```bash
-docker-compose run web npm run migrate:dev
+docker-compose exec web npm run migrate:dev
 ```
