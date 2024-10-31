@@ -1,5 +1,5 @@
 import prisma from '@/lib/prismaClient';
-import { dons } from '@prisma/client';
+import type { orders, dons } from '@prisma/client';
 import { bigint2number } from '@/utils/typeConverters';
 import { typedAsyncWrapper } from '@/utils/wrappers';
 import express from 'express';
@@ -10,164 +10,80 @@ const COOKING = 1;
 const CALLING = 2;
 const FINISHED = 3;
 
-/**
- * モデル
- */
-// 丼のモデル
-interface Don {
-  size: number;
-  yasai: number;
-  ninniku: number;
-  karame: number;
-  abura: number;
-  toppings: {
-    id: number;
-    label: string;
-    amount: number;
-  }[];
-  sns_followed: boolean;
-}
 
-// 注文のモデル
-interface Order {
-  id: number;
-  call_num: number;
-  created_at: Date;
-  dons: Don[];
-}
-
-type orders = {
-  id: bigint;
-  created_at: Date;
-  call_num: number;
-  dons: dons[]; // prismのorders型そのまま使うとdonsがなかったので独自定義
-};
-
-
-/**
- * ルーティング
- */
 const router = express.Router();
 
-// パスはファイル名からの相対パス
-// ここで"/"は，"/order/"を指す
-router.post("/", validateNewOrder, saveOrder);
 
+router.post("/", typedAsyncWrapper<"/order", "post">(async (req, res, next) => {
+  const order = req.body;
 
-/**
- * ミドルウェア
- */
-// リクエストのバリデーション
-// zodとか使えばいいけど，一旦見送りで
-// 型チェックできてないので，数値がfloatできた場合とか，InternalServerErrorになる気がします
-function validateNewOrder(req: express.Request, res: express.Response, next: express.NextFunction) {
-  try {
-    const order: Order = req.body;
-
-    if ((order.call_num == null) || (order.dons == null) || !Array.isArray(order.dons)) {
-      const received_object = util.inspect(order, {depth: null});
-      res.status(400).send(`invalid request: callNum and dons are required
-      you sent : ${received_object}
-      `);
-      return;
-    }
-
-    for (const don of order.dons) {
-      if ((don.size == null) ||
-          (don.yasai == null) ||
-          (don.ninniku == null) ||
-          (don.karame == null) ||
-          (don.abura == null) ||
-          (don.toppings == null) ||
-          !Array.isArray(don.toppings) ||
-          (don.sns_followed == null)) {
-        const received_object = util.inspect(order, {depth: null});
-        res.status(400).send(`invalid request: size, yasai, ninniku, karame, abura, toppings, and sns_followed are required
-        you sent : ${received_object}
-        `);
-        return;
-      }
-
-      for (const topping of don.toppings) {
-        if ((topping.id == null) || (topping.label == null) || (topping.amount == null)) {
-          const received_object = util.inspect(order, {depth: null});
-          res.status(400).send(`invalid request: id, label, and amount are required
-          you sent : ${received_object}
-          `);
-          return;
+  const addedOrder = await prisma.orders.create({
+    include: {
+      dons: {
+        include: {
+          adding: true
         }
       }
-    }
-
-    if (order.dons.length === 0) {
-      res.status(400).send("dons must not be empty");
-    } else {
-      next();
-    }
-  } catch (e) {
-    next(e);
-  }
-}
-
-// 注文をDBに保存して，保存した注文を返す
-async function saveOrder(req: express.Request, res: express.Response, next: express.NextFunction) {
-  try {
-    const order: Order = req.body;
-
-    const addedOrder = await prisma.orders.create({
-      include: {
-        dons: {
-          include: {
-            adding: true
-          }
-        }
-      },
-      data: {
-        dons: {
-          create: order.dons.map((don) => {
-            return {
-              yasai: don.yasai,
-              ninniku: don.ninniku,
-              karame: don.karame,
-              abura: don.abura,
-              status: 1,
-              sns_followed: don.sns_followed,
-              adding: {
-                create: don.toppings.map((topping) => {
-                  return {
-                    amount: topping.amount,
-                    topping_id: topping.id
-                  }
-                })
-              },
-              sizes: {
-                connect: {
-                  id: don.size
+    },
+    data: {
+      dons: {
+        create: order.dons.map((don) => {
+          return {
+            yasai: don.yasai,
+            ninniku: don.ninniku,
+            karame: don.karame,
+            abura: don.abura,
+            status: 1,
+            sns_followed: don.snsFollowed,
+            adding: {
+              create: don.toppings.map((topping) => {
+                return {
+                  amount: topping.amount,
+                  topping_id: topping.id
                 }
+              })
+            },
+            sizes: {
+              connect: {
+                id: don.size
               }
             }
-          })
-        },
-        call_num: order.call_num,
-      }
-    });
+          }
+        })
+      },
+      call_num: order.callNum,
+    }
+  });
 
-    // addedOrderをJSONに変換する前にBigIntを処理
-    const serializedOrder = JSON.parse(JSON.stringify(addedOrder, (key, value) =>
-      typeof value === 'bigint' ? bigint2number(value) : value
-    ));
+  const response = {
+    id: bigint2number(addedOrder.id),
+    callNum: addedOrder.call_num,
+    createdAt: addedOrder.created_at,
+    dons: addedOrder.dons.map(don => ({
+      id: bigint2number(don.id),
+      yasai: don.yasai,
+      ninniku: don.ninniku,
+      karame: don.karame,
+      abura: don.abura,
+      snsFollowed: don.sns_followed,
+      callNum: addedOrder.call_num,
+      orderId: bigint2number(don.order_id),
+      size: don.size_id,
+      status: don.status,
+    })),
+    donsCount: addedOrder.dons.length,
+    cookingDonsCount: addedOrder.dons.reduce((count, don) => don.status === COOKING ? count + 1 : count, 0),
+  };
 
-    res.status(201).json(serializedOrder);
-    next();
-  } catch (e) {
-    next(e);
-  }
-}
+  res.status(201).json(response);
+
+  }));
+
 
 router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, res, next) => {
   const status = req.body.status;
 
-  let statusOrders: orders[] = [];
+  let statusOrders: (orders & { dons: dons[] })[] = [];
 
   switch (status) {
     case COOKING:
