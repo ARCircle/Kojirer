@@ -225,6 +225,7 @@ paths:
                       - ninniku
                       - karame
                       - abura
+                      - toppings
               required:
                 - callNum
                 - dons

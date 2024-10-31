@@ -5,16 +5,6 @@ import { ApiError } from '@/utils/ApiError';
 import { bigint2number } from '@/utils/typeConverters';
 import { components } from 'api/schema';
 
-interface Topping {
-  id: number,
-  amount: number,
-}
-
-interface PriceBody {
-  size: number,
-  toppings: Topping[] | undefined,
-  isFollowed: boolean,
-}
 
 const router = express.Router();
 
