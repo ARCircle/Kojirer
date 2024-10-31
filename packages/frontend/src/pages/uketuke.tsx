@@ -143,7 +143,7 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
       size: 2, // 今年度は麺がないため固定する
       toppings: [mayonezu, friedOnion, curryPowder, lemonJuice].map((v, ind) => (
         {
-          id: ind,
+          id: ind+1,
           amount: v
         }
       )),
