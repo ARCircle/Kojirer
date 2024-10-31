@@ -4,7 +4,7 @@ FROM node:20-slim AS prod
 WORKDIR /kojirer
 
 # 依存関係を示すファイルをコピー
-COPY . .
+COPY . /kojirer
 
 RUN apt-get update -y && apt-get install -y openssl
 
@@ -13,8 +13,7 @@ RUN npm install
 
 RUN npx prisma generate --schema packages/backend/prisma/schema.prisma
 
-
 # ビルド
 RUN npm run build
 
-CMD [ "npm", "run", "start" ]
+CMD [ "sh", "-c", "npm run start & npx prisma studio" ]
