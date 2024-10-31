@@ -79,13 +79,13 @@ npm run api
 ### マスタデータの流し込み
 `.devcontainer`の外，すなわちWSL上の`Kojirer`ディレクトリにおいて，以下のコマンドを実行．
 ```bash
- docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/master.sql
+docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/master.sql
 ```
 
 #### 開発用データのInsert
 `.devcontainer`の外，すなわちWSL上の`Kojirer`ディレクトリにおいて，以下のコマンドを実行．
 ```bash
- docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
+docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
 ```
 
 ### pakages/frontend
