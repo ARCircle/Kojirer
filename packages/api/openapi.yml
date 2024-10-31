@@ -214,8 +214,6 @@ paths:
                             id:
                               type: integer
                               format: int32
-                            label:
-                              type: string
                             amount:
                               type: integer
                               format: int32
@@ -229,6 +227,7 @@ paths:
                       - ninniku
                       - karame
                       - abura
+                      - toppings
               required:
                 - callNum
                 - dons
