@@ -1,4 +1,5 @@
 import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput, Card, HStack, CardHeader, CardBody, Text } from '@chakra-ui/react'
+import fetchClient from '@/utils/client'
 import React from 'react'
 
 type Don = {
@@ -79,6 +80,7 @@ const SelectTopping: React.FC<ToppingProps> = ({ name, value, setValue, mode }: 
 
 const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: SelectDonProps) => {
 
+  const [price, setPrice] = React.useState(0);
   const [karame, setKarame] = React.useState('');
   const [abura, setAbura] = React.useState('');
   const [niniku, setNiniku] = React.useState('');
@@ -92,7 +94,7 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
     // [TODO] 丼の情報が変わるたびにBEから価格を取得するようにする
     const selectedDon: Don = {
       id: id,
-      price: 0,
+      price: price,
       customizes: {
         karame: karame,
         abura: abura,
@@ -125,6 +127,7 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
   }
 
   const restoreDon = React.useCallback(() => {
+    setPrice(dons[id].price)
     setKarame(dons[id].customizes.karame)
     setAbura(dons[id].customizes.abura)
     setNiniku(dons[id].customizes.niniku)
@@ -134,16 +137,38 @@ const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: Selec
     setLemonJuice(dons[id].toppings.lemonJuice)
   }, [dons, id])
 
+  const fetchPrice = React.useCallback(async () => {
+    const data = {
+      size: 2, // 今年度は麺がないため固定する
+      toppings: [mayonezu, friedOnion, curryPowder, lemonJuice].map((v, ind) => (
+        {
+          id: ind,
+          amount: v
+        }
+      )),
+      snsFollowed: false
+    }
+    const res = await fetchClient.POST("/dons/price", { body: data })
+    if (res.data && res.data.price) {
+      setPrice(res.data.price)
+    } else {
+      console.error('Failed to fetch price: response data is undefined')
+    }
+
+  }, [mayonezu, friedOnion, curryPowder, lemonJuice])
+
   React.useEffect(() => {
     if (dons.length !== id) {
       restoreDon()
     }
   }, [id, restoreDon, dons.length])
 
+  React.useEffect(() => { fetchPrice() }, [mayonezu, friedOnion, curryPowder, lemonJuice, fetchPrice])
+
   return (
     <Box border='2px'>
       <Center><Heading>丼{id}を選択中</Heading></Center>
-      <Center><Heading size='md'>価格: ¥0</Heading></Center>
+      <Center><Heading size='md'>価格: ¥{price}</Heading></Center>
       <Box>
         <Center><Heading size='md'>カスタマイズを選択</Heading></Center>
         <Center>
