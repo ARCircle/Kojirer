@@ -16,7 +16,7 @@ INSERT INTO options (label) VALUES
   ('少なめ'),
   ('普通'),
   ('マシ'),
-  ('マシマシ'),
+  ('マシマシ');
 
 INSERT INTO toppings (label) VALUES
   ('マヨ'),
