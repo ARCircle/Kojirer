@@ -137,7 +137,11 @@ paths:
                 status:
                   type: integer
                   format: int32
-                  description: 調理状態
+                  description: |
+                    調理状態を表すstatus
+                    1: 調理中
+                    2: 調理完了
+                    3: 受け渡し済み
                 limit:
                   type: integer
                   format: int32
