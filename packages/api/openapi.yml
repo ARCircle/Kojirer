@@ -238,6 +238,58 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Order"
+  "/order/price":
+    post: 
+      tags:
+        - order
+      description: オーダー単位の値段を取得
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                dons: 
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      size:
+                        type: integer
+                        format: int32
+                      toppings:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int32
+                            amount:
+                              type: integer
+                              format: int32
+                          required:
+                            - id
+                            - amount
+                      snsFollowed:
+                        type: boolean
+                    required:
+                      - size
+                      - snsFollowed
+              required:
+                - dons
+      responses:
+        '200':
+          description: 価格を返す
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  price:
+                    type: integer
+                    format: int32
   "/order/status":
     post:
       tags:
