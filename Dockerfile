@@ -35,4 +35,4 @@ COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
 # コンテナ実行時のコマンドを指定
-CMD ["sh", "/start.sh"]
+CMD ["npm", "run", "start"]
