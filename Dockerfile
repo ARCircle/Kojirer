@@ -5,16 +5,17 @@ FROM node:20-slim AS builder
 WORKDIR /kojirer
 
 # 依存関係を示すファイルをコピー
-COPY [ "package.json", "./" ]
+COPY [ ".", "." ]
 COPY [ "scripts", "./scripts" ]
 COPY [ "packages/backend/package.json", "./packages/backend/" ]
 COPY [ "packages/frontend/package.json", "./packages/frontend/" ]
+COPY [ "packages/api/package.json", "./packages/api/" ]
 
 # アプリの依存関係をインストール
 RUN npm install --production
 
 # ソースコードをコピー
-COPY --link . ./
+COPY . .
 
 # ビルド
 RUN npm run build
