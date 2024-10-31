@@ -18,6 +18,7 @@ type FudaProps = {
 }
 
 const FudaSimple: React.FC<FudaProps> = ({ order, color }) => {
+  // 進捗を伴わないOrderのカード
   const responsiveFontSize = { base: '0.5em', md: '3em', lg: '3em' };
   return (
     <Center h='100%' w='100%' bg={color} borderColor='gray' border='4px' borderRadius='16px' fontSize={responsiveFontSize} fontWeight='bold'>{order.id}</Center>
@@ -25,6 +26,7 @@ const FudaSimple: React.FC<FudaProps> = ({ order, color }) => {
 }
 
 const FudaProgress: React.FC<FudaProps> = ({ order }) => {
+  // 進捗を伴うOrderのカード
   function calculateProgress(order: Order): number {
     const numDons = order.dons.length;
     const numDoneDons = order.dons.filter(don => don.status === 2).length;
@@ -48,6 +50,7 @@ const FudaProgress: React.FC<FudaProps> = ({ order }) => {
 }
 
 const YobidashiRow: React.FC<RowProps> = ({ n, status }: RowProps) => {
+  // 縦一列にorder情報を表示する領域
   const data = generateMockOrders({ numOrders: n })
   return (
     <>
@@ -66,6 +69,7 @@ const YobidashiRow: React.FC<RowProps> = ({ n, status }: RowProps) => {
 }
 
 const YobidashiTable: React.FC<TableProps> = ({ n, status }: TableProps) => {
+  // グリッド状にorder情報を表示する領域
   const data = generateMockOrders({ numOrders: n });
   return (
     <>
@@ -81,6 +85,7 @@ const YobidashiTable: React.FC<TableProps> = ({ n, status }: TableProps) => {
 }
 
 const Yobidashi: React.FC = () => {
+  // main
   type TableLabelProp = {
     name: string
   }
@@ -95,16 +100,22 @@ const Yobidashi: React.FC = () => {
       <Heading textAlign='center' fontSize='xxx-large'>呼び出し口画面</Heading>
       <Flex flexDirection='row' px='10px'>
         <Box w='25%' border='2px' borderColor='black' p={responsiveSpace} mx={responsiveSpace}>
+
+          {/* 調理中のorderを表示 */}
           <TableLabel name='調理中' />
           <YobidashiRow n={Math.floor(Math.random() * 16) + 4} status={'cooking'} />
         </Box>
         <Box w='50%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' mx={responsiveSpace}>
+
+          {/* 呼び出し中のorderを表示 */}
           <TableLabel name='呼出中' />
           <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} gap={responsiveSpace} pt={responsiveSpace}>
             <YobidashiTable n={Math.floor(Math.random() * 32) + 8} status={'calling'} />
           </SimpleGrid>
         </Box>
         <Box w='25%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' mx={responsiveSpace}>
+
+          {/* 呼び出し中のorderを表示 */}
           <TableLabel name='呼出完了' />
           {/* <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
             <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'finish'}/>
