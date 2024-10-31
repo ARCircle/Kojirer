@@ -24,6 +24,7 @@
     "packages/api"
   ],
   "dependencies": {
+    "@react-spring/web": "^9.7.5",
     "@use-gesture/react": "^10.3.1",
     "env-cmd": "^10.1.0",
     "react-spring": "^9.7.4"
