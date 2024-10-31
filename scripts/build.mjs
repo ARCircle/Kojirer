@@ -12,9 +12,9 @@ try {
   // build backend
   spawnSync('npm', [ 'run', 'build', '-w', 'packages/backend' ], { stdio: 'inherit' });
 
-  // check existing directory 
+  // check existing directory
   if (!fs.existsSync('./packages/backend/built/web')) {
-    execSync('mkdir ./packages/backend/built/web');
+    fs.mkdirSync('./packages/backend/built/web', { recursive: true });
     console.log('✓ Created directory: web\n');
   }
 
