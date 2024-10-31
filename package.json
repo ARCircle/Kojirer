@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "./node_modules/.bin/env-cmd -f .env node ./scripts/build.mjs",
-    "start": "cd packages/backend/built && ../../../node_modules/.bin/env-cmd -f ../../../.env node index.js",
+    "start": "./node_modules/.bin/env-cmd -f .env node ./packages/backend/built/index.js",
     "clean": "node ./scripts/clean.mjs",
     "dev": "./node_modules/.bin/env-cmd -f .env node ./scripts/dev.mjs",
     "api": "npm run build -w packages/api",
