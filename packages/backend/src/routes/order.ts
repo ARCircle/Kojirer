@@ -1,5 +1,5 @@
 import prisma from '@/lib/prismaClient';
-import { dons } from '@prisma/client';
+import type { orders, dons } from '@prisma/client';
 import { bigint2number } from '@/utils/typeConverters';
 import { typedAsyncWrapper } from '@/utils/wrappers';
 import express from 'express';
@@ -10,12 +10,6 @@ const COOKING = 1;
 const CALLING = 2;
 const FINISHED = 3;
 
-type orders = {
-  id: bigint;
-  created_at: Date;
-  call_num: number;
-  dons: dons[]; // prismのorders型そのまま使うとdonsがなかったので独自定義
-};
 
 const router = express.Router();
 
@@ -89,7 +83,7 @@ router.post("/", typedAsyncWrapper<"/order", "post">(async (req, res, next) => {
 router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, res, next) => {
   const status = req.body.status;
 
-  let statusOrders: orders[] = [];
+  let statusOrders: (orders & { dons: dons[] })[] = [];
 
   switch (status) {
     case COOKING:
