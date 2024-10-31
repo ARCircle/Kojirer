@@ -1,8 +1,10 @@
-FROM mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
 COPY . .
+
+RUN apt-get update -y && apt-get install -y openssl
 
 # db settings
 ENV POSTGRES_PASSWORD=kojirer

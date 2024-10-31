@@ -4,7 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: ${TARGET:-prod}
     container_name: kojirer
     restart: always
     env_file:
