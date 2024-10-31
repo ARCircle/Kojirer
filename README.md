@@ -88,3 +88,12 @@ docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/b
 | UIライブラリ | [React](https://ja.react.dev/) |
 | ルーティングライブラリ | [@generouted/react-router](https://github.com/oedotme/generouted) |
 | UIコンポーネント | [Chakra UI](https://chakra-ui.com/) |
+
+# 本番環境
+```bash
+docker-compose up -d --build
+```
+
+```bash
+docker-compose run web npm run migrate:dev
+```

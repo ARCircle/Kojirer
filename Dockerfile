@@ -16,4 +16,4 @@ RUN npx prisma generate --schema packages/backend/prisma/schema.prisma
 # ビルド
 RUN npm run build
 
-CMD [ "sh", "-c", "npm run start & npx prisma studio" ]
+CMD [ "sh", "-c", "npm run start & npx prisma studio --schema packages/backend/prisma/schema.prisma" ]
