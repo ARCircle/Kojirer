@@ -18,7 +18,6 @@ RUN npm install
 # ビルド
 RUN npm run build
 
-# ポートを指定
-EXPOSE 52600
 
 CMD ["npm", "run", "start"]
+

@@ -8,8 +8,6 @@ services:
     restart: always
     env_file:
       - .env
-    environment:
-      NODE_PATH: "./packages/backend/src"
     ports:
       - "52600:52600"
       - "52800:52800"
