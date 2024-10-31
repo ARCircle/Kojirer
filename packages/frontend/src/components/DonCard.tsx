@@ -8,40 +8,91 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 import InfoRow from "./InfoRow"; // InfoRowをインポート
+import { components } from "api/schema";
+import React from "react";
+type Don = components["schemas"]["Don"];
+
+type Custom = {
+  key: string;
+  label: string;
+  amount: number;
+  defaultAmount: number;
+  incrementBgColor: string;
+  decrementBgColor: string;
+}
 
 export const DonCard = (don: Don) => {
-  const id = don.id;
+  const { id } = don;
+  const customs: Custom[] = [
+    {
+      key: "yasai",
+      label: "ヤサイ",
+      amount: don.yasai,
+      defaultAmount: 0,
+      incrementBgColor: "red.100",
+      decrementBgColor: "blue.100",
+    },
+    {
+      key: "ninniku",
+      label: "ニンニク",
+      amount: don.ninniku,
+      defaultAmount: 0,
+      incrementBgColor: "red.100",
+      decrementBgColor: "blue.100",
+    },
+    {
+      key: "karame",
+      label: "カラメ",
+      amount: don.karame,
+      defaultAmount: 0,
+      incrementBgColor: "red.100",
+      decrementBgColor: "blue.100",
+    },
+    {
+      key: "abura",
+      label: "アブラ",
+      amount: don.abura,
+      defaultAmount: 0,
+      incrementBgColor: "red.100",
+      decrementBgColor: "blue.100",
+    },
+  ]
 
-  function renderCustomiseContent(customise: Don["customise"]) {
-    if (customise) {
-      return Object.keys(customise).map((key) => (
-        <InfoRow
-          key={key}
-          label={key}
-          amount={customise[key]}
-          defaultAmount={0}
-          incrementBgColor="red.100"
-          decrementBgColor="blue.100"
-        />
-      ));
-    }
-    return null;
+  interface CustomsContentProps {
+    customs: Custom[];
   }
 
-  function renderToppingsContent(toppings: Don["toppings"]) {
+  const CustomsContent: React.FC<CustomsContentProps> = ({ customs }) => {
+    return (
+      customs.map((custom) => (
+        <InfoRow
+          key={custom.key}
+          label={custom.label}
+          amount={custom.amount}
+          defaultAmount={custom.defaultAmount}
+          incrementBgColor={custom.incrementBgColor}
+          decrementBgColor={custom.decrementBgColor}
+        />
+      ))
+    );
+  }
+
+  interface ToppingsContentProps { 
+    toppings: Don["toppings"];
+  }
+
+  const ToppingsContent: React.FC<ToppingsContentProps> = ({toppings}) => {
     if (toppings) {
-      return Object.keys(toppings)
-        .filter((key) => toppings[key] >= 0) // 個数が負の場合はスキップ
-        .map((key) => (
-          <InfoRow
-            key={key}
-            label={key}
-            amount={toppings[key]}
-            defaultAmount={0}
-            incrementBgColor="yellow.200"
-            decrementBgColor="lightgray"
-          />
-        ));
+      return toppings.map((topping) => (
+        <InfoRow
+          key={topping.id}
+          label={topping.label}
+          amount={topping.amount}
+          defaultAmount={0}
+          incrementBgColor="yellow.200"
+          decrementBgColor="lightgray"
+        />
+      ));
     }
     return null;
   }
@@ -57,10 +108,10 @@ export const DonCard = (don: Don) => {
         <CardBody>
           <Stack divider={<StackDivider />} spacing="4">
             <Stack spacing="4">
-              {renderCustomiseContent(don.customise)}
+              <CustomsContent customs={customs} />
             </Stack>
             <Stack spacing="4">
-              {renderToppingsContent(don.toppings)}
+              <ToppingsContent toppings={don.toppings} />
             </Stack>
           </Stack>
         </CardBody>
