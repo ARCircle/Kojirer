@@ -88,3 +88,20 @@ npm run api
 | UIライブラリ | [React](https://ja.react.dev/) |
 | ルーティングライブラリ | [@generouted/react-router](https://github.com/oedotme/generouted) |
 | UIコンポーネント | [Chakra UI](https://chakra-ui.com/) |
+
+# 本番環境
+デプロイ手順
+1. ビルド
+```bash
+docker-compose build
+```
+2. マイグレーション（必要があれば）
+```bash
+docker-compose exec web npm run migrate:dev
+```
+3. 起動
+```bash
+docker-compose up -d
+```
+4. マスターデータの挿入（必要があれば）
+[Prisma Studio](http://localhost:5555)にアクセスし、手動で更新する．
