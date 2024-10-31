@@ -23,7 +23,7 @@ RUN npm run build
 FROM node:20-slim AS prod
 
 # 作業ディレクトリを指定
-WORKDIR /kojirer 
+WORKDIR /kojirer
 
 COPY --from=builder "/kojirer/packages/backend/built/" "./packages/backend/built/"
 COPY --from=builder "/kojirer/node_modules" "./node_modules/"
@@ -32,4 +32,6 @@ COPY --from=builder "/kojirer/package.json" "./package.json"
 # ポートを指定
 EXPOSE 52600
 
-CMD [ "npm", "run", "start" ]
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+CMD ["sh", "/start.sh"]
