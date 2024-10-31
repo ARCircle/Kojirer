@@ -1,11 +1,14 @@
-##################### BUILD STAGE #####################
-FROM node:20-slim AS builder
+FROM mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye
 
-# 作業ディレクトリを指定 (ディレクトリがない場合は作成)
-WORKDIR /kojirer
+WORKDIR /app
 
-# ソースコード全体をビルド環境にコピー
 COPY . .
+
+# db settings
+ENV POSTGRES_PASSWORD=kojirer
+ENV POSTGRES_USER=kojirer
+ENV POSTGRES_DB=kojirer
+ENV DATABASE_URL="postgres://kojirer:kojirer@localhost:5432/kojirer"
 
 # アプリの依存関係をインストール
 RUN npm install
@@ -13,26 +16,7 @@ RUN npm install
 # ビルド
 RUN npm run build
 
-##################### PRODUCTION STAGE #####################
-FROM node:20-slim AS prod
-
-RUN apt-get update -y && apt-get install -y openssl
-
-# 作業ディレクトリを指定
-WORKDIR /kojirer
-
-# ビルド済みコードと依存関係のみをコピー
-COPY --from=builder /kojirer/packages/backend/built/ ./packages/backend/built/
-COPY --from=builder /kojirer/node_modules ./node_modules/
-COPY --from=builder /kojirer/package.json ./package.json
-COPY --from=builder /kojirer/.env ./.env
-
 # ポートを指定
 EXPOSE 52600
 
-# スタートスクリプトをコピーし、実行権限を付与
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-# コンテナ実行時のコマンドを指定
 CMD ["npm", "run", "start"]
