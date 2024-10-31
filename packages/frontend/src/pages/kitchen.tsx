@@ -16,12 +16,12 @@ const KitchenUI = () => {
   }
 
   return (
-    <Box p={5} overflowX="auto">
+    <Box p={5} overflowX="auto" height="100vh">
       {
         isLoading || !data ? (
           <Spinner />
         ) : (
-          <HStack spacing={6} justify="flex-end" width="max-content" direction="row-reverse">
+          <HStack spacing={6} justify="flex-end" width="max-content" direction="row-reverse" height="100%">
             {data.reverse().map(don => (
               <DonCard key={don.id} {...don} />
             ))}

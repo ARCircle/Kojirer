@@ -98,8 +98,8 @@ export const DonCard = (don: Don) => {
   }
 
   return (
-    <Box width="300px">
-      <Card variant="outline" borderWidth="3px" width="300px">
+    <Box width="300px" height="100%">
+      <Card variant="outline" borderWidth="3px" width="300px" height="80%">
         <CardHeader bg="cyan" margin="10px" borderRadius="md">
           <Heading size="3xl" fontWeight="bold" textAlign="center">
             {id}
