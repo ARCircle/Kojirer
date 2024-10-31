@@ -76,6 +76,12 @@ npm run api
 3. 作成されたsqlファイルを確認し，既存のスキーマを壊すことがないか確認
 4. `npm run migrate:dev`でsqlを実行する
 
+### マスタデータの流し込み
+`.devcontainer`の外，すなわちWSL上の`Kojirer`ディレクトリにおいて，以下のコマンドを実行．
+```bash
+ docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/master.sql
+```
+
 #### 開発用データのInsert
 `.devcontainer`の外，すなわちWSL上の`Kojirer`ディレクトリにおいて，以下のコマンドを実行．
 ```bash
