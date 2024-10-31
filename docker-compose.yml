@@ -1,7 +1,7 @@
 version: "3.9"
 services:
-  web: 
-    build: 
+  web:
+    build:
       context: .
       dockerfile: ./Dockerfile
       target: ${TARGET:-prod}
@@ -10,11 +10,8 @@ services:
     ports:
       - "52600:52600"
       - "52800:52800"
-    depends_on: 
+    depends_on:
       - db
-    volumes:
-      - /node_modules
-      - .:/kojirer
   db:
     image: postgres:15-alpine
     container_name: postgres
@@ -28,4 +25,3 @@ services:
 volumes:
   db_data:
     driver: local
-    
