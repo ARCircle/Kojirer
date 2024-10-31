@@ -281,7 +281,6 @@ export interface paths {
                             toppings: {
                                 /** Format: int32 */
                                 id: number;
-                                label: string;
                                 /** Format: int32 */
                                 amount: number;
                             }[];
