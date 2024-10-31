@@ -221,6 +221,7 @@ const OrderContents: React.FC<OrderContentsProps> = ({ dons, setId }: OrderConte
           ))}
         </HStack>
       </Center>
+      <Center>合計: ¥{dons.reduce((total, don) => total + don.price, 0)}</Center>
       <Center>
         <Button colorScheme='blue'>確定する</Button>
       </Center>
