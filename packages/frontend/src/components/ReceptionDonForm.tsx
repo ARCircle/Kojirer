@@ -94,7 +94,6 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
       id: toppingData ? Number(toppingData[idx].id) : 0,
       amount,
     }));
-    console.log(_toppings)
 
     isEdit ? 
     onEdit(

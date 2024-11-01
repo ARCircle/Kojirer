@@ -24,7 +24,7 @@ const SidebarContent: React.FC<SidebarProps> = ({
   selectingIndex = null,
   onSelect = () => {},
 }) => {
-  const { data } = $api.useQuery('post', '/order/price', {
+  const { data, isLoading } = $api.useQuery('post', '/order/price', {
     body: {
       dons,
     }
@@ -74,7 +74,7 @@ const SidebarContent: React.FC<SidebarProps> = ({
         backdropFilter='blur(10px)'
         background='rgba(255, 255, 255, 0.4)'
       >
-        <Text fontSize='xl'>合計金額 ￥{price}</Text>
+        <Text fontSize='xl'>合計金額 ￥{isLoading ? '...' : price}</Text>
         <ReceptionCallNumInput />
         <Button colorScheme='teal' mt={4}>
           注文
