@@ -110,7 +110,7 @@ const SidebarContent: React.FC<SidebarProps> = ({
           onChange={setCallNum}
         />
         
-        <Button colorScheme='teal' mt={4} onClick={() => onOrder(callNum)}>
+        <Button colorScheme='teal' mt={4} onClick={() => onOrder(callNum)} isDisabled={dons.length == 0}>
           注文
         </Button>
       </VStack>
