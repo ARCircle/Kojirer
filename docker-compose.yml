@@ -1,20 +1,19 @@
 version: "3.9"
 services:
-  web: 
-    build: 
+  web:
+    build:
       context: .
-      dockerfile: ./Dockerfile
-      target: ${TARGET:-prod}
+      dockerfile: Dockerfile
     container_name: kojirer
     restart: always
     ports:
       - "52600:52600"
       - "52800:52800"
-    depends_on: 
+      - "5555:5555"
+    depends_on:
       - db
     volumes:
       - /node_modules
-      - .:/kojirer
   db:
     image: postgres:15-alpine
     container_name: postgres
@@ -22,10 +21,9 @@ services:
     env_file:
       - .env
     ports:
-      - 5432:5432
+      - 5333:5432
     volumes:
       - ./db_data:/var/lib/postgresql/data
 volumes:
   db_data:
     driver: local
-    

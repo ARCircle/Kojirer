@@ -1,35 +1,19 @@
-##################### BUILD STAGE #####################
-FROM node:20-slim AS builder
+FROM node:20-slim AS prod
 
 # 作業ディレクトリを指定 (ディレクトリがない場合は作ってくれる)
 WORKDIR /kojirer
 
 # 依存関係を示すファイルをコピー
-COPY [ "package.json", "./" ]
-COPY [ "scripts", "./scripts" ]
-COPY [ "packages/backend/package.json", "./packages/backend/" ]
-COPY [ "packages/frontend/package.json", "./packages/frontend/" ]
+COPY . /kojirer
+
+RUN apt-get update -y && apt-get install -y openssl
 
 # アプリの依存関係をインストール
-RUN npm install --production
+RUN npm install
 
-# ソースコードをコピー
-COPY --link . ./
+RUN npx prisma generate --schema packages/backend/prisma/schema.prisma
 
 # ビルド
 RUN npm run build
 
-##################### PRODUCTION STAGE #####################
-FROM node:20-slim AS prod
-
-# 作業ディレクトリを指定
-WORKDIR /kojirer 
-
-COPY --from=builder "/kojirer/packages/backend/built/" "./packages/backend/built/"
-COPY --from=builder "/kojirer/node_modules" "./node_modules/"
-COPY --from=builder "/kojirer/package.json" "./package.json"
-
-# ポートを指定
-EXPOSE 52600
-
-CMD [ "npm", "run", "start" ]
+CMD [ "sh", "-c", "npm run start & npx prisma studio --schema packages/backend/prisma/schema.prisma" ]

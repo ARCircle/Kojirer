@@ -177,7 +177,11 @@ export interface paths {
                     "application/json": {
                         /**
                          * Format: int32
-                         * @description 調理状態
+                         * @description 調理状態を表すstatus
+                         *     1: 調理中
+                         *     2: 調理完了
+                         *     3: 受け渡し済み
+                         *
                          */
                         status: number;
                         /**
@@ -296,6 +300,61 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["Order"];
+                    };
+                };
+            };
+        };
+        delete?: never | null;
+        options?: never | null;
+        head?: never | null;
+        patch?: never | null;
+        trace?: never | null;
+    };
+    "/order/price": {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        get?: never | null;
+        put?: never | null;
+        /** @description オーダー単位の値段を取得 */
+        post: {
+            parameters: {
+                query?: never | null;
+                header?: never | null;
+                path?: never | null;
+                cookie?: never | null;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        dons: {
+                            /** Format: int32 */
+                            size: number;
+                            toppings?: {
+                                /** Format: int32 */
+                                id: number;
+                                /** Format: int32 */
+                                amount: number;
+                            }[] | null;
+                            snsFollowed: boolean;
+                        }[];
+                    };
+                };
+            };
+            responses: {
+                /** @description 価格を返す */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: int32 */
+                            price?: number | null;
+                        };
                     };
                 };
             };
