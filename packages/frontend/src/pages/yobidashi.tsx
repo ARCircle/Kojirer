@@ -1,4 +1,4 @@
-import { SimpleGrid, GridItem, Box, Heading, Center, Flex } from '@chakra-ui/react'
+import { SimpleGrid, GridItem, Box, Heading, Center, Flex, Button } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { paths } from "api/schema";
 import { $api } from "@/utils/client";
@@ -13,8 +13,17 @@ type FudaProps = {
 const FudaSimple: React.FC<FudaProps> = ({ order, color }) => {
   const responsiveFontSize = { base: '0.5em', md: '3em', lg: '3em' };
   return (
-    <Center h='100%' w='100%' bg={color} borderColor='gray' border='4px' borderRadius='16px' fontSize={responsiveFontSize} fontWeight='bold'>{order.id}</Center>
+    <Center h='100%' w='100%' bg={color} borderColor='gray' border='4px' borderRadius='16px' fontSize={responsiveFontSize} fontWeight='bold' onClick={() => finishTransfer(order)}>
+      {order.id}
+    </Center>
   )
+}
+
+// 受け渡しを完了するAPIを呼び出す
+const finishTransfer = async (order: Order) => {
+  $api.useQuery("put", "/order/status", {
+    body: { orderId: order.id, targetStatus: 3 },
+  });
 }
 
 const FudaProgress: React.FC<FudaProps> = ({ order: order }) => {
