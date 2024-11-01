@@ -156,6 +156,7 @@ router.post('/status/', typedAsyncWrapper<"/dons/status/", "post">(async (req, r
     where: {
       status: status,
     },
+    orderBy: { created_at: 'asc' },
     take: limit,
     include: {
       orders: true,
