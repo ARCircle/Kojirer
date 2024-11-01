@@ -1,18 +1,9 @@
 import { SimpleGrid, GridItem, Box, Heading, Center, Flex } from '@chakra-ui/react'
-import { generateMockOrders } from '@/utils/genMockData'
 import React, { useEffect, useState } from 'react'
 import { paths } from "api/schema";
 import { $api } from "@/utils/client";
 
-type TableProps = {
-  n: number
-  status: string
-}
-
-type RowProps = {
-  n: number
-  status: string
-}
+type Order = paths['/order/status']['post']['responses']['200']['content']['application/json'][0]
 
 type FudaProps = {
   order: Order
@@ -26,7 +17,7 @@ const FudaSimple: React.FC<FudaProps> = ({ order, color }) => {
   )
 }
 
-const FudaProgress: React.FC<FudaProps> = ({ order }) => {
+const FudaProgress: React.FC<FudaProps> = ({ order: order }) => {
   function calculateProgress(order: Order): number {
     const numDons = order.dons.length;
     const numDoneDons = order.dons.filter(don => don.status === 2).length;
@@ -49,8 +40,7 @@ const FudaProgress: React.FC<FudaProps> = ({ order }) => {
   )
 }
 
-const YobidashiRow: React.FC<string> = ( status: string) => {
-  // const data = generateMockOrders({ numOrders: n })
+const YobidashiRow: React.FC<{ status: string }> = ({ status }) => {
   let statusNum = 0;
   if (status === 'cooking') {
     statusNum = 1;
@@ -65,9 +55,7 @@ const YobidashiRow: React.FC<string> = ( status: string) => {
     body: { status: statusNum },
   });
 
-  const mutation = $api.useMutation("post", "/order/status");
-
-  const [ordersCooking, setCookingOrders] = useState<any | undefined>(undefined);
+  const [ordersCooking, setCookingOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     if (error) {
@@ -95,7 +83,7 @@ const YobidashiRow: React.FC<string> = ( status: string) => {
 
   return (
     <>
-      {data.map((order) => {
+      {ordersCooking.map((order) => {
         return (
           <>
             <Box h='100px' py='5px'>
@@ -109,11 +97,50 @@ const YobidashiRow: React.FC<string> = ( status: string) => {
   )
 }
 
-const YobidashiTable: React.FC<TableProps> = ({ n, status }: TableProps) => {
-  const data = generateMockOrders({ numOrders: n });
+const YobidashiTable: React.FC<{ status: string }> = ({ status }) => {
+  let statusNum = 0;
+  if (status === 'cooking') {
+    statusNum = 1;
+  }
+  else if (status === 'calling') {
+    statusNum = 2;
+  }
+  else if (status === 'finish') {
+    statusNum = 3;
+  }
+  const { data, error, isLoading, refetch } = $api.useQuery("post", "/order/status", {
+    body: { status: statusNum },
+  });
+
+  const [ordersCalling, setOrdersCalling] = useState<Order[]>([]);
+
+  useEffect(() => {
+    if (error) {
+      return;
+    }
+    if (data && !isLoading) {
+      setOrdersCalling(data);
+    }
+  }, [data, error, isLoading]);
+
+  // 15秒ごとにrefetchを呼び出す
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch();
+    }, 15000); // 15秒間隔
+
+    // コンポーネントがアンマウントされるときにintervalをクリア
+    return () => clearInterval(intervalId);
+  }, [refetch]);
+
+  // 本当にこれでいいのかは不明
+  if (data === undefined) {
+    return <div>loading...</div>;
+  }
+
   return (
     <>
-      {data.map((order) => (
+      {ordersCalling.map((order) => (
         <GridItem key={order.id} colSpan={1} h='100px'>
           {status === 'cooking' && <FudaProgress order={order} color={'blue.200'} />}
           {status === 'calling' && <FudaSimple order={order} color={'blue.200'} />}
@@ -145,7 +172,7 @@ const Yobidashi: React.FC = () => {
         <Box w='50%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' mx={responsiveSpace}>
           <TableLabel name='呼出中' />
           <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} gap={responsiveSpace} pt={responsiveSpace}>
-            <YobidashiTable n={Math.floor(Math.random() * 32) + 8} status={'calling'} />
+            <YobidashiTable status={'calling'} />
           </SimpleGrid>
         </Box>
         <Box w='25%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' mx={responsiveSpace}>
@@ -153,7 +180,7 @@ const Yobidashi: React.FC = () => {
           {/* <Grid templateColumns='repeat(2, 1fr)' gap={6} pt='20px'>
             <YobidashiTable n={Math.floor(Math.random()*16)+4} status={'finish'}/>
           </Grid> */}
-          <YobidashiRow n={Math.floor(Math.random() * 16) + 4} status={'finish'} />
+          <YobidashiRow status={'finish'} />
         </Box>
       </Flex>
     </>
