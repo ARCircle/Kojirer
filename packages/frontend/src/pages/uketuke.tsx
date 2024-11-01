@@ -1,7 +1,24 @@
-import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput, Card, HStack } from '@chakra-ui/react'
+import { Box, Heading, Center, Button, Radio, RadioGroup, Stack, useNumberInput, Card, HStack, CardHeader, CardBody, Text, useToast } from '@chakra-ui/react'
+import { client } from '@/utils/client'
 import React from 'react'
 
-type OptionProps = {
+type Don = {
+  id: number
+  price: number
+  customizes: {
+    karame: string
+    abura: string
+    niniku: string
+  }
+  toppings: {
+    mayonezu: number
+    friedOnion: number
+    curryPowder: number
+    lemonJuice: number
+  }
+}
+
+type CustomizeProps = {
   name: string
   items: string[]
   value: string
@@ -15,7 +32,19 @@ type ToppingProps = {
   mode: boolean
 }
 
-const SelectOption: React.FC<OptionProps> = ({ name, items, value, setValue }: OptionProps) => {
+type SelectDonProps = {
+  id: number
+  setId: (value: number) => void
+  dons: Don[]
+  setDons: (value: Don[]) => void
+}
+
+type OrderContentsProps = {
+  dons: Don[]
+  setId: (value: number) => void
+}
+
+const SelectCustomize: React.FC<CustomizeProps> = ({ name, items, value, setValue }: CustomizeProps) => {
   return (
     <Box>
       <Center><Heading size='sm'>{name}({value})</Heading></Center>
@@ -44,14 +73,14 @@ const SelectTopping: React.FC<ToppingProps> = ({ name, value, setValue, mode }: 
   const dec = getDecrementButtonProps()
   return (
     <Stack>
-      <Button {...inc}>{name} ({value})</Button>
-      {mode ? <Button {...dec}>-</Button> : <></>}
+      <Button {...(mode ? dec : inc)} colorScheme={mode && value !== 0 ? 'red' : 'gray'}>{name} ({value})</Button>
     </Stack>
   )
 }
 
-const SelectDon = () => {
+const SelectDon: React.FC<SelectDonProps> = ({ id, setId, dons, setDons }: SelectDonProps) => {
 
+  const [price, setPrice] = React.useState(0);
   const [karame, setKarame] = React.useState('');
   const [abura, setAbura] = React.useState('');
   const [niniku, setNiniku] = React.useState('');
@@ -60,16 +89,97 @@ const SelectDon = () => {
   const [curryPowder, setCurryPowder] = React.useState(0);
   const [lemonJuice, setLemonJuice] = React.useState(0);
   const [doDecrement, setDoDecrement] = React.useState(false);
+  const toast = useToast();
+
+  const submitDon = () => {
+    // [TODO] 丼の情報が変わるたびにBEから価格を取得するようにする
+    const selectedDon: Don = {
+      id: id,
+      price: price,
+      customizes: {
+        karame: karame,
+        abura: abura,
+        niniku: niniku
+      },
+      toppings: {
+        mayonezu: mayonezu,
+        friedOnion: friedOnion,
+        curryPowder: curryPowder,
+        lemonJuice: lemonJuice
+      }
+    }
+    if (dons.length === id) {
+      setDons([...dons, selectedDon])
+      setId(dons.length + 1)
+    }
+    else {
+      setDons(dons.map((don) => (don.id === id) ? selectedDon : don))
+      setId(dons.length)
+    }
+
+    setKarame('')
+    setAbura('')
+    setNiniku('')
+    setMayonezu(0)
+    setFriedOnion(0)
+    setCurryPowder(0)
+    setLemonJuice(0)
+    setDoDecrement(false)
+  }
+
+  const restoreDon = React.useCallback(() => {
+    setPrice(dons[id].price)
+    setKarame(dons[id].customizes.karame)
+    setAbura(dons[id].customizes.abura)
+    setNiniku(dons[id].customizes.niniku)
+    setMayonezu(dons[id].toppings.mayonezu)
+    setFriedOnion(dons[id].toppings.friedOnion)
+    setCurryPowder(dons[id].toppings.curryPowder)
+    setLemonJuice(dons[id].toppings.lemonJuice)
+  }, [dons, id])
+
+  const fetchPrice = React.useCallback(async () => {
+    const data = {
+      size: 2, // 今年度は麺がないため固定する
+      toppings: [mayonezu, friedOnion, curryPowder, lemonJuice].map((v, ind) => (
+        {
+          id: ind+1,
+          amount: v
+        }
+      )),
+      snsFollowed: false
+    }
+    const res = await client.POST("/dons/price", { body: data })
+    if (res.data && res.data.price) {
+      setPrice(res.data.price)
+    } else {
+      toast({
+        title: '価格の取得に失敗しました',
+        status: 'error',
+        variant: 'left-accent'
+      })
+    }
+
+  }, [mayonezu, friedOnion, curryPowder, lemonJuice, toast])
+
+  React.useEffect(() => {
+    if (dons.length !== id) {
+      restoreDon()
+    }
+  }, [id, restoreDon, dons.length])
+
+  React.useEffect(() => { fetchPrice() }, [mayonezu, friedOnion, curryPowder, lemonJuice, fetchPrice])
 
   return (
     <Box border='2px'>
-      <Center>丼の注文内容をここで決める</Center>
+      <Center><Heading>丼{id}を選択中</Heading></Center>
+      <Center><Heading size='md'>価格: ¥{price}</Heading></Center>
       <Box>
-        <Center><Heading size='md'>オプションを選択</Heading></Center>
+        <Center><Heading size='md'>カスタマイズを選択</Heading></Center>
         <Center>
-          <SelectOption name="カラメ" items={['無', '並', 'マシ', 'マシマシ']} value={karame} setValue={setKarame} />
-          <SelectOption name="アブラ" items={['無', '並', 'マシ', 'マシマシ']} value={abura} setValue={setAbura} />
-          <SelectOption name="にんにく" items={['無', '並', 'マシ', 'マシマシ']} value={niniku} setValue={setNiniku} />
+          <SelectCustomize name="カラメ" items={['無', '並', 'マシ', 'マシマシ']} value={karame} setValue={setKarame} />
+          <SelectCustomize name="アブラ" items={['無', '並', 'マシ', 'マシマシ']} value={abura} setValue={setAbura} />
+          <SelectCustomize name="にんにく" items={['無', '並', 'マシ', 'マシマシ']} value={niniku} setValue={setNiniku} />
         </Center>
       </Box>
       <Box>
@@ -82,23 +192,36 @@ const SelectDon = () => {
           <SelectTopping name="レモン果汁" value={lemonJuice} setValue={setLemonJuice} mode={doDecrement} />
         </Center>
       </Box>
+      <Center><Button colorScheme='blue' onClick={submitDon}>確定する</Button></Center>
     </Box>
   )
 }
 
-const OrderContents = () => {
+const OrderContents: React.FC<OrderContentsProps> = ({ dons, setId }: OrderContentsProps) => {
   return (
     <Box>
       <Center><Heading size='lg'>注文情報</Heading></Center>
       <Center>
         <HStack>
-          {[...Array(5).keys()].map((i) => (
-            <Card>
-              <Center>丼の情報{i}</Center>
+          {dons.map((don) => (
+            <Card key={don.id}>
+              <CardHeader><Center><Heading>丼{don.id}</Heading></Center></CardHeader>
+              <CardBody>
+                <Text>価格: ¥{don.price}</Text>
+                <Text>カラメ: {don.customizes.karame}</Text>
+                <Text>アブラ: {don.customizes.abura}</Text>
+                <Text>にんにく: {don.customizes.niniku}</Text>
+                <Text>マヨネーズ: {don.toppings.mayonezu}</Text>
+                <Text>フライドオニオン: {don.toppings.friedOnion}</Text>
+                <Text>カレー粉: {don.toppings.curryPowder}</Text>
+                <Text>レモン果汁: {don.toppings.lemonJuice}</Text>
+                <Center><Button colorScheme='green' onClick={() => setId(don.id)}>編集する</Button></Center>
+              </CardBody>
             </Card>
           ))}
         </HStack>
       </Center>
+      <Center>合計: ¥{dons.reduce((total, don) => total + don.price, 0)}</Center>
       <Center>
         <Button colorScheme='blue'>確定する</Button>
       </Center>
@@ -107,11 +230,13 @@ const OrderContents = () => {
 }
 
 const Uketuke: React.FC = () => {
+  const [Dons, setDons] = React.useState<Don[]>([])
+  const [DonId, setDonId] = React.useState(0)
   return (
     <>
       <Center><Heading>受付画面</Heading></Center>
-      <SelectDon />
-      <OrderContents />
+      <SelectDon id={DonId} setId={setDonId} dons={Dons} setDons={setDons} />
+      <OrderContents dons={Dons} setId={setDonId} />
     </>
   )
 }
