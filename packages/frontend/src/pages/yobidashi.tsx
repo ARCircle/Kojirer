@@ -1,6 +1,8 @@
 import { SimpleGrid, GridItem, Box, Heading, Center, Flex } from '@chakra-ui/react'
 import { generateMockOrders } from '@/utils/genMockData'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { paths } from "api/schema";
+import { $api } from "@/utils/client";
 
 type TableProps = {
   n: number
@@ -47,8 +49,50 @@ const FudaProgress: React.FC<FudaProps> = ({ order }) => {
   )
 }
 
-const YobidashiRow: React.FC<RowProps> = ({ n, status }: RowProps) => {
-  const data = generateMockOrders({ numOrders: n })
+const YobidashiRow: React.FC<string> = ( status: string) => {
+  // const data = generateMockOrders({ numOrders: n })
+  let statusNum = 0;
+  if (status === 'cooking') {
+    statusNum = 1;
+  }
+  else if (status === 'calling') {
+    statusNum = 2;
+  }
+  else if (status === 'finish') {
+    statusNum = 3;
+  }
+  const { data, error, isLoading, refetch } = $api.useQuery("post", "/order/status", {
+    body: { status: statusNum },
+  });
+
+  const mutation = $api.useMutation("post", "/order/status");
+
+  const [ordersCooking, setCookingOrders] = useState<any | undefined>(undefined);
+
+  useEffect(() => {
+    if (error) {
+      return;
+    }
+    if (data && !isLoading) {
+      setCookingOrders(data);
+    }
+  }, [data, error, isLoading]);
+
+  // 15秒ごとにrefetchを呼び出す
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch();
+    }, 15000); // 15秒間隔
+
+    // コンポーネントがアンマウントされるときにintervalをクリア
+    return () => clearInterval(intervalId);
+  }, [refetch]);
+
+  // 本当にこれでいいのかは不明
+  if (data === undefined) {
+    return <div>loading...</div>;
+  }
+
   return (
     <>
       {data.map((order) => {
@@ -96,7 +140,7 @@ const Yobidashi: React.FC = () => {
       <Flex flexDirection='row' px='10px'>
         <Box w='25%' border='2px' borderColor='black' p={responsiveSpace} mx={responsiveSpace}>
           <TableLabel name='調理中' />
-          <YobidashiRow n={Math.floor(Math.random() * 16) + 4} status={'cooking'} />
+          <YobidashiRow status={'cooking'} />
         </Box>
         <Box w='50%' border='2px' borderColor='black' p={responsiveSpace} verticalAlign='top' mx={responsiveSpace}>
           <TableLabel name='呼出中' />
