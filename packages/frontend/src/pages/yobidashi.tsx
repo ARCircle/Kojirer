@@ -2,6 +2,7 @@ import { SimpleGrid, GridItem, Box, Heading, Center, Flex, Button } from '@chakr
 import React, { useEffect, useState } from 'react'
 import { paths } from "api/schema";
 import { $api } from "@/utils/client";
+import { useQueryClient } from '@tanstack/react-query';
 
 type Order = paths['/order/status']['post']['responses']['200']['content']['application/json'][0]
 
@@ -11,19 +12,53 @@ type FudaProps = {
 }
 
 const FudaSimple: React.FC<FudaProps> = ({ order, color }) => {
+  const queryClient = useQueryClient();
+  const { mutate } = $api.useMutation("put", "/order/status");
+
   const responsiveFontSize = { base: '0.5em', md: '3em', lg: '3em' };
   return (
-    <Center h='100%' w='100%' bg={color} borderColor='gray' border='4px' borderRadius='16px' fontSize={responsiveFontSize} fontWeight='bold' onClick={() => finishTransfer(order)}>
+    <Center 
+      h='100%' 
+      w='100%' 
+      bg={color} 
+      borderColor='gray' 
+      border='4px' 
+      borderRadius='16px' 
+      fontSize={responsiveFontSize} 
+      fontWeight='bold'
+      onClick={() => mutate(
+        {
+          body: { orderId: order.id, targetStatus: 3 },
+        },
+        {
+          onSuccess: (result) => {
+            queryClient.setQueryData(
+              [
+                "post", 
+                "/order/status", 
+                {
+                  body: { status: 3 },
+                }
+              ], 
+              (old: Order[]) => [...old, result]
+            );
+            queryClient.setQueryData(
+              [
+                "post", 
+                "/order/status", 
+                {
+                  body: { status: 2 },
+                }
+              ], 
+              (old: Order[]) => old.filter(o => o.id !== result.id)
+            );
+          }
+        }
+    )}
+    >
       {order.id}
     </Center>
   )
-}
-
-// 受け渡しを完了するAPIを呼び出す
-const finishTransfer = async (order: Order) => {
-  $api.useQuery("put", "/order/status", {
-    body: { orderId: order.id, targetStatus: 3 },
-  });
 }
 
 const FudaProgress: React.FC<FudaProps> = ({ order: order }) => {
@@ -90,6 +125,7 @@ const YobidashiRow: React.FC<{ status: string }> = ({ status }) => {
     return <div>loading...</div>;
   }
 
+
   return (
     <>
       {ordersCooking.map((order) => {
@@ -150,7 +186,11 @@ const YobidashiTable: React.FC<{ status: string }> = ({ status }) => {
   return (
     <>
       {ordersCalling.map((order) => (
-        <GridItem key={order.id} colSpan={1} h='100px'>
+        <GridItem 
+          key={order.id} 
+          colSpan={1} 
+          h='100px'
+        >
           {status === 'cooking' && <FudaProgress order={order} color={'blue.200'} />}
           {status === 'calling' && <FudaSimple order={order} color={'blue.200'} />}
           {status === 'finish' && <FudaSimple order={order} color={'green.300'} />}
