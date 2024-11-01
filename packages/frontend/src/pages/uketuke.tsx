@@ -13,6 +13,8 @@ const Uketuke: React.FC = () => {
   const [ selectingDon, setSelectingDon ] = useState<Don | null>(null);
   const { mutate } = $api.useMutation('post', '/order');
 
+  console.log(dons)
+
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent 
@@ -32,6 +34,7 @@ const Uketuke: React.FC = () => {
               callNum
             }
           });
+          setDons([]);
         }}
       />
       <Box ml={80} p="4">
