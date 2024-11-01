@@ -130,7 +130,7 @@ export interface paths {
                             /** Format: int32 */
                             amount: number;
                         }[] | null;
-                        snsFollowed: boolean;
+                        snsFollowed?: boolean | null;
                     };
                 };
             };
@@ -339,7 +339,7 @@ export interface paths {
                                 /** Format: int32 */
                                 amount: number;
                             }[] | null;
-                            snsFollowed: boolean;
+                            snsFollowed?: boolean | null;
                         }[];
                     };
                 };
