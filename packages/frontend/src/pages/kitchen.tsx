@@ -18,7 +18,7 @@ const KitchenUI = () => {
 
   const [dons, setDons] = useState<any | undefined>(undefined);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (error) {
       return;
     }
@@ -34,7 +34,7 @@ const KitchenUI = () => {
         path: { id },
       },
       body: {
-        status: 2,
+        status: 1,
       }
     });
     // データの再取得
