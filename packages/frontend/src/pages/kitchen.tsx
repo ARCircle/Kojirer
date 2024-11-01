@@ -41,6 +41,16 @@ const KitchenUI = () => {
     refetch();
   };
 
+  // 15秒ごとにrefetchを呼び出す
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch();
+    }, 15000); // 15秒間隔
+
+    // コンポーネントがアンマウントされるときにintervalをクリア
+    return () => clearInterval(intervalId);
+  }, [refetch]);
+
   return (
     <Box p={5} overflowX="auto" height="100vh">
       {
