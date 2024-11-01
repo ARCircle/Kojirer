@@ -110,7 +110,6 @@ paths:
                   type: boolean
               required:
                 - size
-                - snsFollowed
       responses:
         '200':
           description: 価格を返す
@@ -276,7 +275,6 @@ paths:
                         type: boolean
                     required:
                       - size
-                      - snsFollowed
               required:
                 - dons
       responses:

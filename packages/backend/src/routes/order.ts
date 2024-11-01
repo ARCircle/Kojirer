@@ -152,7 +152,7 @@ router.post("/price", typedAsyncWrapper<"/order/price", "post">(async (req, res)
     return donPrice + toppingsPrice + discount;
   }, 0));
 
-  const price = prices.reduce((now, _price) => now + _price);
+  const price = prices.reduce((now, _price) => now + _price, 0);
 
   res.status(200).send({ price });
 }));
