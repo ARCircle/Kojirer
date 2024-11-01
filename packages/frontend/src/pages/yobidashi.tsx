@@ -110,11 +110,11 @@ const YobidashiRow: React.FC<{ status: string }> = ({ status }) => {
     }
   }, [data, error, isLoading]);
 
-  // 15秒ごとにrefetchを呼び出す
+  // 1秒ごとにrefetchを呼び出す
   useEffect(() => {
     const intervalId = setInterval(() => {
       refetch();
-    }, 15000); // 15秒間隔
+    }, 1000); // 1秒間隔
 
     // コンポーネントがアンマウントされるときにintervalをクリア
     return () => clearInterval(intervalId);
@@ -168,11 +168,11 @@ const YobidashiTable: React.FC<{ status: string }> = ({ status }) => {
     }
   }, [data, error, isLoading]);
 
-  // 15秒ごとにrefetchを呼び出す
+  // 1秒ごとにrefetchを呼び出す
   useEffect(() => {
     const intervalId = setInterval(() => {
       refetch();
-    }, 15000); // 15秒間隔
+    }, 1000); // 1秒間隔
 
     // コンポーネントがアンマウントされるときにintervalをクリア
     return () => clearInterval(intervalId);
