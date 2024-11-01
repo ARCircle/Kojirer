@@ -47,11 +47,11 @@ const SidebarContent: React.FC<SidebarProps> = ({
         mx="8" 
         align="stretch"  
       >
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" mt={4}>
           注文情報
         </Text>
       </VStack>
-      <Box overflow="scroll" px="8" h="100%">
+      <Box overflowY="auto" px="8" h="60%">
       {
           dons.map((don, idx) => 
             <ReceptionDonCard 
