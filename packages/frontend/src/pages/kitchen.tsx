@@ -6,7 +6,10 @@ import {
 
 import { DonCard } from "@/components/DonCard";
 import { $api } from "@/utils/client";
+import { paths } from "api/schema";
 import { useEffect, useState } from "react";
+
+type Don = paths['/dons/status/']['post']['responses']['200']['content']['application/json'][0];
 
 const KitchenUI = () => {
   // $api.useQueryでrefetchメソッドを含むオブジェクトを取得
@@ -16,7 +19,7 @@ const KitchenUI = () => {
 
   const mutation = $api.useMutation("put", "/dons/{id}");
 
-  const [dons, setDons] = useState<any | undefined>(undefined);
+  const [dons, setDons] = useState<Don[]>([]);
 
   useEffect(() => {
     if (error) {
