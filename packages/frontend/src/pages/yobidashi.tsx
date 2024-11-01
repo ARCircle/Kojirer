@@ -1,4 +1,4 @@
-import { SimpleGrid, GridItem, Box, Heading, Center, Flex, Button } from '@chakra-ui/react'
+import { SimpleGrid, GridItem, Box, Heading, Center, Flex } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { paths } from "api/schema";
 import { $api } from "@/utils/client";
