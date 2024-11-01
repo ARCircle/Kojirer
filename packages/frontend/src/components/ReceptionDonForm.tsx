@@ -80,7 +80,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
   const [ toppingAmounts, setToppingAmounts ] = useState<number[]>(initialToppingAmountsState);
   const [ canDecrement, { toggle } ] = useBoolean(false);
 
-  const title = isEdit ? `丼 #${index} の編集` : '新規注文';
+  const title = isEdit ? `丼 #${index + 1} の編集` : '新規注文';
 
   useEffect(() => {
     setCostomizes(initialCostomizeState);
@@ -141,16 +141,16 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
   return (
     <form onSubmit={submit}>
       <HStack justify="space-between">
-        <Text fontSize='3xl'>{ title }</Text>
+        <Text fontSize='2xl'>{ title }</Text>
         { isEdit &&
           <div>
             <Button onClick={cancel}>キャンセル</Button>
           </div>
         }
       </HStack>
-      <Box position='relative' padding='10'>
+      <Box position='relative' padding={8}>
         <Divider />
-        <AbsoluteCenter bg='white' px='4'>
+        <AbsoluteCenter bg='white' px={2}>
           <Text fontSize='xl'>オプション</Text>
         </AbsoluteCenter>
       </Box>
@@ -178,7 +178,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
       </VStack>
 
       <Flex>
-        <Box position='relative' padding='10' w='90%'>
+        <Box position='relative' padding={8} w='70%'>
           <Divider />
           <AbsoluteCenter bg='white' px='4'>
             <Text fontSize='xl'>トッピング</Text>
@@ -215,7 +215,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
         )
       }
 
-      <VStack align='stretch' pt={10}>
+      <VStack align='stretch' pt={8}>
         <Button 
           colorScheme='teal'
           type="submit"
