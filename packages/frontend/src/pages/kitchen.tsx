@@ -6,24 +6,50 @@ import {
 
 import { DonCard } from "@/components/DonCard";
 import { $api } from "@/utils/client";
+import { useEffect, useState } from "react";
 
 const KitchenUI = () => {
-  const { data, error, isLoading } = $api.useQuery("post", "/dons/status/", {
+  // $api.useQueryでrefetchメソッドを含むオブジェクトを取得
+  const { data, error, isLoading, refetch } = $api.useQuery("post", "/dons/status/", {
     body: { status: 1 },
   });
-  if (error) { 
-    return "network error";
-  }
+
+  const mutation = $api.useMutation("put", "/dons/{id}");
+
+  const [dons, setDons] = useState<any | undefined>(undefined);
+
+  useEffect(() => { 
+    if (error) {
+      return;
+    }
+    if (data && !isLoading) {
+      setDons(data);
+    }
+  }, [data, error, isLoading]);
+
+  // completeCooking関数内でデータを更新し、refetchを呼び出す
+  const completeCooking = async (id: number) => {
+    await mutation.mutate({
+      params: {
+        path: { id },
+      },
+      body: {
+        status: 2,
+      }
+    });
+    // データの再取得
+    refetch();
+  };
 
   return (
     <Box p={5} overflowX="auto" height="100vh">
       {
-        isLoading || !data ? (
+        isLoading || !dons ? (
           <Spinner />
         ) : (
           <HStack spacing={6} justify="flex-end" width="max-content" direction="row-reverse" height="100%">
-            {data.reverse().map(don => (
-              <DonCard key={don.id} {...don} />
+            {dons.reverse().map(don => (
+              <DonCard don={don} completeCooking={completeCooking} />
             ))}
           </HStack>
         )
