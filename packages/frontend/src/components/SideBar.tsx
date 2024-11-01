@@ -5,24 +5,34 @@ import {
   useColorModeValue, 
   VStack
 } from "@chakra-ui/react";
+import { 
+  SwipeableList, 
+  SwipeableListItem, 
+  SwipeAction, 
+  TrailingActions 
+} from "react-swipeable-list";
 import paths from "api";
 import React from "react";
 import ReceptionDonCard from "./ReceptionDonCard";
 import { $api } from "@/utils/client";
 import ReceptionCallNumInput from "./ReceptionCallNumInput";
 
-type Don = paths["/order"]["post"]["requestBody"]["content"]["application/json"]["dons"][0];
+import 'react-swipeable-list/dist/styles.css';
+
+type Don = paths["/order"]["post"]["requestBody"]["content"]["application/json"]["dons"][0] & { uniqueId: string };
 
 interface SidebarProps {
   dons: Don[],
   selectingIndex?: number | null,
-  onSelect?: (index: number, don: Don) => void
+  onSelect?: (index: number, don: Don) => void,
+  onDelete?: (uniqueId: string) => void,
 }
 
 const SidebarContent: React.FC<SidebarProps> = ({ 
   dons, 
   selectingIndex = null,
   onSelect = () => {},
+  onDelete = () => {},
 }) => {
   const { data, isLoading } = $api.useQuery('post', '/order/price', {
     body: {
@@ -31,6 +41,17 @@ const SidebarContent: React.FC<SidebarProps> = ({
   });
 
   const price = data?.price || 0;
+
+  const trailingActions = (uniqueId: string) => (
+    <TrailingActions>
+      <SwipeAction
+        destructive={true}
+        onClick={() => onDelete(uniqueId)}
+      >
+        Delete
+      </SwipeAction>
+    </TrailingActions>
+  )
 
   return (
     <Box
@@ -52,19 +73,26 @@ const SidebarContent: React.FC<SidebarProps> = ({
         </Text>
       </VStack>
       <Box overflowY="auto" px="8" h="60%">
-      {
+        <SwipeableList>
+        {
           dons.map((don, idx) => 
-            <ReceptionDonCard 
-              key={idx}
-              index={idx + 1}
-              isSelecting={selectingIndex === idx}
-              onClick={() => {
-                onSelect(idx, don);
-              }}
-              {...don}
-            />
+            <SwipeableListItem
+              trailingActions={trailingActions(don.uniqueId)}
+              key={don.uniqueId}
+            >
+              <ReceptionDonCard 
+                index={idx + 1}
+                isSelecting={selectingIndex === idx}
+                onClick={() => {
+                  onSelect(idx, don);
+                }}
+                {...don}
+              />
+            </SwipeableListItem>
+            
           )
         }
+        </SwipeableList>
       </Box>
       <VStack 
         bottom={0} 

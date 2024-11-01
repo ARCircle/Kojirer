@@ -33,6 +33,7 @@ const ReceptionDonCard: React.FC<ReceptionDonCardProps> = ({
 }) => {
   const { data: options } = $api.useQuery('get', '/options');
   const { data: toppingData } = $api.useQuery('get', '/toppings/available');
+
   return (
     <Card 
       w="100%" 

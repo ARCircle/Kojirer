@@ -4,7 +4,7 @@ import { Box, useColorModeValue } from '@chakra-ui/react'
 import paths from 'api';
 import React, { useState } from 'react'
 
-type Don = paths["/order"]["post"]["requestBody"]["content"]["application/json"]["dons"][0];
+type Don = paths["/order"]["post"]["requestBody"]["content"]["application/json"]["dons"][0] & { uniqueId: string };
 
 const Uketuke: React.FC = () => {
   const [ dons, setDons ] = useState<Don[]>([]);
@@ -19,6 +19,9 @@ const Uketuke: React.FC = () => {
         onSelect={(idx, don) => { 
           setSelectingDon(don);
           setSelectingIdx(idx);
+        }}
+        onDelete={(uniqueId) => {
+          setDons(dons.filter((don) => don.uniqueId !== uniqueId))
         }}
       />
       <Box ml={80} p="4">

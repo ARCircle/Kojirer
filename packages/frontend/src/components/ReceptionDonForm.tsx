@@ -20,10 +20,11 @@ import {
 } from "@chakra-ui/react";
 import { paths } from "api/schema";
 
-type Don = paths["/order"]["post"]["requestBody"]["content"]["application/json"]["dons"][0];
+type Don = paths["/order"]["post"]["requestBody"]["content"]["application/json"]["dons"][0] & { uniqueId: string };
 
 interface ReceptionDonFormProps {
   index?: number | null,
+  uniqueId?: string | null,
   onSubmit?: (don: Don) => void,
   onEdit?: (idx: number, don: Don) => void,
   size?: number | null,
@@ -55,6 +56,7 @@ const costomizeLabels: {
 
 const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
   index,
+  uniqueId,
   abura,
   karame,
   ninniku,
@@ -65,7 +67,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
   const { data: toppingData } = $api.useQuery('get', '/toppings/available');
 
   const indexIsUndefined = index !== 0 && !index
-  const isEdit = !indexIsUndefined && !!abura && !!karame && !!ninniku && !!toppings;
+  const isEdit = !indexIsUndefined && !!uniqueId && !!abura && !!karame && !!ninniku && !!toppings;
   const initialCostomizeState = 
     isEdit ? 
     [ abura, karame, ninniku ] : 
@@ -104,6 +106,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
         karame: Number(costomizes[1]),
         ninniku: Number(costomizes[2]),
         toppings: _toppings,
+        uniqueId,
       }
     ):
     onSubmit({
@@ -113,6 +116,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
       karame: Number(costomizes[1]),
       ninniku: Number(costomizes[2]),
       toppings: _toppings,
+      uniqueId: new Date().getTime().toString()
     });
 
     setCostomizes(initialCostomizeState);
@@ -134,6 +138,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
         karame: Number(initialCostomizeState[1]),
         ninniku: Number(initialCostomizeState[2]),
         toppings: _toppings,
+        uniqueId,
       }
     )
   }
