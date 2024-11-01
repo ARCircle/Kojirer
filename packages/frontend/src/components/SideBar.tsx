@@ -12,7 +12,7 @@ import {
   TrailingActions 
 } from "react-swipeable-list";
 import paths from "api";
-import React from "react";
+import React, { useState } from "react";
 import ReceptionDonCard from "./ReceptionDonCard";
 import { $api } from "@/utils/client";
 import ReceptionCallNumInput from "./ReceptionCallNumInput";
@@ -26,6 +26,7 @@ interface SidebarProps {
   selectingIndex?: number | null,
   onSelect?: (index: number, don: Don) => void,
   onDelete?: (uniqueId: string) => void,
+  onOrder?: (callNum: number) => void
 }
 
 const SidebarContent: React.FC<SidebarProps> = ({ 
@@ -33,12 +34,14 @@ const SidebarContent: React.FC<SidebarProps> = ({
   selectingIndex = null,
   onSelect = () => {},
   onDelete = () => {},
+  onOrder = () => {},
 }) => {
   const { data, isLoading } = $api.useQuery('post', '/order/price', {
     body: {
       dons,
     }
   });
+  const [ callNum, setCallNum ] = useState(0)
 
   const price = data?.price || 0;
 
@@ -89,7 +92,6 @@ const SidebarContent: React.FC<SidebarProps> = ({
                 {...don}
               />
             </SwipeableListItem>
-            
           )
         }
         </SwipeableList>
@@ -103,8 +105,12 @@ const SidebarContent: React.FC<SidebarProps> = ({
         background='rgba(255, 255, 255, 0.4)'
       >
         <Text fontSize='xl'>合計金額 ￥{isLoading ? '...' : price}</Text>
-        <ReceptionCallNumInput />
-        <Button colorScheme='teal' mt={4}>
+        <ReceptionCallNumInput 
+          value={callNum}
+          onChange={setCallNum}
+        />
+        
+        <Button colorScheme='teal' mt={4} onClick={() => onOrder(callNum)}>
           注文
         </Button>
       </VStack>

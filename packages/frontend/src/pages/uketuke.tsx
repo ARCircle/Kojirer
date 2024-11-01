@@ -1,5 +1,6 @@
 import ReceptionDonForm from '@/components/ReceptionDonForm'
 import SidebarContent from '@/components/SideBar'
+import { $api } from '@/utils/client';
 import { Box, useColorModeValue } from '@chakra-ui/react'
 import paths from 'api';
 import React, { useState } from 'react'
@@ -10,6 +11,7 @@ const Uketuke: React.FC = () => {
   const [ dons, setDons ] = useState<Don[]>([]);
   const [ selectingIdx, setSelectingIdx ] = useState<number | null>(null);
   const [ selectingDon, setSelectingDon ] = useState<Don | null>(null);
+  const { mutate } = $api.useMutation('post', '/order');
 
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -22,6 +24,14 @@ const Uketuke: React.FC = () => {
         }}
         onDelete={(uniqueId) => {
           setDons(dons.filter((don) => don.uniqueId !== uniqueId))
+        }}
+        onOrder={(callNum) => {
+          mutate({
+            body: {
+              dons,
+              callNum
+            }
+          });
         }}
       />
       <Box ml={80} p="4">
