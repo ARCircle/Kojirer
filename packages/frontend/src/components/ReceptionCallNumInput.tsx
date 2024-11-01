@@ -16,13 +16,12 @@ const ReceptionCallNumInput: React.FC<ReceptionCallNumInputProps> = ({
   value,
   onChange = () => {},
 }) => {
-
   const { valueAsNumber, getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       step: 1,
-      value,
+      value: String(value),
       defaultValue: 0,
-      min: 0,
+      min: 1,
       precision: 0
     });
 
@@ -35,8 +34,12 @@ const ReceptionCallNumInput: React.FC<ReceptionCallNumInputProps> = ({
       <Text>呼び出し番号</Text>
       <HStack maxW='230px'>
         <Button {...inc} onClick={() => onChange(valueAsNumber + 1)}>+</Button>
-        <Input {...input}/>
-        <Button {...dec} onClick={() => onChange(valueAsNumber - 1)}>-</Button>
+        <Input {...input} onChange={(e) => onChange(Number(e.currentTarget.value))}/>
+        <Button 
+          {...dec} 
+          onClick={() => {
+            valueAsNumber > 1 && onChange(valueAsNumber - 1)
+          }}>-</Button>
       </HStack>
     </>
     
