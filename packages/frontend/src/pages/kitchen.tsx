@@ -61,7 +61,7 @@ const KitchenUI = () => {
           <Spinner />
         ) : (
           <HStack spacing={6} justify="flex-end" width="max-content" direction="row-reverse" height="100%">
-            {dons.reverse().map(don => (
+            {dons.map(don => (
               <DonCard don={don} completeCooking={completeCooking} />
             ))}
           </HStack>

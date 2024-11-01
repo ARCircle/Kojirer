@@ -82,7 +82,7 @@ router.post("/", typedAsyncWrapper<"/order", "post">(async (req, res, next) => {
 router.post("/price", typedAsyncWrapper<"/order/price", "post">(async (req, res) => {
   const dons = req.body.dons;
 
-  if (!dons) 
+  if (!dons)
     throw ApiError.invalidParams();
 
   const prices = await Promise.all(dons.map(async (don) => {
@@ -173,6 +173,7 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
             }
           }
         },
+        orderBy: { created_at: 'asc' },
         include: {
           dons: true
         }
@@ -188,6 +189,7 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
             }
           }
         },
+        orderBy: { created_at: 'asc' },
         include: {
           dons: true
         }
@@ -201,8 +203,10 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
             every: {
               status: FINISHED
             }
-          }
+          },
         },
+        take: 10, // 受け取り完了は 10 件まで取得（無限に貯まるので）
+        orderBy: { created_at: 'asc' },
         include: {
           dons: true
         }
