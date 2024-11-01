@@ -20,23 +20,28 @@ const InfoRow: React.FC<InfoRowProps> = ({
     return null; // デフォルトから変わらないときは表示しない
   }
 
+  const diff = amount - defaultAmount;
+
   return (
     <Card bg={
-            amount > 0 && incrementBgColor ||
-            amount == -1 && decrementBgColor ||
-            'gray.100'
-          } variant="outline" borderWidth={0}>
+        diff > 0 && incrementBgColor ||
+        diff == -1 && decrementBgColor ||
+        'gray.100'
+      } 
+      variant="outline" 
+      borderWidth={0}
+    >
       <SimpleGrid columns={2} gridTemplateColumns="3fr 7fr" gap={0}>
         <Box px={2} display="flex" alignItems="center" justifyContent="center">
           <Text fontSize="4xl" fontWeight="bold" color={
-            amount > 0 && 'red.500' ||
-            amount == -1 && 'blue.500' ||
+            diff > 0 && 'red.500' ||
+            diff == -1 && 'blue.500' ||
             'gray.500'
           }>
-            {amount > 0 && '＋'}
-            {amount == -1 && 'ー'}
-            {amount == -2 && '×'}
-            {amount > 1 ? amount : ''}
+            {diff > 0 && '＋'}
+            {diff == -1 && 'ー'}
+            {diff == -2 && '×'}
+            {diff > 1 ? diff : ''}
           </Text>
         </Box>
         <Box pl={1} display="flex" alignItems="center" justifyContent="left">
