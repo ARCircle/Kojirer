@@ -24,7 +24,7 @@ const searchLabel = (target: number, options: Option[]) =>
 
 const ReceptionDonCard: React.FC<ReceptionDonCardProps> = ({
   index,
-  isSelecting = true,
+  isSelecting = false,
   onClick = () => {},
   abura,
   karame,
@@ -32,7 +32,7 @@ const ReceptionDonCard: React.FC<ReceptionDonCardProps> = ({
   toppings,
 }) => {
   const { data: options } = $api.useQuery('get', '/options');
-
+  const { data: toppingData } = $api.useQuery('get', '/toppings/available');
   return (
     <Card 
       w="100%" 
@@ -49,9 +49,9 @@ const ReceptionDonCard: React.FC<ReceptionDonCardProps> = ({
       <Text>トッピング</Text>
       <UnorderedList>
         {
-          toppings.map((topping) => 
-            <ListItem key={topping.id}>
-              {topping.amount}
+          toppings.map((topping, idx) => 
+            <ListItem key={idx}>
+              { toppingData ? toppingData[idx].label : '' }: {topping.amount}
             </ListItem>
           )
         }

@@ -15,6 +15,7 @@ const Uketuke: React.FC = () => {
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent 
         dons={dons}
+        selectingIndex={selectingIdx}
         onSelect={(idx, don) => { 
           setSelectingDon(don);
           setSelectingIdx(idx);
@@ -24,6 +25,13 @@ const Uketuke: React.FC = () => {
         <Box borderRadius='md' background='white' p={10}>
           <ReceptionDonForm 
             onSubmit={(don) => setDons([...dons, don])}
+            onEdit={(idx, don) => {
+              setDons(
+                dons.map((d, index) => (index === idx ? don : d))
+              );
+              setSelectingDon(null);
+              setSelectingIdx(null);
+            }}
             index={selectingIdx}
             yasai={selectingDon?.yasai}
             abura={selectingDon?.abura}

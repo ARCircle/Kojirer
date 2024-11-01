@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReceptionDonOptionRadio from "./ReceptionDonOptionRadio";
 import ReceptionToppingNumberInput from "./ReceptionToppingNumberInput";
 import { $api } from "@/utils/client";
@@ -12,6 +12,7 @@ import {
   FormLabel, 
   Grid,
   GridItem,
+  HStack,
   Switch,
   Text,
   useBoolean,
@@ -24,6 +25,7 @@ type Don = paths["/order"]["post"]["requestBody"]["content"]["application/json"]
 interface ReceptionDonFormProps {
   index?: number | null,
   onSubmit?: (don: Don) => void,
+  onEdit?: (idx: number, don: Don) => void,
   size?: number | null,
   yasai?: number | null,
   ninniku?: number | null,
@@ -58,13 +60,21 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
   ninniku,
   toppings,
   onSubmit = () => {},
+  onEdit = () => {},
 }) => {
-  const { data } = $api.useQuery('get', '/toppings/available');
+  const { data: toppingData } = $api.useQuery('get', '/toppings/available');
 
-  const isEdit = !!index && !!abura && !!karame && !!ninniku && !!toppings;
-  const initialCostomizeState = isEdit ? [ abura, karame, ninniku ] : [...Array(3)].map(() => 3);
+  const indexIsUndefined = index !== 0 && !index
+  const isEdit = !indexIsUndefined && !!abura && !!karame && !!ninniku && !!toppings;
+  const initialCostomizeState = 
+    isEdit ? 
+    [ abura, karame, ninniku ] : 
+    [...Array(3)].map(() => 3);
+
   const initialToppingAmountsState = 
-    isEdit ? toppings.map((t) => t.amount) : [...Array(toppings?.length)].map(() => 0);
+    isEdit ? 
+    toppings.map((t) => t.amount) : 
+    [...Array(toppingData?.length)].map(() => 0);
 
   const [ costomizes, setCostomizes ] = useState<number[]>(initialCostomizeState);
   const [ toppingAmounts, setToppingAmounts ] = useState<number[]>(initialToppingAmountsState);
@@ -72,9 +82,73 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
 
   const title = isEdit ? `丼 #${index} の編集` : '新規注文';
 
+  useEffect(() => {
+    setCostomizes(initialCostomizeState);
+    setToppingAmounts(initialToppingAmountsState)
+  }, [isEdit, toppingData]);
+
+  const submit = (e: React.FormEvent<HTMLFormElement>) => { 
+    e.preventDefault();
+    
+    const _toppings = toppingAmounts.map((amount, idx) => ({
+      id: toppingData ? Number(toppingData[idx].id) : 0,
+      amount,
+    }));
+    console.log(_toppings)
+
+    isEdit ? 
+    onEdit(
+      index, {
+        size: 1,
+        yasai: 3,
+        abura: Number(costomizes[0]),
+        karame: Number(costomizes[1]),
+        ninniku: Number(costomizes[2]),
+        toppings: _toppings,
+      }
+    ):
+    onSubmit({
+      size: 1,
+      yasai: 3,
+      abura: Number(costomizes[0]),
+      karame: Number(costomizes[1]),
+      ninniku: Number(costomizes[2]),
+      toppings: _toppings,
+    });
+
+    setCostomizes(initialCostomizeState);
+    setToppingAmounts(initialToppingAmountsState);
+  }
+
+  const cancel = () => {
+    const _toppings = initialToppingAmountsState.map((amount, idx) => ({
+      id: toppingData ? Number(toppingData[idx].id) : 0,
+      amount,
+    }));
+
+    isEdit &&
+    onEdit(
+      index, {
+        size: 1,
+        yasai: 3,
+        abura: Number(initialCostomizeState[0]),
+        karame: Number(initialCostomizeState[1]),
+        ninniku: Number(initialCostomizeState[2]),
+        toppings: _toppings,
+      }
+    )
+  }
+ 
   return (
-    <>
-      <Text fontSize='3xl'>{ title }</Text>
+    <form onSubmit={submit}>
+      <HStack justify="space-between">
+        <Text fontSize='3xl'>{ title }</Text>
+        { isEdit &&
+          <div>
+            <Button onClick={cancel}>キャンセル</Button>
+          </div>
+        }
+      </HStack>
       <Box position='relative' padding='10'>
         <Divider />
         <AbsoluteCenter bg='white' px='4'>
@@ -120,7 +194,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
       </Flex>
       
       {
-        data?.map(({ id, label }, idx) => 
+        toppingData?.map(({ id, label }, idx) => 
           <Grid key={id} templateColumns='repeat(12, 1fr)' pb={4}>
             <GridItem colSpan={3}>
               <Center>
@@ -145,26 +219,12 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
       <VStack align='stretch' pt={10}>
         <Button 
           colorScheme='teal'
-          onClick={() => { 
-            const _toppings = toppingAmounts.map((amount, idx) => ({
-              id: toppings ? Number(toppings[idx].id) : 0,
-              amount,
-            }));
-
-            onSubmit({
-              size: 1,
-              yasai: 3,
-              abura: Number(costomizes[0]),
-              karame: Number(costomizes[1]),
-              ninniku: Number(costomizes[2]),
-              toppings: _toppings,
-            });
-          }}
+          type="submit"
         >
-          追加
+          { isEdit ? '編集' : '追加'}
         </Button>
       </VStack>
-    </>
+    </form>
   )
 };
 

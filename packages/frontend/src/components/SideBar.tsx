@@ -15,11 +15,13 @@ type Don = paths["/order"]["post"]["requestBody"]["content"]["application/json"]
 
 interface SidebarProps {
   dons: Don[],
+  selectingIndex?: number | null,
   onSelect?: (index: number, don: Don) => void
 }
 
 const SidebarContent: React.FC<SidebarProps> = ({ 
   dons, 
+  selectingIndex = null,
   onSelect = () => {},
 }) => {
   const { data } = $api.useQuery('post', '/order/price', {
@@ -55,7 +57,10 @@ const SidebarContent: React.FC<SidebarProps> = ({
             <ReceptionDonCard 
               key={idx}
               index={idx + 1}
-              onClick={() => onSelect(idx + 1, don)}
+              isSelecting={selectingIndex === idx}
+              onClick={() => {
+                onSelect(idx, don);
+              }}
               {...don}
             />
           )

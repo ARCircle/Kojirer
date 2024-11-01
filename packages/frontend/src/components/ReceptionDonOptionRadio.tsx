@@ -4,7 +4,7 @@ import {
   RadioGroup, 
   Stack,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 
 export interface ReceptionDonOptionRadioProps {
   value?: number,
@@ -15,16 +15,14 @@ const ReceptionDonOptionRadio: React.FC<ReceptionDonOptionRadioProps> = ({
   value = 3, 
   onChange = () => {},
 }) => {
-  const [ innerValue, innerSetValue ] = useState(value);
   const { data: options } = $api.useQuery('get', '/options');
 
   const setValue = (value: number) => {
-    innerSetValue(value);
     onChange(value);
   }
  
   return (
-    <RadioGroup value={String(innerValue)} onChange={(v) => setValue(Number(v))} size="lg">
+    <RadioGroup value={String(value)} onChange={(v) => setValue(Number(v))} size="lg">
       <Stack spacing={5} direction='row'>
         {
           options?.map(({id, label}) => 
