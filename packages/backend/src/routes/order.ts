@@ -268,7 +268,6 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
           price: true
         },
         orderBy: { since: 'desc' },
-        take: 1
       }
     }
   });
