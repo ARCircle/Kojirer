@@ -160,6 +160,11 @@ router.post('/status/', typedAsyncWrapper<"/dons/status/", "post">(async (req, r
     take: limit,
     include: {
       orders: true,
+      adding: {
+        include: {
+          toppings: true,
+        },
+      },
     },
   });
 
@@ -175,6 +180,11 @@ router.post('/status/', typedAsyncWrapper<"/dons/status/", "post">(async (req, r
     abura: don.abura,
     karame: don.karame,
     status: don.status,
+    toppings: don.adding.map(adding => ({
+      id: adding.toppings.id,
+      label: adding.toppings.label,
+      amount: adding.amount
+    })),
   }));
 
 

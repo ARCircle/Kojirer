@@ -238,18 +238,18 @@ paths:
               schema:
                 $ref: "#/components/schemas/Order"
   "/order/price":
-    post: 
+    post:
       tags:
         - order
       description: オーダー単位の値段を取得
-      requestBody: 
+      requestBody:
         required: true
         content:
           application/json:
-            schema: 
+            schema:
               type: object
               properties:
-                dons: 
+                dons:
                   type: array
                   items:
                     type: object
@@ -434,6 +434,7 @@ components:
         - ninniku
         - karame
         - abura
+        - toppings
     Error:
       type: object
       properties:
