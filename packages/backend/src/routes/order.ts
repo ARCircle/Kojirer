@@ -1,5 +1,5 @@
 import prisma from '@/lib/prismaClient';
-import type { orders, dons } from '@prisma/client';
+import type { orders, dons, toppings, adding } from '@prisma/client';
 import { bigint2number } from '@/utils/typeConverters';
 import { typedAsyncWrapper } from '@/utils/wrappers';
 import express from 'express';
@@ -181,7 +181,7 @@ router.post("/price", typedAsyncWrapper<"/order/price", "post">(async (req, res)
 router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, res, next) => {
   const status = req.body.status;
 
-  let statusOrders: (orders & { dons: dons[] })[] = [];
+  let statusOrders: (orders & { dons: (dons & { adding: (adding & { toppings: toppings[] })[] })[] })[] = [];
 
   switch (status) {
     case COOKING:
@@ -261,6 +261,18 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
       break;
   }
 
+  const toppings = await prisma.toppings.findMany({
+    include: {
+      topping_prices: {
+        select: {
+          price: true
+        },
+        orderBy: { since: 'desc' },
+        take: 1
+      }
+    }
+  });
+
   const response = statusOrders.map(order => ({
     id: bigint2number(order.id),
     callNum: order.call_num,
@@ -276,11 +288,11 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
       orderId: bigint2number(don.order_id),
       size: don.size_id,
       status: don.status,
-      toppings: don.adding.map(topping => ({
+      toppings: order.dons.map(don => don.adding.map(topping => ({
         id: topping.topping_id,
         amount: topping.amount,
-        label: topping.toppings.label
-      }))
+        label: toppings.find(t => t.id === topping.topping_id)?.label || ''
+      }))).flat()
     })),
     donsCount: order.dons.length,
     cookingDonsCount: order.dons.reduce((count, don) => don.status === COOKING ? count + 1 : count, 0), // 調理中の丼の数
