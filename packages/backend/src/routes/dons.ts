@@ -83,6 +83,11 @@ router.get('/', typedAsyncWrapper<"/dons", "get">(async (req, res, next) => {
     {
       include: {
         orders: true,
+        adding: {
+          include: {
+            toppings: true,
+          },
+        },
       },
     }
   );
@@ -98,6 +103,11 @@ router.get('/', typedAsyncWrapper<"/dons", "get">(async (req, res, next) => {
     abura: don.abura,
     karame: don.karame,
     status: don.status,
+    toppings: don.adding.map(adding => ({
+      id: adding.toppings.id,
+      label: adding.toppings.label,
+      amount: adding.amount
+    })),
   }));
   res.status(200).send(resDons);
 }));
@@ -116,6 +126,14 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
   const don = await prisma.dons.findUnique({
     where: {
       id: Number(id),
+    },
+    include: {
+      orders: true,
+      adding: {
+        include: {
+          toppings: true,
+        },
+      },
     },
   });
 
@@ -141,6 +159,11 @@ router.get('/:id', typedAsyncWrapper<"/dons/{id}", "get">(async (req, res, next)
     abura: don.abura,
     karame: don.karame,
     status: don.status,
+    toppings: don.adding.map(adding => ({
+      id: adding.toppings.id,
+      label: adding.toppings.label,
+      amount: adding.amount,
+    })),
   };
 
   res.status(200).send(resDon);
