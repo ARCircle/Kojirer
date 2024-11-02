@@ -217,6 +217,11 @@ router.put('/:id', typedAsyncWrapper<"/dons/{id}", "put">(async (req, res, next)
     },
     include: {
       orders: true,
+      adding: {
+        include: {
+          toppings: true,
+        },
+      }
     },
   })
 
@@ -231,6 +236,11 @@ router.put('/:id', typedAsyncWrapper<"/dons/{id}", "put">(async (req, res, next)
     abura: updatedDon.abura,
     karame: updatedDon.karame,
     status: updatedDon.status,
+    toppings: updatedDon.adding.map(adding => ({
+      id: adding.toppings.id,
+      label: adding.toppings.label,
+      amount: adding.amount
+    })),
   }
 
   res.status(200).json(response);

@@ -537,13 +537,13 @@ interface components {
             /** Format: int32 */
             abura: number;
             snsFollowed?: boolean | null;
-            toppings?: {
+            toppings: {
                 /** Format: int32 */
                 id: number;
                 label: string;
                 /** Format: int32 */
                 amount: number;
-            }[] | null;
+            }[];
         };
         Error: {
             /** @description エラーを簡潔に表現したコード */
