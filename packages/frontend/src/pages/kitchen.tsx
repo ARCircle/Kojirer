@@ -14,7 +14,7 @@ type Don = paths['/dons/status/']['post']['responses']['200']['content']['applic
 const KitchenUI = () => {
   // $api.useQueryでrefetchメソッドを含むオブジェクトを取得
   const { data, error, isLoading, refetch } = $api.useQuery("post", "/dons/status/", {
-    body: { status: 1 },
+    body: { status: 1, limit: 100000000 },
   });
 
   const mutation = $api.useMutation("put", "/dons/{id}");
