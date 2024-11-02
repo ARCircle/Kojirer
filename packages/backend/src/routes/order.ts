@@ -17,11 +17,23 @@ const router = express.Router();
 router.post("/", typedAsyncWrapper<"/order", "post">(async (req, res, next) => {
   const order = req.body;
 
+  const toppings = await prisma.toppings.findMany({
+    where: {
+      id: {
+        in: order.dons.map(don => don.toppings.map(topping => topping.id)).flat()
+      }
+    }
+  });
+
   const addedOrder = await prisma.orders.create({
     include: {
       dons: {
         include: {
-          adding: true
+          adding: {
+            include: {
+              toppings: true
+            }
+          },
         }
       }
     },
@@ -39,9 +51,13 @@ router.post("/", typedAsyncWrapper<"/order", "post">(async (req, res, next) => {
               create: don.toppings.map((topping) => {
                 return {
                   amount: topping.amount,
-                  topping_id: topping.id
+                  topping_id: topping.id,
+                  label: toppings.find(t => t.id === topping.id)?.label
                 }
-              })
+              }),
+              include: {
+                toppings: true
+              }
             },
             sizes: {
               connect: {
@@ -70,6 +86,11 @@ router.post("/", typedAsyncWrapper<"/order", "post">(async (req, res, next) => {
       orderId: bigint2number(don.order_id),
       size: don.size_id,
       status: don.status,
+      toppings: don.adding.map(topping => ({
+        id: topping.topping_id,
+        amount: topping.amount,
+        label: topping.toppings.label
+      }))
     })),
     donsCount: addedOrder.dons.length,
     cookingDonsCount: addedOrder.dons.reduce((count, don) => don.status === COOKING ? count + 1 : count, 0),
@@ -175,7 +196,15 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
         },
         orderBy: { created_at: 'asc' },
         include: {
-          dons: true
+          dons: {
+            include: {
+              adding: {
+                include: {
+                  toppings: true
+                }
+              }
+            }
+          }
         }
       });
       break;
@@ -191,7 +220,15 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
         },
         orderBy: { created_at: 'asc' },
         include: {
-          dons: true
+          dons: {
+            include: {
+              adding: {
+                include: {
+                  toppings: true
+                }
+              }
+            }
+          }
         }
       });
       break;
@@ -208,7 +245,15 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
         take: 10, // 受け取り完了は 10 件まで取得（無限に貯まるので）
         orderBy: { created_at: 'asc' },
         include: {
-          dons: true
+          dons: {
+            include: {
+              adding: {
+                include: {
+                  toppings: true
+                }
+              }
+            }
+          }
         }
       });
       break;
@@ -231,6 +276,11 @@ router.post("/status", typedAsyncWrapper<"/order/status", "post">(async (req, re
       orderId: bigint2number(don.order_id),
       size: don.size_id,
       status: don.status,
+      toppings: don.adding.map(topping => ({
+        id: topping.topping_id,
+        amount: topping.amount,
+        label: topping.toppings.label
+      }))
     })),
     donsCount: order.dons.length,
     cookingDonsCount: order.dons.reduce((count, don) => don.status === COOKING ? count + 1 : count, 0), // 調理中の丼の数
@@ -280,7 +330,15 @@ router.put("/status", typedAsyncWrapper<"/order/status", "put">(async (req, res,
       }
     },
     include: {
-      dons: true
+      dons: {
+        include: {
+          adding: {
+            include: {
+              toppings: true
+            }
+          }
+        }
+      }
     }
   });
 
@@ -299,6 +357,11 @@ router.put("/status", typedAsyncWrapper<"/order/status", "put">(async (req, res,
       orderId: bigint2number(don.order_id),
       size: don.size_id,
       status: don.status,
+      toppings: updatedOrder.dons.map(don => don.adding.map(topping => ({
+        id: topping.topping_id,
+        amount: topping.amount,
+        label: topping.toppings.label
+      }))).flat()
     })),
     donsCount: updatedOrder.dons.length,
     cookingDonsCount: updatedOrder.dons.filter(don => don.status == COOKING).length,
