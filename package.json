@@ -29,5 +29,8 @@
     "env-cmd": "^10.1.0",
     "react-spring": "^9.7.4",
     "react-swipeable": "^7.0.1"
+  },
+  "devDependencies": {
+    "react-is": "^19.1.0"
   }
 }

@@ -7,7 +7,7 @@
     "start": "node ./built/index.js",
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "watch": "tsc-watch --noClear --onSuccess \"node watch.mjs\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
     "migrate:create": "npx prisma migrate dev --create-only",
     "migrate:exe": "npx prisma migrate dev",
     "migrate:status": "npx prisma migrate status",
@@ -28,6 +28,7 @@
     "@types/node": "^20.11.20",
     "prisma": "^5.11.0",
     "tsc-alias": "^1.8.8",
-    "tsc-watch": "^6.0.4"
+    "tsc-watch": "^6.0.4",
+    "vitest": "^1.6.1"
   }
 }
