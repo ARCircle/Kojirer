@@ -7,10 +7,10 @@ try {
   console.log('✓ Cleaned built files');
 
   // build frontend
-  spawnSync('pnpm', ['run', 'build', '-w', 'packages/frontend'], { stdio: 'inherit' });
+  spawnSync('pnpm', ['run', '--filter', 'frontend', 'build'], { stdio: 'inherit' });
 
   // build backend
-  spawnSync('pnpm', ['run', 'build', '-w', 'packages/backend'], { stdio: 'inherit' });
+  spawnSync('pnpm', ['run', '--filter', 'backend', 'build'], { stdio: 'inherit' });
 
   // check existing directory
   if (!fs.existsSync('./packages/backend/built/web')) {

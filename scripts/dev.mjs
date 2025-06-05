@@ -5,8 +5,8 @@ const pids = [];
 
 spawnSync('pnpm', ['run', 'clean'], { stdio: 'inherit' });
 
-const backProc = spawn('pnpm', ['run', 'watch', '-w', 'packages/backend']);
-const frontProc = spawn('pnpm', ['run', 'watch', '-w', 'packages/frontend']);
+const backProc = spawn('pnpm', ['run', '--filter', 'backend', 'watch']);
+const frontProc = spawn('pnpm', ['run', '--filter', 'frontend', 'watch']);
 
 backProc.stdout.on('data', (data) => {
   process.stdout.write(data);
