@@ -1,0 +1,508 @@
+openapi: "3.0.3"
+
+info:
+  title: "Kojirer API"
+  version: 0.0.0
+
+servers:
+  - url: "http://localhost:52600/api/"
+
+tags:
+  - name: don
+  - name: topping
+  - name: order
+
+paths:
+  "/dons":
+    get:
+      tags:
+        - don
+      description: 全ての丼を取得
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Don"
+  "/dons/{id}":
+    get:
+      tags:
+        - don
+      description: 特定のidの丼の詳細を取得
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: 丼の詳細を返す
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Don"
+    put:
+      tags:
+        - don
+      description: donの調理状態を更新する
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+              required:
+                - donId
+                - status
+      responses:
+        '201':
+          description: 調理状態の変更に成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Don"
+  "/dons/price":
+    post:
+      tags:
+        - don
+      description: 特定の条件の場合の丼の値段を取得
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                size:
+                  type: integer
+                  format: int32
+                toppings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int32
+                      amount:
+                        type: integer
+                        format: int32
+                    required:
+                      - id
+                      - amount
+                snsFollowed:
+                  type: boolean
+              required:
+                - size
+      responses:
+        '200':
+          description: 価格を返す
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  price:
+                    type: integer
+                    format: int32
+  "/dons/status/":
+    post:
+      tags:
+        - don
+      description: 特定の状態の丼を取得する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+                  description: |
+                    調理状態を表すstatus
+                    1: 調理中
+                    2: 調理完了
+                    3: 受け渡し済み
+                limit:
+                  type: integer
+                  format: int32
+                  default: 10
+                  description: 取得件数上限
+              required:
+                - status
+      responses:
+        '200':
+          description: 注文の一覧を正常に取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Don"
+  "/options":
+    get:
+      responses:
+        '200':
+          description: オプションの数字と言葉をマッピングを取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Option'
+  "/order":
+    post:
+      tags:
+        - order
+      summary: 新規注文を追加
+      description: 新規注文を含むリクエストに対して，DBにその内容を保存し，作成した内容をレスポンスする
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callNum:
+                  type: integer
+                dons:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      size:
+                        type: integer
+                        format: int32
+                      yasai:
+                        type: integer
+                        format: int32
+                      ninniku:
+                        type: integer
+                        format: int32
+                      karame:
+                        type: integer
+                        format: int32
+                      abura:
+                        type: integer
+                        format: int32
+                      snsFollowed:
+                        type: boolean
+                      toppings:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int32
+                            amount:
+                              type: integer
+                              format: int32
+                          required:
+                            - id
+                            - label
+                            - amount
+                    required:
+                      - size
+                      - yasai
+                      - ninniku
+                      - karame
+                      - abura
+                      - toppings
+              required:
+                - callNum
+                - dons
+      responses:
+        '201':
+          description: 注文の追加が成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  "/order/price":
+    post: 
+      tags:
+        - order
+      description: オーダー単位の値段を取得
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                dons: 
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      size:
+                        type: integer
+                        format: int32
+                      toppings:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int32
+                            amount:
+                              type: integer
+                              format: int32
+                          required:
+                            - id
+                            - amount
+                      snsFollowed:
+                        type: boolean
+                    required:
+                      - size
+              required:
+                - dons
+      responses:
+        '200':
+          description: 価格を返す
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  price:
+                    type: integer
+                    format: int32
+  "/order/status":
+    post:
+      tags:
+        - order
+      description: |
+                  don のステータスに応じて Order を取得する。各ステータスの動作は以下の通り
+                  1: 一つでも調理中の don がある Order を全て取得
+                  2: 全ての don が調理済み かつ 受け渡しが完了していない Order を取得
+                  3: オーダー内の全ての don が受け渡し完了の Order を取得
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+              required:
+                - status
+      responses:
+        '200':
+          description: ステータスに応じた Order を返す
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    put:
+      tags:
+        - order
+      description: |
+        1つの order の中の全ての don の状態を targetStatus に更新する
+        order 単位で変更可能な status は 2 -> 3 or 3 -> 2 のみ.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targetStatus:
+                  type: integer
+                  format: int32
+                orderId:
+                  type: integer
+                  format: int32
+              required:
+                - targetStatus
+                - orderId
+      responses:
+        '200':
+          description: 更新後の Order を返す
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  "/toppings":
+    get:
+      tags:
+        - topping
+      responses:
+        '200':
+          description: すべてのトッピングを返す
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Topping"
+  "/toppings/available":
+    get:
+      tags:
+        - topping
+      responses:
+        '200':
+          description: すべてのトッピングを返す
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Topping"
+components:
+  schemas:
+    Don:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        callNum:
+          type: integer
+          format: int32
+        status:
+          type: integer
+          format: int32
+        orderId:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        yasai:
+          type: integer
+          format: int32
+        ninniku:
+          type: integer
+          format: int32
+        karame:
+          type: integer
+          format: int32
+        abura:
+          type: integer
+          format: int32
+        snsFollowed:
+          type: boolean
+        toppings:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int32
+              label:
+                type: string
+              amount:
+                type: integer
+                format: int32
+            required:
+              - id
+              - label
+              - amount
+      required:
+        - id
+        - orderId
+        - status
+        - callNum
+        - size
+        - yasai
+        - ninniku
+        - karame
+        - abura
+    Error:
+      type: object
+      properties:
+        title:
+          type: string
+          description: エラーを簡潔に表現したコード
+        type:
+          type: string
+          description: エラーの詳細ドキュメントを指すURL
+        status:
+          type: number
+          description: HTTPステータスコード
+        detail:
+          type: string
+          description: 開発者向けの詳細文
+      required:
+        - title
+        - type
+        - status
+        - detail
+    Option:
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+      required:
+        - id
+        - label
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        callNum:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        donsCount:
+          type: integer
+          format: int32
+        cookingDonsCount:
+          type: integer
+          format: int32
+        dons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Don"
+      required:
+        - id
+        - callNum
+        - createdAt
+        - donsCount
+        - cookingDonsCount
+        - dons
+    Topping:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        label:
+          type: string
+        price:
+          type: integer
+          format: int32
+
+

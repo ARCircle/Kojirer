@@ -12,6 +12,7 @@
         "prisma.prisma-insider",
         "knisterpeter.vscode-commitizen",
         "esbenp.prettier-vscode"
+        "42crunch.vscode-openapi"
       ]
     }
   },

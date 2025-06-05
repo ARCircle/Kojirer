@@ -1,0 +1,39 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./types": {
+      "require": "./dist/types.js",
+      "import": "./dist/types.mjs",
+      "types": "./dist/types.d.ts"
+    },
+    "./schema": {
+      "require": "./dist/schema.js",
+      "import": "./dist/schema.mjs",
+      "types": "./dist/schema.d.ts"
+    }
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.4.2",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run clean && npm run codegen && npm run build:tsup",
+    "build:tsup": "tsup-node --config tsup.config.ts",
+    "clean": "rm -rf dist && rm -rf ./src/gen",
+    "codegen": "npm run codegen:openapi-ts",
+    "codegen:openapi-ts": "tsx ./src/transform.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

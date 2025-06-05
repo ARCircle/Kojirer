@@ -1,7 +1,8 @@
 import express from "express";
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from "./middlewares/errorHandler";
+import cors from 'cors';
+import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
 const port = 52600;
@@ -10,6 +11,7 @@ const port = 52600;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public'))); 
 app.use(express.static(path.join(__dirname, 'web'))); 
+app.use(cors())
 
 // routesのファイル名の配列を取得
 const filenames = fs.readdirSync(path.join(__dirname, 'routes'));
@@ -32,6 +34,8 @@ app.get('/api/*', (req, res) => {
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'web', 'index.html'));
 });
+
+app.use(errorHandler);
 
 // ポート開放
 app.listen(port);

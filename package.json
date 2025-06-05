@@ -2,12 +2,13 @@
   "name": "kojirer",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "./node_modules/.bin/env-cmd -f .env node ./scripts/build.mjs",
-    "start": "cd packages/backend/built && ../../../node_modules/.bin/env-cmd -f ../../../.env node index.js",
+    "start": "cd /kojirer/packages/backend/built && /kojirer/node_modules/.bin/env-cmd -f /kojirer/.env node index.js",
     "clean": "node ./scripts/clean.mjs",
     "dev": "./node_modules/.bin/env-cmd -f .env node ./scripts/dev.mjs",
+    "api": "npm run build -w packages/api",
     "migrate:create": "./node_modules/.bin/env-cmd -f .env npm run migrate:create -w packages/backend",
     "migrate:exe": "./node_modules/.bin/env-cmd -f .env npm run migrate:exe    -w packages/backend",
     "migrate:dev": "npm run migrate:exe",
@@ -19,10 +20,16 @@
   "license": "ISC",
   "workspaces": [
     "packages/frontend",
-    "packages/backend"
+    "packages/backend",
+    "packages/api"
   ],
   "dependencies": {
-    "env-cmd": "^10.1.0"
+    "env-cmd": "^10.1.0",
+    "@react-spring/web": "^9.7.5",
+    "@use-gesture/react": "^10.3.1",
+    "env-cmd": "^10.1.0",
+    "react-spring": "^9.7.4",
+    "react-swipeable": "^7.0.1"
   },
   "devDependencies": {
     "prettier": "^3.3.3"

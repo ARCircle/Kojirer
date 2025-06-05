@@ -1,23 +1,23 @@
 {
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig to read more about this file */
-    "noImplicitAny": false,
-
     /* Language and Environment */
-    "target": "ES2020",
+    "target": "es2020",
 
     /* Modules */
-    "module": "Node16",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "rootDir": "./src",
-    "moduleResolution": "Node16",
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*", "./dist/*"]
     },
     "resolveJsonModule": true,
+    "declaration": true, 
+    "declarationMap": true,
+    "sourceMap": true,
 
     /* Emit */
-    "outDir": "./built",
+    "outDir": "dist",
 
     /* Interop Constraints */
     "esModuleInterop": true,
@@ -28,5 +28,11 @@
 
     /* Completeness */
     "skipLibCheck": true
-  }
+  },
+  "exclude": [
+    "src/schemaFormatter.ts",
+    "src/typesIndexFormatter.ts",
+    "tsup.config.ts"
+  ],
+  "include": ["./src/**/*.ts"]
 }
