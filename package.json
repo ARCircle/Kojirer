@@ -25,7 +25,8 @@
   },
   "devDependencies": {
     "prettier": "^3.5.3",
-    "ps-tree": "^1.2.0"
+    "ps-tree": "^1.2.0",
+    "react-is": "^19.1.0"
   },
   "packageManager": "pnpm@10.11.1",
   "prisma": {
