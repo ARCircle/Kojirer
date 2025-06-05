@@ -1,9 +1,9 @@
 type ErrorSchema = {
-  title: string,
-  type: string,
-  status: number,
-  detail: string,
-}
+  title: string;
+  type: string;
+  status: number;
+  detail: string;
+};
 
 export class ApiError extends Error {
   private _schema: ErrorSchema;
@@ -12,11 +12,11 @@ export class ApiError extends Error {
     super(_schema?.title);
     this.name = new.target.name;
     this._schema = _schema || {
-      title: "INTERNAL_PROBLEMS",
-      type: "about:blank",
+      title: 'INTERNAL_PROBLEMS',
+      type: 'about:blank',
       status: 500,
-      detail: "Something problems occured in server.",
-    }
+      detail: 'Something problems occured in server.',
+    };
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
@@ -25,19 +25,19 @@ export class ApiError extends Error {
 
   public static invalidParams(detail?: string) {
     return new ApiError({
-      title: "INVAILD_PARAMS",
-      type: "about:blank",
+      title: 'INVAILD_PARAMS',
+      type: 'about:blank',
       status: 400,
-      detail: detail || "This request contains invaild parameter. Please correct to the right ones.",
+      detail: detail || 'This request contains invaild parameter. Please correct to the right ones.',
     });
   }
 
   public static internalProblems() {
     return new ApiError({
-      title: "INTERNAL_PROBLEMS",
-      type: "about:blank",
+      title: 'INTERNAL_PROBLEMS',
+      type: 'about:blank',
       status: 500,
-      detail: "Something problems occured in server.",
+      detail: 'Something problems occured in server.',
     });
   }
 

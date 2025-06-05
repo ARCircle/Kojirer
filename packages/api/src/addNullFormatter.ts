@@ -1,6 +1,6 @@
 import ts from 'typescript';
 
-export default function addNullFormatter<T extends ts.Node>(context: ts.TransformationContext){
+export default function addNullFormatter<T extends ts.Node>(context: ts.TransformationContext) {
   return (rootNode: T) => {
     const visit = (node: ts.Node): ts.Node => {
       node = ts.visitEachChild(node, visit, context);
@@ -10,16 +10,16 @@ export default function addNullFormatter<T extends ts.Node>(context: ts.Transfor
         if (node.questionToken) {
           const unionType = ts.factory.createUnionTypeNode([
             node.type,
-            ts.factory.createLiteralTypeNode(ts.factory.createNull())
+            ts.factory.createLiteralTypeNode(ts.factory.createNull()),
           ]);
 
           return ts.factory.updatePropertySignature(node, node.modifiers, node.name, node.questionToken, unionType);
         }
       }
 
-      return node
+      return node;
     };
 
     return ts.visitNode(rootNode, visit);
-  }
+  };
 }
