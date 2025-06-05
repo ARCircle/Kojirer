@@ -32,6 +32,6 @@ export default {
 ## How to start development
 
 - first, open the devcontainer and run following commands
-- `$ cd packages/frontend && npm run watch`
+- `$ cd packages/frontend && pnpm run watch`
   - copy URL
 - open browser and paste URL, then you can view frontend pages

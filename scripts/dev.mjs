@@ -3,10 +3,10 @@ import psTree from 'ps-tree';
 
 const pids = [];
 
-spawnSync('npm', ['run', 'clean'], { stdio: 'inherit' });
+spawnSync('pnpm', ['run', 'clean'], { stdio: 'inherit' });
 
-const backProc = spawn('npm', ['run', 'watch', '-w', 'packages/backend']);
-const frontProc = spawn('npm', ['run', 'watch', '-w', 'packages/frontend']);
+const backProc = spawn('pnpm', ['run', 'watch', '-w', 'packages/backend']);
+const frontProc = spawn('pnpm', ['run', 'watch', '-w', 'packages/frontend']);
 
 backProc.stdout.on('data', (data) => {
   process.stdout.write(data);

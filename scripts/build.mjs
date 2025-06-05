@@ -3,14 +3,14 @@ import fs from 'fs';
 
 try {
   // clean built files
-  spawnSync('npm', ['run', 'clean'], { stdio: 'inherit' });
+  spawnSync('pnpm', ['run', 'clean'], { stdio: 'inherit' });
   console.log('✓ Cleaned built files');
 
   // build frontend
-  spawnSync('npm', ['run', 'build', '-w', 'packages/frontend'], { stdio: 'inherit' });
+  spawnSync('pnpm', ['run', 'build', '-w', 'packages/frontend'], { stdio: 'inherit' });
 
   // build backend
-  spawnSync('npm', ['run', 'build', '-w', 'packages/backend'], { stdio: 'inherit' });
+  spawnSync('pnpm', ['run', 'build', '-w', 'packages/backend'], { stdio: 'inherit' });
 
   // check existing directory
   if (!fs.existsSync('./packages/backend/built/web')) {
@@ -22,5 +22,5 @@ try {
   execSync('cp -f -r ./packages/frontend/built/* ./packages/backend/built/web');
 
   console.log("✓ Copied frontend's built directory\n");
-  console.log('Start server: npm run start\n');
+  console.log('Start server: pnpm run start\n');
 } catch {}
