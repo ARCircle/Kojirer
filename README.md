@@ -51,7 +51,7 @@ VSCodeの画面左の「><」のようなマークから，
 開発開始時には必ずマイグレーションを実行する．
 
 ```bash
-npm run migrate:dev
+pnpm run migrate:dev
 ```
 
 `TARGET=dev`では，ホットリロードの恩恵を受けるため，フロントエンドサーバ (port: 52800) とバックエンドサーバ (port: 52600) の両方が起動する．
@@ -88,7 +88,7 @@ tsファイルを`src/routes`に追加すると，そのファイル名のパス
 バックエンド側の型再生成
 
 ```bash
-npm run api
+pnpm run api
 ```
 
 #### DBマイグレーション
@@ -98,9 +98,9 @@ npm run api
 このリポジトリにおけるマイグレーションの手順は以下のとおりです．
 
 1. `prisma/schema.prisma`において，スキーマを編集する
-2. `npm run migrate:create`を実行し，sqlファイルを`prisma`ディレクトリ以下に作成される
+2. `pnpm run migrate:create`を実行し，sqlファイルを`prisma`ディレクトリ以下に作成される
 3. 作成されたsqlファイルを確認し，既存のスキーマを壊すことがないか確認
-4. `npm run migrate:dev`でsqlを実行する
+4. `pnpm run migrate:dev`でsqlを実行する
 
 #### 開発用データのInsert
 
@@ -125,5 +125,5 @@ docker-compose up -d --build
 ```
 
 ```bash
-docker-compose exec web npm run migrate:dev
+docker-compose exec web pnpm run migrate:dev
 ```

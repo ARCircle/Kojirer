@@ -27,10 +27,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run clean && npm run codegen && npm run build:tsup",
+    "build": "pnpm run clean && pnpm run codegen && pnpm run build:tsup",
     "build:tsup": "tsup-node --config tsup.config.ts",
     "clean": "rm -rf dist && rm -rf ./src/gen",
-    "codegen": "npm run codegen:openapi-ts",
+    "codegen": "pnpm run codegen:openapi-ts",
     "codegen:openapi-ts": "tsx ./src/transform.ts"
   },
   "author": "",
