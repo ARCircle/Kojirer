@@ -31,16 +31,16 @@ importers:
   packages/api:
     devDependencies:
       openapi-typescript:
-        specifier: ^7.4.2
+        specifier: ^7.8.0
         version: 7.8.0(typescript@5.8.3)
       tsup:
-        specifier: ^8.3.5
+        specifier: ^8.5.0
         version: 8.5.0(jiti@2.4.2)(postcss@8.5.4)(tsx@4.19.4)(typescript@5.8.3)
       tsx:
-        specifier: ^4.19.1
+        specifier: ^4.19.4
         version: 4.19.4
       typescript:
-        specifier: ^5.6.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   packages/backend:
