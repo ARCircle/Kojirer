@@ -19,7 +19,7 @@
     "openapi-fetch": "^0.14.0",
     "openapi-react-query": "^0.2.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.2",
     "react-swipeable-list": "^1.10.0",
     "typescript": "^5.4.2",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.2.56",
-    "@types/react-dom": "^18.2.19",
+    "@types/react-dom": "^19.1.6",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^8.33.1",
     "@vitejs/plugin-react": "^4.2.1",
