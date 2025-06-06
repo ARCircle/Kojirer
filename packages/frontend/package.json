@@ -23,7 +23,7 @@
     "react-router-dom": "^6.22.3",
     "react-swipeable-list": "^1.10.0",
     "typescript": "^5.4.2",
-    "vite": "^5.1.5"
+    "vite": "^6.3.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",
