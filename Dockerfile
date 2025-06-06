@@ -1,4 +1,4 @@
-FROM node:20-slim AS prod
+FROM node:24-slim AS prod
 
 # 作業ディレクトリを指定 (ディレクトリがない場合は作ってくれる)
 WORKDIR /kojirer
