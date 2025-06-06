@@ -20,14 +20,14 @@
     "api": "file:../api",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "typescript": "^5.4.2"
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17",
+    "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
     "@types/node": "^22.15.30",
     "prisma": "^6.9.0",
-    "tsc-alias": "^1.8.8",
+    "tsc-alias": "^1.8.16",
     "tsc-watch": "^7.1.1"
   }
 }
