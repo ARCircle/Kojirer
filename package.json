@@ -15,7 +15,7 @@
     "migrate:dev": "pnpm run migrate:exe",
     "migrate:status": "env-cmd -f .env pnpm --filter backend run migrate:status",
     "migrate:reset": "env-cmd -f .env pnpm --filter backend run migrate:reset",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "pnpm exec tsx --test"
   },
   "author": "",
   "license": "ISC",
@@ -32,7 +32,8 @@
     "react-swipeable": "^7.0.2"
   },
   "devDependencies": {
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "tsx": "^4.9.0"
   },
   "packageManager": "pnpm@10.11.1"
 }
