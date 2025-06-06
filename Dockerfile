@@ -6,14 +6,15 @@ WORKDIR /kojirer
 # 依存関係を示すファイルをコピー
 COPY . /kojirer
 
-RUN apt-get update -y && apt-get install -y openssl
+RUN apt-get update -y && apt-get install -y openssl \
+    && npm install -g pnpm
 
 # アプリの依存関係をインストール
-RUN npm install
+RUN pnpm install
 
 RUN npx prisma generate --schema packages/backend/prisma/schema.prisma
 
 # ビルド
-RUN npm run build
+RUN pnpm run build
 
-CMD [ "sh", "-c", "npm run start & npx prisma studio --schema packages/backend/prisma/schema.prisma" ]
+CMD [ "sh", "-c", "pnpm run start & npx prisma studio --schema packages/backend/prisma/schema.prisma" ]

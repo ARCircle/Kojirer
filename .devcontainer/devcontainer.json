@@ -16,5 +16,5 @@
       ]
     }
   },
-  "postCreateCommand": "npm install"
+  "postCreateCommand": "pnpm install"
 }

@@ -12,7 +12,7 @@
       "@/*": ["./src/*", "./dist/*"]
     },
     "resolveJsonModule": true,
-    "declaration": true, 
+    "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
 
@@ -29,10 +29,6 @@
     /* Completeness */
     "skipLibCheck": true
   },
-  "exclude": [
-    "src/schemaFormatter.ts",
-    "src/typesIndexFormatter.ts",
-    "tsup.config.ts"
-  ],
+  "exclude": ["src/schemaFormatter.ts", "src/typesIndexFormatter.ts", "tsup.config.ts"],
   "include": ["./src/**/*.ts"]
 }
