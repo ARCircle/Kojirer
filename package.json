@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "prettier": "^3.5.3"
+    "react-is": "^19.1.0"
   },
   "packageManager": "pnpm@10.11.1"
 }
