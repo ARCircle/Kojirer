@@ -1,9 +1,9 @@
-import { Box, Heading, Card, CardHeader, CardBody, Stack, StackDivider } from '@chakra-ui/react';
-import InfoRow from './InfoRow';
-import { components } from 'api/schema';
-import { useSpring, animated } from 'react-spring';
+import { Box, Card, CardBody, CardHeader, Heading, Stack, StackDivider } from '@chakra-ui/react';
+import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
+import { components } from 'api/schema';
 import React from 'react';
+import InfoRow from './InfoRow';
 
 type Don = components['schemas']['Don'];
 
