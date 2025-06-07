@@ -31,9 +31,11 @@ app.get('/api/*splat', (req, res) => {
 });
 
 // API以外にアクセスされたらindex.htmlを返す
-app.get('/*splat', (req, res) => {
-  res.sendFile(path.join(__dirname, 'web', 'index.html'));
-});
+if (process.env.NODE_ENV === 'production') {
+  app.get('/*splat', (req, res) => {
+    res.sendFile(path.join(__dirname, 'web', 'index.html'));
+  });
+}
 
 app.use(errorHandler);
 

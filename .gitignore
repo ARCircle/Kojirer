@@ -3,5 +3,6 @@ package-lock.json
 pnpm-debug.log*
 
 .env
+.env.container
 
 db_data

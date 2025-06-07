@@ -6,24 +6,20 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "node ./scripts/build.mjs",
-    "start": "cd /kojirer/packages/backend/built && /kojirer/node_modules/.bin/env-cmd -f /kojirer/.env node index.js",
+    "start": "cd /kojirer/packages/backend/built && /kojirer/node_modules/.bin/env-cmd -f /kojirer/.env --no-override node index.js",
     "clean": "node ./scripts/clean.mjs",
-    "dev": "env-cmd -f .env node ./scripts/dev.mjs",
+    "dev": "env-cmd -f .env --no-override node ./scripts/dev.mjs",
     "api": "pnpm --filter api run build",
-    "migrate:create": "env-cmd -f .env pnpm --filter backend run migrate:create",
-    "migrate:exe": "env-cmd -f .env pnpm --filter backend run migrate:exe",
+    "migrate:create": "env-cmd -f .env --no-override pnpm --filter backend run migrate:create",
+    "migrate:exe": "env-cmd -f .env --no-override pnpm --filter backend run migrate:exe",
     "migrate:dev": "pnpm run migrate:exe",
-    "migrate:status": "env-cmd -f .env pnpm --filter backend run migrate:status",
-    "migrate:reset": "env-cmd -f .env pnpm --filter backend run migrate:reset",
+    "migrate:status": "env-cmd -f .env --no-override pnpm --filter backend run migrate:status",
+    "migrate:reset": "env-cmd -f .env --no-override pnpm --filter backend run migrate:reset",
+    "db:studio": "env-cmd -f .env --no-override pnpm --filter backend run db:studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "workspaces": [
-    "packages/frontend",
-    "packages/backend",
-    "packages/api"
-  ],
   "dependencies": {
     "@react-spring/web": "^9.7.5",
     "@use-gesture/react": "^10.3.1",
@@ -35,5 +31,8 @@
     "prettier": "^3.5.3",
     "ps-tree": "^1.2.0"
   },
-  "packageManager": "pnpm@10.11.1"
+  "packageManager": "pnpm@10.11.1",
+  "prisma": {
+    "schema": "packages/backend/prisma/schema.prisma"
+  }
 }
