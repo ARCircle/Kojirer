@@ -15,7 +15,7 @@
     "migrate:dev": "pnpm run migrate:exe",
     "migrate:status": "env-cmd -f .env pnpm --filter backend run migrate:status",
     "migrate:reset": "env-cmd -f .env pnpm --filter backend run migrate:reset",
-    "test": "npm test -w packages/backend"
+    "test": "pnpm --filter backend test"
   },
   "author": "",
   "license": "ISC",
