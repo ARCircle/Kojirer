@@ -14,7 +14,7 @@
     "migrate:dev": "npm run migrate:exe",
     "migrate:status": "./node_modules/.bin/env-cmd -f .env npm run migrate:status -w packages/backend",
     "migrate:reset": "./node_modules/.bin/env-cmd -f .env npm run migrate:reset  -w packages/backend",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "test": "npm test -w packages/backend"
   },
   "author": "",
   "license": "ISC",
