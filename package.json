@@ -25,14 +25,15 @@
     "packages/api"
   ],
   "dependencies": {
-    "@react-spring/web": "^10.0.1",
+    "@react-spring/web": "^9.7.5",
     "@use-gesture/react": "^10.3.1",
     "env-cmd": "^10.1.0",
     "react-spring": "^10.0.1",
     "react-swipeable": "^7.0.2"
   },
   "devDependencies": {
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "ps-tree": "^1.2.0"
   },
   "packageManager": "pnpm@10.11.1"
 }
