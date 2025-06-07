@@ -6,70 +6,76 @@ import { ApiError } from '@/utils/ApiError';
 const router = express.Router();
 
 //get available only
-router.get('/available', asyncWrapper(async (req, res, next) => {
-  const toppings = await prisma.toppings.findMany({
-    //get available: true
-    where: {
-      available: true,
-    },
+router.get(
+  '/available',
+  asyncWrapper(async (req, res, next) => {
+    const toppings = await prisma.toppings.findMany({
+      //get available: true
+      where: {
+        available: true,
+      },
 
-    //include topping_prices table
-    include: {
-      topping_prices: {
-        select: {
-          price: true,
+      //include topping_prices table
+      include: {
+        topping_prices: {
+          select: {
+            price: true,
+          },
+          orderBy: { since: 'desc' },
+          take: 1,
         },
-        orderBy: { since: 'desc' },
-        take: 1
-      }
+      },
+    });
+
+    if (!toppings) {
+      throw ApiError.internalProblems();
     }
-  });
 
-  if (!toppings) {
-    throw ApiError.internalProblems();
-  }
+    const sendToppings = toppings.map((t) => {
+      const { available, topping_prices, ...sendTopping } = t;
 
-  const sendToppings = toppings.map(t => {
-    const { available, topping_prices, ...sendTopping } = t
+      return {
+        ...sendTopping,
+        price: topping_prices[0].price,
+      };
+    });
 
-    return {
-      ...sendTopping,
-      price: topping_prices[0].price
-    }
-  });
-
-  res.status(200).send(sendToppings);
-}));
+    res.status(200).send(sendToppings);
+  }),
+);
 
 //get all
-router.get('/', asyncWrapper(async (req, res, next) => {
-  const toppings = await prisma.toppings.findMany({
-    //include topping_prices table
-    include: {
-      topping_prices: {
-        select: {
-          price: true,
+router.get(
+  '/',
+  asyncWrapper(async (req, res, next) => {
+    const toppings = await prisma.toppings.findMany({
+      //include topping_prices table
+      include: {
+        topping_prices: {
+          select: {
+            price: true,
+          },
+          orderBy: { since: 'desc' },
+          take: 1,
         },
-        orderBy: { since: 'desc' },
-        take: 1
-      }
-    },
-  });
+      },
+    });
 
-  if (!toppings) {
-    throw ApiError.internalProblems();
-  }
-
-  const sendToppings = toppings.map(t => {
-    const { available, topping_prices, ...sendTopping } = t
-
-    return {
-      ...sendTopping,
-      price: topping_prices[0].price
+    if (!toppings) {
+      throw ApiError.internalProblems();
     }
-  })
 
-  res.status(200).send(sendToppings);
-}));
+    const sendToppings = toppings.map((t) => {
+      const { available, topping_prices, ...sendTopping } = t;
+
+      return {
+        ...sendTopping,
+        price: topping_prices[0].price,
+      };
+    });
+
+    res.status(200).send(sendToppings);
+  }),
+);
 
 export default router;

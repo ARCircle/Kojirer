@@ -3,10 +3,10 @@ import psTree from 'ps-tree';
 
 const pids = [];
 
-spawnSync('npm', [ 'run', 'clean' ], { stdio: 'inherit' });
+spawnSync('pnpm', ['run', 'clean'], { stdio: 'inherit' });
 
-const backProc = spawn('npm', [ 'run', 'watch', '-w', 'packages/backend' ]);
-const frontProc = spawn('npm', [ 'run', 'watch', '-w', 'packages/frontend' ]);
+const backProc = spawn('pnpm', ['run', '--filter', 'backend', 'watch']);
+const frontProc = spawn('pnpm', ['run', '--filter', 'frontend', 'watch']);
 
 backProc.stdout.on('data', (data) => {
   process.stdout.write(data);
@@ -20,7 +20,7 @@ backProc.stdout.on('data', (data) => {
   }
 });
 
-backProc.stderr.on('data', data => {
+backProc.stderr.on('data', (data) => {
   process.stderr.write(data);
 });
 
@@ -36,12 +36,12 @@ frontProc.stdout.on('data', (data) => {
   }
 });
 
-frontProc.stderr.on('data', data => {
+frontProc.stderr.on('data', (data) => {
   process.stderr.write(data);
 });
 
 const cleanup = () => {
-  console.log('You will kill following process (pid).')
+  console.log('You will kill following process (pid).');
   console.log(pids);
   pids.forEach((pid) => {
     try {
@@ -49,8 +49,8 @@ const cleanup = () => {
     } catch (e) {
       // nice catch
     }
-  })
-}
+  });
+};
 
 process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);

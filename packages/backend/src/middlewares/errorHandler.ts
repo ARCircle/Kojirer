@@ -11,6 +11,6 @@ export const errorHandler = (err: any, req: express.Request, res: express.Respon
   if (err instanceof ApiError) {
     return res.status(err.schema.status).send(err.schema);
   }
-  
+
   return res.status(500).send(ApiError.internalProblems());
-}
+};

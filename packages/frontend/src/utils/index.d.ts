@@ -3,18 +3,18 @@ interface Dictionary {
 }
 
 type Customise = Dictionary & {
-  "ヤサイ": number;
-  "アブラ": number;
-  "ニンニク": number;
-  "カラメ": number;
-}
+  ヤサイ: number;
+  アブラ: number;
+  ニンニク: number;
+  カラメ: number;
+};
 
 type Toppings = Dictionary & {
-  "マヨ": number;
-  "レモン汁": number;
-  "カレー粉": number;
-  "フライドオニオン": number;
-}
+  マヨ: number;
+  レモン汁: number;
+  カレー粉: number;
+  フライドオニオン: number;
+};
 
 type Don = {
   id: number;

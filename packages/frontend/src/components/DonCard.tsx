@@ -1,19 +1,11 @@
-import {
-  Box,
-  Heading,
-  Card,
-  CardHeader,
-  CardBody,
-  Stack,
-  StackDivider,
-} from "@chakra-ui/react";
-import InfoRow from "./InfoRow";
-import { components } from "api/schema";
-import { useSpring, animated } from "react-spring";
-import { useDrag } from "@use-gesture/react";
-import React from "react";
+import { Box, Heading, Card, CardHeader, CardBody, Stack, StackDivider } from '@chakra-ui/react';
+import InfoRow from './InfoRow';
+import { components } from 'api/schema';
+import { useSpring, animated } from 'react-spring';
+import { useDrag } from '@use-gesture/react';
+import React from 'react';
 
-type Don = components["schemas"]["Don"];
+type Don = components['schemas']['Don'];
 
 type Custom = {
   key: string;
@@ -22,7 +14,7 @@ type Custom = {
   defaultAmount: number;
   incrementBgColor: string;
   decrementBgColor: string;
-}
+};
 
 interface DonCardProps {
   don: Don;
@@ -49,7 +41,7 @@ export const DonCard: React.FC<DonCardProps> = ({ don, completeCooking }) => {
         api.start({ y: 0 });
       }
     },
-    { axis: "y" }
+    { axis: 'y' },
   );
 
   function renderCustomsContent(customs: Custom[]) {
@@ -65,7 +57,7 @@ export const DonCard: React.FC<DonCardProps> = ({ don, completeCooking }) => {
     ));
   }
 
-  function renderToppingsContent(toppings: Don["toppings"]) {
+  function renderToppingsContent(toppings: Don['toppings']) {
     if (toppings) {
       return toppings.map((topping) => (
         <InfoRow
@@ -73,8 +65,8 @@ export const DonCard: React.FC<DonCardProps> = ({ don, completeCooking }) => {
           label={topping.label}
           amount={topping.amount}
           defaultAmount={0}
-          incrementBgColor="yellow.200"
-          decrementBgColor="lightgray"
+          incrementBgColor='yellow.200'
+          decrementBgColor='lightgray'
         />
       ));
     }
@@ -83,57 +75,56 @@ export const DonCard: React.FC<DonCardProps> = ({ don, completeCooking }) => {
 
   const customs: Custom[] = [
     {
-      key: "yasai",
-      label: "ヤサイ",
+      key: 'yasai',
+      label: 'ヤサイ',
       amount: don.yasai,
       defaultAmount: 3,
-      incrementBgColor: "red.100",
-      decrementBgColor: "blue.100",
+      incrementBgColor: 'red.100',
+      decrementBgColor: 'blue.100',
     },
     {
-      key: "ninniku",
-      label: "ニンニク",
+      key: 'ninniku',
+      label: 'ニンニク',
       amount: don.ninniku,
       defaultAmount: 3,
-      incrementBgColor: "red.100",
-      decrementBgColor: "blue.100",
+      incrementBgColor: 'red.100',
+      decrementBgColor: 'blue.100',
     },
     {
-      key: "karame",
-      label: "カラメ",
+      key: 'karame',
+      label: 'カラメ',
       amount: don.karame,
       defaultAmount: 3,
-      incrementBgColor: "red.100",
-      decrementBgColor: "blue.100",
+      incrementBgColor: 'red.100',
+      decrementBgColor: 'blue.100',
     },
     {
-      key: "abura",
-      label: "アブラ",
+      key: 'abura',
+      label: 'アブラ',
       amount: don.abura,
       defaultAmount: 3,
-      incrementBgColor: "red.100",
-      decrementBgColor: "blue.100",
+      incrementBgColor: 'red.100',
+      decrementBgColor: 'blue.100',
     },
   ];
 
   return (
-    <animated.div {...bind()} style={{ transform: y.to((val) => `translateY(${val}px)`), touchAction: "none", height: "100%" }}>
-      <Box width="300px" height="100%">
-        <Box height="10%"></Box>
-        <Card variant="outline" borderWidth="3px" width="300px" height="80%">
-          <CardHeader bg="cyan" margin="10px" borderRadius="md">
-            <Heading size="3xl" fontWeight="bold" textAlign="center">
+    <animated.div
+      {...bind()}
+      style={{ transform: y.to((val) => `translateY(${val}px)`), touchAction: 'none', height: '100%' }}
+    >
+      <Box width='300px' height='100%'>
+        <Box height='10%'></Box>
+        <Card variant='outline' borderWidth='3px' width='300px' height='80%'>
+          <CardHeader bg='cyan' margin='10px' borderRadius='md'>
+            <Heading size='3xl' fontWeight='bold' textAlign='center'>
               {id}
             </Heading>
           </CardHeader>
           <CardBody>
-            <Stack divider={<StackDivider />} spacing="4">
-              <Stack spacing="4">
-                {renderCustomsContent(customs)}
-              </Stack>
-              <Stack spacing="4">
-                {renderToppingsContent(don.toppings)}
-              </Stack>
+            <Stack divider={<StackDivider />} spacing='4'>
+              <Stack spacing='4'>{renderCustomsContent(customs)}</Stack>
+              <Stack spacing='4'>{renderToppingsContent(don.toppings)}</Stack>
             </Stack>
           </CardBody>
         </Card>

@@ -50,7 +50,7 @@
       }
     },
     "/api/order": {
-      "post" : {
+      "post": {
         "summary": "新規注文を追加する",
         "description": "新規注文を含むリクエストに対して，DBにその内容を保存し，作成した内容をレスポンスする",
         "requestBody": {

@@ -1,27 +1,29 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = (mod) => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 
 // src/index.ts
 var src_exports = {};
 __export(src_exports, {
   ApiError: () => ApiError,
-  default: () => src_default
+  default: () => src_default,
 });
 module.exports = __toCommonJS(src_exports);
 
@@ -37,58 +39,58 @@ var ApiError = class _ApiError extends Error {
   }
   invalidParams(detail) {
     return new _ApiError({
-      title: "INVAILD_PARAMS",
-      type: "about:blank",
+      title: 'INVAILD_PARAMS',
+      type: 'about:blank',
       status: 400,
-      detail: detail || "This request contains invaild parameter. Please correct to the right ones."
+      detail: detail || 'This request contains invaild parameter. Please correct to the right ones.',
     });
   }
   noUser(detail) {
     return new _ApiError({
-      title: "NO_USER",
-      type: "about:blank",
+      title: 'NO_USER',
+      type: 'about:blank',
       status: 400,
-      detail: detail || "No user with such a user name and password."
+      detail: detail || 'No user with such a user name and password.',
     });
   }
   expiredToken(detail) {
     return new _ApiError({
-      title: "EXPIRED_TOKEN",
-      type: "about:blank",
+      title: 'EXPIRED_TOKEN',
+      type: 'about:blank',
       status: 401,
-      detail: detail || "This authorization token have expired. Please refetch token."
+      detail: detail || 'This authorization token have expired. Please refetch token.',
     });
   }
   invalidToken(detail) {
     return new _ApiError({
-      title: "INVAILD_TOKEN",
-      type: "about:blank",
+      title: 'INVAILD_TOKEN',
+      type: 'about:blank',
       status: 401,
-      detail: detail || "This authorization token is invalid."
+      detail: detail || 'This authorization token is invalid.',
     });
   }
   noToken(detail) {
     return new _ApiError({
-      title: "NO_TOKEN",
-      type: "about:blank",
+      title: 'NO_TOKEN',
+      type: 'about:blank',
       status: 401,
-      detail: detail || "Authorization token was not found. Please set authorization header."
+      detail: detail || 'Authorization token was not found. Please set authorization header.',
     });
   }
   accessDenied(detail) {
     return new _ApiError({
-      title: "ACCESS_DENIED",
-      type: "about:blank",
+      title: 'ACCESS_DENIED',
+      type: 'about:blank',
       status: 403,
-      detail: detail || "Access denied. Insufficient rights to access the resource."
+      detail: detail || 'Access denied. Insufficient rights to access the resource.',
     });
   }
   internalProblems() {
     return new _ApiError({
-      title: "INTERNAL_PROBLEMS",
-      type: "about:blank",
+      title: 'INTERNAL_PROBLEMS',
+      type: 'about:blank',
       status: 500,
-      detail: "Something problems occured in server."
+      detail: 'Something problems occured in server.',
     });
   }
   get schema() {
@@ -111,6 +113,7 @@ var ApiError = class _ApiError extends Error {
 // src/index.ts
 var src_default = paths;
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  ApiError
-});
+0 &&
+  (module.exports = {
+    ApiError,
+  });

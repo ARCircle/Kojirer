@@ -1,57 +1,55 @@
-import React, { useEffect, useState } from "react";
-import ReceptionDonOptionRadio from "./ReceptionDonOptionRadio";
-import ReceptionToppingNumberInput from "./ReceptionToppingNumberInput";
-import { $api } from "@/utils/client";
-import { 
-  AbsoluteCenter, 
-  Box, 
-  Button, 
-  Center, 
-  Divider, 
-  Flex, 
-  FormLabel, 
+import React, { useEffect, useState } from 'react';
+import ReceptionDonOptionRadio from './ReceptionDonOptionRadio';
+import ReceptionToppingNumberInput from './ReceptionToppingNumberInput';
+import { $api } from '@/utils/client';
+import {
+  AbsoluteCenter,
+  Box,
+  Button,
+  Center,
+  Divider,
+  Flex,
+  FormLabel,
   Grid,
   GridItem,
   HStack,
   Switch,
   Text,
   useBoolean,
-  VStack 
-} from "@chakra-ui/react";
-import { paths } from "api/schema";
+  VStack,
+} from '@chakra-ui/react';
+import { paths } from 'api/schema';
 
-type Don = paths["/order"]["post"]["requestBody"]["content"]["application/json"]["dons"][0] & { uniqueId: string };
+type Don = paths['/order']['post']['requestBody']['content']['application/json']['dons'][0] & { uniqueId: string };
 
 interface ReceptionDonFormProps {
-  index?: number | null,
-  uniqueId?: string | null,
-  onSubmit?: (don: Don) => void,
-  onEdit?: (idx: number, don: Don) => void,
-  size?: number | null,
-  yasai?: number | null,
-  ninniku?: number | null,
-  abura?: number | null,
-  karame?: number | null,
-  toppings?: {
-    id: number,
-    amount: number,
-  }[] | null
+  index?: number | null;
+  uniqueId?: string | null;
+  onSubmit?: (don: Don) => void;
+  onEdit?: (idx: number, don: Don) => void;
+  size?: number | null;
+  yasai?: number | null;
+  ninniku?: number | null;
+  abura?: number | null;
+  karame?: number | null;
+  toppings?:
+    | {
+        id: number;
+        amount: number;
+      }[]
+    | null;
 }
 
 const costomizeLabels: {
-  label: string,
-  value: 'karame' | 'abura' | 'ninniku'
+  label: string;
+  value: 'karame' | 'abura' | 'ninniku';
 }[] = [
-  { label: 'アブラ',
-    value: 'abura',
-  },  
-  { 
+  { label: 'アブラ', value: 'abura' },
+  {
     label: 'カラメ',
     value: 'karame',
   },
-  { label: 'ニンニク',
-    value: 'ninniku',
-  },
+  { label: 'ニンニク', value: 'ninniku' },
 ];
 
 const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
@@ -66,62 +64,56 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
 }) => {
   const { data: toppingData } = $api.useQuery('get', '/toppings/available');
 
-  const indexIsUndefined = index !== 0 && !index
+  const indexIsUndefined = index !== 0 && !index;
   const isEdit = !indexIsUndefined && !!uniqueId && !!abura && !!karame && !!ninniku && !!toppings;
-  const initialCostomizeState = 
-    isEdit ? 
-    [ abura, karame, ninniku ] : 
-    [...Array(3)].map(() => 3);
+  const initialCostomizeState = isEdit ? [abura, karame, ninniku] : [...Array(3)].map(() => 3);
 
-  const initialToppingAmountsState = 
-    isEdit ? 
-    toppings.map((t) => t.amount) : 
-    [...Array(toppingData?.length)].map(() => 0);
+  const initialToppingAmountsState = isEdit
+    ? toppings.map((t) => t.amount)
+    : [...Array(toppingData?.length)].map(() => 0);
 
-  const [ costomizes, setCostomizes ] = useState<number[]>(initialCostomizeState);
-  const [ toppingAmounts, setToppingAmounts ] = useState<number[]>(initialToppingAmountsState);
-  const [ canDecrement, { toggle } ] = useBoolean(false);
+  const [costomizes, setCostomizes] = useState<number[]>(initialCostomizeState);
+  const [toppingAmounts, setToppingAmounts] = useState<number[]>(initialToppingAmountsState);
+  const [canDecrement, { toggle }] = useBoolean(false);
 
   const title = isEdit ? `丼 #${index + 1} の編集` : '新規注文';
 
   useEffect(() => {
     setCostomizes(initialCostomizeState);
-    setToppingAmounts(initialToppingAmountsState)
+    setToppingAmounts(initialToppingAmountsState);
   }, [isEdit, toppingData]);
 
-  const submit = (e: React.FormEvent<HTMLFormElement>) => { 
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     const _toppings = toppingAmounts.map((amount, idx) => ({
       id: toppingData ? Number(toppingData[idx].id) : 0,
       amount,
     }));
 
-    isEdit ? 
-    onEdit(
-      index, {
-        size: 1,
-        yasai: 3,
-        abura: Number(costomizes[0]),
-        karame: Number(costomizes[1]),
-        ninniku: Number(costomizes[2]),
-        toppings: _toppings,
-        uniqueId,
-      }
-    ):
-    onSubmit({
-      size: 1,
-      yasai: 3,
-      abura: Number(costomizes[0]),
-      karame: Number(costomizes[1]),
-      ninniku: Number(costomizes[2]),
-      toppings: _toppings,
-      uniqueId: new Date().getTime().toString()
-    });
+    isEdit
+      ? onEdit(index, {
+          size: 1,
+          yasai: 3,
+          abura: Number(costomizes[0]),
+          karame: Number(costomizes[1]),
+          ninniku: Number(costomizes[2]),
+          toppings: _toppings,
+          uniqueId,
+        })
+      : onSubmit({
+          size: 1,
+          yasai: 3,
+          abura: Number(costomizes[0]),
+          karame: Number(costomizes[1]),
+          ninniku: Number(costomizes[2]),
+          toppings: _toppings,
+          uniqueId: new Date().getTime().toString(),
+        });
 
     setCostomizes(initialCostomizeState);
     setToppingAmounts(initialToppingAmountsState);
-  }
+  };
 
   const cancel = () => {
     const _toppings = initialToppingAmountsState.map((amount, idx) => ({
@@ -130,8 +122,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
     }));
 
     isEdit &&
-    onEdit(
-      index, {
+      onEdit(index, {
         size: 1,
         yasai: 3,
         abura: Number(initialCostomizeState[0]),
@@ -139,19 +130,18 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
         ninniku: Number(initialCostomizeState[2]),
         toppings: _toppings,
         uniqueId,
-      }
-    )
-  }
- 
+      });
+  };
+
   return (
     <form onSubmit={submit}>
-      <HStack justify="space-between">
-        <Text fontSize='2xl'>{ title }</Text>
-        { isEdit &&
+      <HStack justify='space-between'>
+        <Text fontSize='2xl'>{title}</Text>
+        {isEdit && (
           <div>
             <Button onClick={cancel}>キャンセル</Button>
           </div>
-        }
+        )}
       </HStack>
       <Box position='relative' padding={8}>
         <Divider />
@@ -159,27 +149,23 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
           <Text fontSize='xl'>オプション</Text>
         </AbsoluteCenter>
       </Box>
-      
+
       <VStack align='stretch' gap={4}>
-      {
-        costomizeLabels.map(({ label }, idx) => 
+        {costomizeLabels.map(({ label }, idx) => (
           <Grid key={idx} templateColumns='repeat(12, 1fr)' pb={4}>
             <GridItem colSpan={3}>
-              <Text fontSize='xl'>{ label }</Text>
+              <Text fontSize='xl'>{label}</Text>
             </GridItem>
             <GridItem colSpan={9}>
-              <ReceptionDonOptionRadio 
+              <ReceptionDonOptionRadio
                 value={costomizes[idx]}
                 onChange={(value) => {
-                  setCostomizes(
-                    costomizes.map((c, index) => (index === idx ? value : c))
-                  );
+                  setCostomizes(costomizes.map((c, index) => (index === idx ? value : c)));
                 }}
               />
             </GridItem>
           </Grid>
-        )
-      }
+        ))}
       </VStack>
 
       <Flex>
@@ -193,43 +179,36 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
           <FormLabel htmlFor='can-decrement' mb='0' fontSize='sm'>
             デクリメントモード
           </FormLabel>
-          <Switch id='can-decrement' size='lg' onChange={toggle}/>
+          <Switch id='can-decrement' size='lg' onChange={toggle} />
         </Center>
       </Flex>
-      
-      {
-        toppingData?.map(({ id, label }, idx) => 
-          <Grid key={id} templateColumns='repeat(12, 1fr)' pb={4}>
-            <GridItem colSpan={3}>
-              <Center>
-                <Text fontSize='xl'>{ label }</Text>
-              </Center>
-            </GridItem>
-            <GridItem colSpan={9}>
-              <ReceptionToppingNumberInput 
-                canDecrement={canDecrement}
-                value={toppingAmounts[idx]}
-                onChange={(value) => {
-                  setToppingAmounts(
-                    toppingAmounts.map((t, index) => (index === idx ? value : t))
-                  );
-                }}
-              />
-            </GridItem>
-          </Grid>
-        )
-      }
+
+      {toppingData?.map(({ id, label }, idx) => (
+        <Grid key={id} templateColumns='repeat(12, 1fr)' pb={4}>
+          <GridItem colSpan={3}>
+            <Center>
+              <Text fontSize='xl'>{label}</Text>
+            </Center>
+          </GridItem>
+          <GridItem colSpan={9}>
+            <ReceptionToppingNumberInput
+              canDecrement={canDecrement}
+              value={toppingAmounts[idx]}
+              onChange={(value) => {
+                setToppingAmounts(toppingAmounts.map((t, index) => (index === idx ? value : t)));
+              }}
+            />
+          </GridItem>
+        </Grid>
+      ))}
 
       <VStack align='stretch' pt={8}>
-        <Button 
-          colorScheme='teal'
-          type="submit"
-        >
-          { isEdit ? '編集' : '追加'}
+        <Button colorScheme='teal' type='submit'>
+          {isEdit ? '編集' : '追加'}
         </Button>
       </VStack>
     </form>
-  )
+  );
 };
 
 export default ReceptionDonForm;

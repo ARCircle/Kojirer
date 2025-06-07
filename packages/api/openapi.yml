@@ -1,11 +1,11 @@
-openapi: "3.0.3"
+openapi: '3.0.3'
 
 info:
-  title: "Kojirer API"
+  title: 'Kojirer API'
   version: 0.0.0
 
 servers:
-  - url: "http://localhost:52600/api/"
+  - url: 'http://localhost:52600/api/'
 
 tags:
   - name: don
@@ -13,7 +13,7 @@ tags:
   - name: order
 
 paths:
-  "/dons":
+  '/dons':
     get:
       tags:
         - don
@@ -26,8 +26,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Don"
-  "/dons/{id}":
+                  $ref: '#/components/schemas/Don'
+  '/dons/{id}':
     get:
       tags:
         - don
@@ -45,7 +45,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Don"
+                $ref: '#/components/schemas/Don'
     put:
       tags:
         - don
@@ -76,8 +76,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Don"
-  "/dons/price":
+                $ref: '#/components/schemas/Don'
+  '/dons/price':
     post:
       tags:
         - don
@@ -121,7 +121,7 @@ paths:
                   price:
                     type: integer
                     format: int32
-  "/dons/status/":
+  '/dons/status/':
     post:
       tags:
         - don
@@ -156,8 +156,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Don"
-  "/options":
+                  $ref: '#/components/schemas/Don'
+  '/options':
     get:
       responses:
         '200':
@@ -168,7 +168,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Option'
-  "/order":
+  '/order':
     post:
       tags:
         - order
@@ -236,20 +236,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Order"
-  "/order/price":
-    post: 
+                $ref: '#/components/schemas/Order'
+  '/order/price':
+    post:
       tags:
         - order
       description: オーダー単位の値段を取得
-      requestBody: 
+      requestBody:
         required: true
         content:
           application/json:
-            schema: 
+            schema:
               type: object
               properties:
-                dons: 
+                dons:
                   type: array
                   items:
                     type: object
@@ -288,15 +288,15 @@ paths:
                   price:
                     type: integer
                     format: int32
-  "/order/status":
+  '/order/status':
     post:
       tags:
         - order
       description: |
-                  don のステータスに応じて Order を取得する。各ステータスの動作は以下の通り
-                  1: 一つでも調理中の don がある Order を全て取得
-                  2: 全ての don が調理済み かつ 受け渡しが完了していない Order を取得
-                  3: オーダー内の全ての don が受け渡し完了の Order を取得
+        don のステータスに応じて Order を取得する。各ステータスの動作は以下の通り
+        1: 一つでも調理中の don がある Order を全て取得
+        2: 全ての don が調理済み かつ 受け渡しが完了していない Order を取得
+        3: オーダー内の全ての don が受け渡し完了の Order を取得
       requestBody:
         required: true
         content:
@@ -317,7 +317,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Order"
+                  $ref: '#/components/schemas/Order'
     put:
       tags:
         - order
@@ -346,8 +346,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Order"
-  "/toppings":
+                $ref: '#/components/schemas/Order'
+  '/toppings':
     get:
       tags:
         - topping
@@ -359,8 +359,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Topping"
-  "/toppings/available":
+                  $ref: '#/components/schemas/Topping'
+  '/toppings/available':
     get:
       tags:
         - topping
@@ -372,7 +372,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Topping"
+                  $ref: '#/components/schemas/Topping'
 components:
   schemas:
     Don:
@@ -485,7 +485,7 @@ components:
         dons:
           type: array
           items:
-            $ref: "#/components/schemas/Don"
+            $ref: '#/components/schemas/Don'
       required:
         - id
         - callNum
@@ -504,5 +504,3 @@ components:
         price:
           type: integer
           format: int32
-
-

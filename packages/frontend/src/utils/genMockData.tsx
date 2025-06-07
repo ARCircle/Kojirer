@@ -1,6 +1,6 @@
 type MockProps = {
-  numOrders: number
-}
+  numOrders: number;
+};
 
 export const generateMockOrders = ({ numOrders }: MockProps): Order[] => {
   const orders: Order[] = [];
@@ -14,18 +14,18 @@ export const generateMockOrders = ({ numOrders }: MockProps): Order[] => {
     for (let j = 1; j <= numDons; j++) {
       const don: Don = {
         id: j,
-        status: Math.floor(Math.random() * 3)
+        status: Math.floor(Math.random() * 3),
       };
       dons.push(don);
     }
 
     const order: Order = {
       id: 200 + i,
-      dons: dons
+      dons: dons,
     };
 
     orders.push(order);
   }
 
   return orders;
-}
+};

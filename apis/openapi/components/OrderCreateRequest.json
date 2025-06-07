@@ -12,10 +12,7 @@
         }
       }
     },
-    "required": [
-      "call_num",
-      "dons"
-    ]
+    "required": ["call_num", "dons"]
   },
   "Don": {
     "type": "object",
@@ -35,7 +32,7 @@
       "abura": {
         "type": "integer"
       },
-      "toppings" : [
+      "toppings": [
         {
           "$ref": "#/Topping"
         }
@@ -44,15 +41,7 @@
         "type": "boolean"
       }
     },
-    "required": [
-      "size",
-      "yasai",
-      "ninniku",
-      "karame",
-      "abura",
-      "toppings",
-      "sns_followed"
-    ]
+    "required": ["size", "yasai", "ninniku", "karame", "abura", "toppings", "sns_followed"]
   },
   "Topping": {
     "type": "object",
@@ -60,7 +49,7 @@
       "id": {
         "type": "integer"
       },
-      "label" : {
+      "label": {
         "type": "string"
       },
       "amount": {
