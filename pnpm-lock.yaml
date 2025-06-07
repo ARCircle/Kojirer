@@ -33,6 +33,9 @@ importers:
 
   packages/api:
     devDependencies:
+      '@types/node':
+        specifier: ^22.15.30
+        version: 22.15.30
       openapi-typescript:
         specifier: ^7.8.0
         version: 7.8.0(typescript@5.8.3)

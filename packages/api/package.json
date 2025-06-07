@@ -20,6 +20,7 @@
     }
   },
   "devDependencies": {
+    "@types/node": "^22.15.30",
     "openapi-typescript": "^7.8.0",
     "tsup": "^8.5.0",
     "tsx": "^4.19.4",
