@@ -26,12 +26,12 @@ for (const filename of filenames) {
 }
 
 // APIそのもの
-app.get('/api/*', (req, res) => {
+app.get('/api/*splat', (req, res) => {
   res.send('Undefined api root');
 });
 
 // API以外にアクセスされたらindex.htmlを返す
-app.get('/*', (req, res) => {
+app.get('/*splat', (req, res) => {
   res.sendFile(path.join(__dirname, 'web', 'index.html'));
 });
 
