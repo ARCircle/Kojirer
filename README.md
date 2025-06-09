@@ -60,6 +60,11 @@ docker compose up
 pnpm run migrate:dev
 ```
 
+DBにシードを入れる。
+```bash
+docker exec -i postgres psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
+```
+
 起動するサーバー
 | サーバー | URL |
 | -------- | --- |
@@ -124,13 +129,7 @@ pnpm run api
 3. 作成されたsqlファイルを確認し，既存のスキーマを壊すことがないか確認
 4. `pnpm run migrate:dev`でsqlを実行する
 
-#### 開発用データのInsert
 
-`.devcontainer`の外，すなわちWSL上の`Kojirer`ディレクトリにおいて，以下のコマンドを実行．
-
-```bash
-docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
-```
 
 ### packages/frontend
 
