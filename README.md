@@ -70,13 +70,6 @@ docker exec -i postgres psql -U kojirer -d kojirer < packages/backend/examples/d
 
 ホットリロードが有効なのでこのサーバーを起動したままホストマシンでコードを編集して開発を進められる。
 
-> [!NOTE] ライブラリを追加した場合
-> 下記のコマンドでコンテナ及び無名ボリュームを再作成してnode_modulesを更新する必要がある。
->
-> ```bash
-> docker compose up --build --renew-anon-volumes
-> ```
-
 ## How to Start Production
 
 本番環境も一応用意している。
