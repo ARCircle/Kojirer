@@ -15,6 +15,7 @@ services:
       - db
     volumes:
       - .:/kojirer # ソースコード
+    tmpfs: # マウントしたいけど永続化はしたくない
       - /kojirer/node_modules # node_modules を除外（コンテナ内でインストールしたものを使用）
       - /kojirer/packages/api/node_modules
       - /kojirer/packages/backend/node_modules
