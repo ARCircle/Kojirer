@@ -1,2 +1,3 @@
 packages/frontend/src/router.ts
 gen/
+dist/
