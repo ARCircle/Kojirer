@@ -1,8 +1,8 @@
+import { ChakraProvider } from '@chakra-ui/react';
+import { Routes } from '@generouted/react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Routes } from '@generouted/react-router';
-import { ChakraProvider } from '@chakra-ui/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
 

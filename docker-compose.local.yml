@@ -1,0 +1,36 @@
+# ローカルでコンテナを立てて開発する構成
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: kojirer-local
+    env_file:
+      - .env.container
+    ports:
+      - '52600:52600' # backend
+      - '52800:52800' # frontend
+      - '5555:5555' # Prisma Studio
+    depends_on:
+      - db
+    volumes:
+      - .:/kojirer # ソースコード
+    tmpfs: # マウントしたいけど永続化はしたくない
+      - /kojirer/node_modules # node_modules を除外（コンテナ内でインストールしたものを使用）
+      - /kojirer/packages/api/node_modules
+      - /kojirer/packages/backend/node_modules
+      - /kojirer/packages/frontend/node_modules
+    tty: true # コンテナを終了させない
+    stdin_open: true # 標準入力を開いたままにする
+  db:
+    image: postgres:15-alpine
+    container_name: postgres
+    env_file:
+      - .env.container
+    ports:
+      - 5333:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:
+    driver: local

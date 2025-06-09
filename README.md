@@ -11,6 +11,8 @@
 - VSCode
 - Docker
 - Git
+- Node.js
+- pnpm
 
 また，VSCode内に以下の拡張機能のインストールが必要．
 
@@ -29,49 +31,62 @@ git clone "git@github.com:ARCircle/Kojirer.git"
 ```bash
 cd Kojirer
 cp example.env .env
+cp example.env.container .env.container
 ```
 
-VSCodeでクローンしたディレクトリを開く．
+### 2. 依存関係のインストール
 
 ```bash
-code .
+pnpm install
 ```
 
-### 2. devcontainerの起動
+### 3. 開発サーバーの起動
 
-VSCodeの画面左の「><」のようなマークから，
-「コンテナーで再度開く（Reopen in Container）」という欄をクリック．
+docker composeを使用して開発用のDB、フロントエンド、バックエンドのサーバーを起動する。
 
-初めてビルドする際は，右下にダイアログが出現するので
-「コンテナーで再度開く」を実行しても可能．
+```bash
+docker compose up
+```
 
-### 3. マイグレーションの実行
-
-開発中のDBとスキーマ定義を合わせるため，
-開発開始時には必ずマイグレーションを実行する．
+サーバーが起動したら下記コマンドでDBのマイグレーションを実行する。
 
 ```bash
 pnpm run migrate:dev
 ```
 
-`TARGET=dev`では，ホットリロードの恩恵を受けるため，フロントエンドサーバ (port: 52800) とバックエンドサーバ (port: 52600) の両方が起動する．
-なお，バックエンドのコンソール表示が2重になっているが，これは仕様である (原因探し中)．
+DBにシードを入れる。
+
+```bash
+docker exec -i postgres psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
+```
+
+起動するサーバー
+| サーバー | URL |
+| -------- | --- |
+| フロントエンド | http://localhost:52800 |
+| バックエンド | http://localhost:52600 |
+| Prisma Studio | http://localhost:5555 |
+| データベース | http://localhost:5333 |
+
+ホットリロードが有効なのでこのサーバーを起動したままホストマシンでコードを編集して開発を進められる。
 
 ## How to Start Production
 
+本番環境も一応用意している。
+
 ```bash
-sudo docker-compose up -d --build
+docker compose -f docker-compose.prod.yml up
 ```
 
-開発環境ではバックエンドサーバ (port: 52600) のみ起動する．
+本番環境では統合されたバックエンドサーバー (port: 52600) のみが起動する。
 
 ## ディレクトリ構成
 
-### pakages
+### packages
 
 Kojirerのコア部分．基本的にここをいじくることになる．
 
-### pakages/backend
+### packages/backend
 
 | Feature                    | Package                                 |
 | -------------------------- | --------------------------------------- |
@@ -102,28 +117,10 @@ pnpm run api
 3. 作成されたsqlファイルを確認し，既存のスキーマを壊すことがないか確認
 4. `pnpm run migrate:dev`でsqlを実行する
 
-#### 開発用データのInsert
-
-`.devcontainer`の外，すなわちWSL上の`Kojirer`ディレクトリにおいて，以下のコマンドを実行．
-
-```bash
-docker exec -i kojirer_devcontainer-db-1 psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
-```
-
-### pakages/frontend
+### packages/frontend
 
 | Feature                | Package                                                           |
 | ---------------------- | ----------------------------------------------------------------- |
 | UIライブラリ           | [React](https://ja.react.dev/)                                    |
 | ルーティングライブラリ | [@generouted/react-router](https://github.com/oedotme/generouted) |
 | UIコンポーネント       | [Chakra UI](https://chakra-ui.com/)                               |
-
-# 本番環境
-
-```bash
-docker-compose up -d --build
-```
-
-```bash
-docker-compose exec web pnpm run migrate:dev
-```
