@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, Text, Card } from '@chakra-ui/react';
+import { Box, Card, SimpleGrid, Text } from '@chakra-ui/react';
 
 interface InfoRowProps {
   label: string;

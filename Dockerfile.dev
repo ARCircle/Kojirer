@@ -1,0 +1,29 @@
+# 開発用アプリケーションイメージ
+# 動作には docker run --env-file や docker compose による環境変数による credential の設定が必須
+
+FROM node:24-slim
+ENV NODE_ENV=development
+
+# 必要最小限のパッケージのみインストール
+RUN apt-get update -y && \
+    apt-get install -y openssl procps && \
+    npm install -g pnpm
+
+# 作業ディレクトリを指定と権限設定
+WORKDIR /kojirer
+
+# 依存関係のファイルのみをコピー
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/api/package.json ./packages/api/
+COPY packages/backend/package.json ./packages/backend/
+COPY packages/frontend/package.json ./packages/frontend/
+COPY packages/backend/prisma/schema.prisma ./packages/backend/prisma/
+
+# 依存関係をインストール（開発用パッケージも含む）
+RUN pnpm install
+
+# 開発用ポートを公開
+EXPOSE 52800 52600 5555
+
+# 開発サーバーとPrisma Studioを起動
+CMD ["sh", "-c", "pnpm run dev & pnpm run db:studio"]

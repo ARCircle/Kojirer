@@ -1,20 +1,33 @@
-FROM node:24-slim AS prod
+# 本番用アプリケーションイメージ
+# 動作には docker run --env-file や docker compose による環境変数による credential の設定が必須
 
+FROM node:24-slim AS base
 # 作業ディレクトリを指定 (ディレクトリがない場合は作ってくれる)
 WORKDIR /kojirer
-
-# 依存関係を示すファイルをコピー
-COPY . /kojirer
 
 RUN apt-get update -y && apt-get install -y openssl \
     && npm install -g pnpm
 
-# アプリの依存関係をインストール
-RUN pnpm install
+FROM base AS builder
+COPY . /kojirer
 
-RUN npx prisma generate --schema packages/backend/prisma/schema.prisma
+RUN pnpm install --frozen-lockfile
 
-# ビルド
 RUN pnpm run build
 
-CMD [ "sh", "-c", "pnpm run start & npx prisma studio --schema packages/backend/prisma/schema.prisma" ]
+FROM base AS production
+ENV NODE_ENV=production
+COPY --from=builder /kojirer/package.json ./package.json
+COPY --from=builder /kojirer/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /kojirer/pnpm-workspace.yaml ./pnpm-workspace.yaml
+
+COPY --from=builder /kojirer/packages/backend/package.json ./packages/backend/package.json
+COPY --from=builder /kojirer/packages/backend/prisma/schema.prisma ./packages/backend/prisma/schema.prisma
+
+RUN pnpm install --frozen-lockfile --prod
+
+COPY --from=builder /kojirer/packages/backend/built ./packages/backend/built
+
+EXPOSE 52600
+
+ENTRYPOINT [ "sh" , "-c", "node /kojirer/packages/backend/built/index.js" ]

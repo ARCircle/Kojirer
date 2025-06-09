@@ -1,0 +1,25 @@
+# 本番環境での利用を想定
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kojirer
+    restart: always
+    env_file:
+      - .env.container
+    ports:
+      - '52600:52600'
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    container_name: postgres
+    restart: always
+    env_file:
+      - .env.container
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+volumes:
+  db_data:
+    driver: local

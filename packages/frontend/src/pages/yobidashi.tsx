@@ -1,8 +1,8 @@
-import { SimpleGrid, GridItem, Box, Heading, Center, Flex } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { paths } from 'api/schema';
 import { $api } from '@/utils/client';
+import { Box, Center, Flex, GridItem, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
+import { paths } from 'api/schema';
+import React, { useEffect, useState } from 'react';
 
 type Order = paths['/order/status']['post']['responses']['200']['content']['application/json'][0];
 

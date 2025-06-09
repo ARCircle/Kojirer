@@ -1,6 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import ReceptionDonOptionRadio from './ReceptionDonOptionRadio';
-import ReceptionToppingNumberInput from './ReceptionToppingNumberInput';
 import { $api } from '@/utils/client';
 import {
   AbsoluteCenter,
@@ -19,6 +16,9 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { paths } from 'api/schema';
+import React, { useEffect, useState } from 'react';
+import ReceptionDonOptionRadio from './ReceptionDonOptionRadio';
+import ReceptionToppingNumberInput from './ReceptionToppingNumberInput';
 
 type Don = paths['/order']['post']['requestBody']['content']['application/json']['dons'][0] & { uniqueId: string };
 
