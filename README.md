@@ -40,12 +40,6 @@ cp example.env.container .env.container
 pnpm install
 ```
 
-APIスキーマの型を生成する．
-
-```bash
-pnpm run api
-```
-
 ### 3. 開発サーバーの起動
 
 docker composeを使用して開発用のDB、フロントエンド、バックエンドのサーバーを起動する。
@@ -61,6 +55,7 @@ pnpm run migrate:dev
 ```
 
 DBにシードを入れる。
+
 ```bash
 docker exec -i postgres psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
 ```
@@ -128,8 +123,6 @@ pnpm run api
 2. `pnpm run migrate:create`を実行し，sqlファイルを`prisma`ディレクトリ以下に作成される
 3. 作成されたsqlファイルを確認し，既存のスキーマを壊すことがないか確認
 4. `pnpm run migrate:dev`でsqlを実行する
-
-
 
 ### packages/frontend
 
