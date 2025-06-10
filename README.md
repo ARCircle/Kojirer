@@ -62,7 +62,7 @@ pnpm run migrate:dev
 DBにシードを入れる。
 
 ```bash
-docker exec -i postgres psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
+docker exec -i kojirer-db-local psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
 ```
 
 起動するサーバー
