@@ -15,12 +15,14 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/kojirer # ソースコード
-    tmpfs: # マウントしたいけど永続化はしたくない
-      - /kojirer/node_modules # node_modules を除外（コンテナ内でインストールしたものを使用）
-      - /kojirer/packages/api/node_modules
-      - /kojirer/packages/backend/node_modules
-      - /kojirer/packages/frontend/node_modules
+      - .:/kojirer # ホストマシンと共有してホットリロードできるようにする
+    # プロジェクトルートをバインドマウントしている一方、node_modulesはホストと共有したくない
+    # tmpfsでマウントしてentrypointで毎回初期化する
+    tmpfs:
+      - /kojirer/node_modules:exec
+      - /kojirer/packages/api/node_modules:exec
+      - /kojirer/packages/backend/node_modules:exec
+      - /kojirer/packages/frontend/node_modules:exec
     tty: true # コンテナを終了させない
     stdin_open: true # 標準入力を開いたままにする
   db:
