@@ -68,7 +68,6 @@ paths:
                   type: integer
                   format: int32
               required:
-                - donId
                 - status
       responses:
         '201':
@@ -110,6 +109,8 @@ paths:
                   type: boolean
               required:
                 - size
+                - toppings
+                - snsFollowed
       responses:
         '200':
           description: 価格を返す
@@ -213,6 +214,8 @@ paths:
                             id:
                               type: integer
                               format: int32
+                            label:
+                              type: string
                             amount:
                               type: integer
                               format: int32
@@ -504,3 +507,7 @@ components:
         price:
           type: integer
           format: int32
+      required:
+        - id
+        - label
+        - price
