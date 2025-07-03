@@ -13,72 +13,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model adding {
-  don_id     BigInt
-  topping_id Int
-  amount     Int
-  dons       dons     @relation(fields: [don_id], references: [id])
-  toppings   toppings @relation(fields: [topping_id], references: [id])
-
-  @@id([don_id, topping_id])
+model orders {
+  id               String   @id @default(uuid()) @db.Uuid
+  num_sns_followed Int      @default(0) // SNSフォローされた数ぶんだけトッピングを無料にする
+  create_datetime  DateTime @default(now())
+  call_num         Int
+  dons             dons[]
 }
 
 model dons {
-  id           BigInt   @id @default(autoincrement())
-  size_id      Int
-  order_id     BigInt
-  status       Int
-  yasai        Int
-  ninniku      Int
-  karame       Int
-  abura        Int
-  sns_followed Boolean? @default(false)
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-  sizes        sizes    @relation(fields: [size_id], references: [id])
-  orders       orders   @relation(fields: [order_id], references: [id])
-  adding       adding[]
+  id              String           @id @default(uuid()) @db.Uuid
+  order_id        String           @db.Uuid
+  create_datetime DateTime         @default(now())
+  update_datetime DateTime         @updatedAt
+  order           orders           @relation(fields: [order_id], references: [id])
+  don_customizes  don_customizes[]
 }
 
-model orders {
-  id         BigInt   @id @default(autoincrement())
-  created_at DateTime @default(now())
-  call_num   Int
-  dons       dons[]
+model don_customizes {
+  don_id     String @id @db.Uuid
+  topping_id String @db.Uuid
+  amount     Int // 負も取りうる (0がデフォルト量)
+
+  customize customizes @relation(fields: [topping_id], references: [id])
+  don       dons       @relation(fields: [don_id], references: [id])
 }
 
-model options {
-  id    Int    @id @default(autoincrement())
-  label String @db.VarChar(255)
+model customizes {
+  id               String             @id @default(uuid()) @db.Uuid
+  label            String             @db.VarChar()
+  available        Boolean?           @default(true)
+  customize_prices customize_prices[]
+  don_customizes   don_customizes[]
 }
 
-model sizes {
-  id          Int           @id @default(autoincrement())
-  label       String        @db.VarChar(255)
-  dons        dons[]
-  size_prices size_prices[]
-}
+model customize_prices {
+  customize_id String     @db.Uuid
+  price        Int
+  since        DateTime
+  customize    customizes @relation(fields: [customize_id], references: [id])
 
-model size_prices {
-  id      Int      @id @default(autoincrement())
-  size_id Int
-  price   Int
-  since   DateTime
-  sizes   sizes    @relation(fields: [size_id], references: [id])
-}
-
-model toppings {
-  id             Int              @id @default(autoincrement())
-  label          String           @db.VarChar()
-  available      Boolean?         @default(true)
-  adding         adding[]
-  topping_prices topping_prices[]
-}
-
-model topping_prices {
-  id         Int      @id @default(autoincrement())
-  topping_id Int
-  price      Int
-  since      DateTime
-  toppings   toppings @relation(fields: [topping_id], references: [id])
+  @@id([customize_id, since]) // 同じカスタマイズの値段に対して、同じ日付の価格は存在しない
 }
