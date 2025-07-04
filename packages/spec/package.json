@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "spec",
   "version": "0.0.1",
   "main": "index.js",
   "exports": {
@@ -32,7 +32,10 @@
     "build:tsup": "tsup-node --config tsup.config.ts",
     "clean": "rm -rf dist && rm -rf ./src/gen",
     "codegen": "pnpm run codegen:openapi-ts",
-    "codegen:openapi-ts": "tsx ./src/transform.ts"
+    "codegen:openapi-ts": "tsx ./src/transform.ts",
+    "docs:validate": "pnpm --package=@redocly/cli dlx redocly lint openapi/openapi.yml",
+    "docs:build": "pnpm --package=@redocly/cli dlx redocly build-docs openapi/openapi.yml --output docs/index.html",
+    "docs:serve": "pnpm --package=@redocly/cli dlx redocly preview-docs openapi/openapi.yml"
   },
   "author": "",
   "license": "ISC",
