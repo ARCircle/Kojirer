@@ -1,7 +1,6 @@
 import ReceptionDonForm from '@/components/ReceptionDonForm';
 import SidebarContent from '@/components/SideBar';
 import { $api } from '@/utils/client';
-import { Box, useColorModeValue } from '@chakra-ui/react';
 import paths from 'api';
 import React, { useState } from 'react';
 
@@ -14,7 +13,7 @@ const Uketuke: React.FC = () => {
   const { mutate } = $api.useMutation('post', '/order');
 
   return (
-    <Box minH='100vh' bg={useColorModeValue('gray.100', 'gray.900')}>
+    <div className="min-h-screen bg-gray-100">
       <SidebarContent
         dons={dons}
         selectingIndex={selectingIdx}
@@ -35,8 +34,8 @@ const Uketuke: React.FC = () => {
           setDons([]);
         }}
       />
-      <Box ml={80} p='4'>
-        <Box borderRadius='md' background='white' p={10}>
+      <div className="ml-80 p-4">
+        <div className="rounded-md bg-white p-10">
           <ReceptionDonForm
             onSubmit={(don) => setDons([...dons, don])}
             onEdit={(idx, don) => {
@@ -51,9 +50,9 @@ const Uketuke: React.FC = () => {
             ninniku={selectingDon?.ninniku}
             toppings={selectingDon?.toppings}
           />
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 

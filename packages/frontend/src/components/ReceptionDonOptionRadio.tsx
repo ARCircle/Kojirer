@@ -1,5 +1,6 @@
 import { $api } from '@/utils/client';
-import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import React from 'react';
 
 export interface ReceptionDonOptionRadioProps {
@@ -15,14 +16,13 @@ const ReceptionDonOptionRadio: React.FC<ReceptionDonOptionRadioProps> = ({ value
   };
 
   return (
-    <RadioGroup value={String(value)} onChange={(v) => setValue(Number(v))} size='lg'>
-      <Stack spacing={5} direction='row'>
-        {options?.map(({ id, label }) => (
-          <Radio key={id} value={String(id)}>
-            {label}
-          </Radio>
-        ))}
-      </Stack>
+    <RadioGroup value={String(value)} onValueChange={(v) => setValue(Number(v))} className="flex flex-row gap-6">
+      {options?.map(({ id, label }) => (
+        <div key={id} className="flex items-center space-x-2">
+          <RadioGroupItem value={String(id)} id={`radio-${id}`} />
+          <Label htmlFor={`radio-${id}`} className="text-lg">{label}</Label>
+        </div>
+      ))}
     </RadioGroup>
   );
 };

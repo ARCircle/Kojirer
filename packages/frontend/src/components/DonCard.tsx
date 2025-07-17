@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardHeader, Heading, Stack, StackDivider } from '@chakra-ui/react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import { components } from 'api/schema';
@@ -113,22 +113,26 @@ export const DonCard: React.FC<DonCardProps> = ({ don, completeCooking }) => {
       {...bind()}
       style={{ transform: y.to((val) => `translateY(${val}px)`), touchAction: 'none', height: '100%' }}
     >
-      <Box width='300px' height='100%'>
-        <Box height='10%'></Box>
-        <Card variant='outline' borderWidth='3px' width='300px' height='80%'>
-          <CardHeader bg='cyan' margin='10px' borderRadius='md'>
-            <Heading size='3xl' fontWeight='bold' textAlign='center'>
+      <div className="w-[300px] h-full">
+        <div className="h-[10%]"></div>
+        <Card className="border-2 w-[300px] h-[80%]">
+          <CardHeader className="bg-cyan-400 m-2 rounded-md">
+            <h1 className="text-5xl font-bold text-center">
               {id}
-            </Heading>
+            </h1>
           </CardHeader>
-          <CardBody>
-            <Stack divider={<StackDivider />} spacing='4'>
-              <Stack spacing='4'>{renderCustomsContent(customs)}</Stack>
-              <Stack spacing='4'>{renderToppingsContent(don.toppings)}</Stack>
-            </Stack>
-          </CardBody>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="space-y-4 border-b pb-4">
+                {renderCustomsContent(customs)}
+              </div>
+              <div className="space-y-4">
+                {renderToppingsContent(don.toppings)}
+              </div>
+            </div>
+          </CardContent>
         </Card>
-      </Box>
+      </div>
     </animated.div>
   );
 };

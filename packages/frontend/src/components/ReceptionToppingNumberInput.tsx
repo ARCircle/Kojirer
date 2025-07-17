@@ -1,4 +1,4 @@
-import { Button, HStack, Text, useNumberInput } from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
 import React from 'react';
 
 export interface ReceptionToppingNumberInputProps {
@@ -8,37 +8,28 @@ export interface ReceptionToppingNumberInputProps {
 }
 
 const ReceptionToppingNumberInput: React.FC<ReceptionToppingNumberInputProps> = ({
-  value,
+  value = 0,
   onChange = () => {},
-  canDecrement,
+  canDecrement = false,
 }) => {
-  const { valueAsNumber, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-    step: 1,
-    value,
-    defaultValue: 0,
-    min: 0,
-    precision: 0,
-  });
-
-  const inc = getIncrementButtonProps();
-  const dec = canDecrement && getDecrementButtonProps();
+  const currentValue = value || 0;
 
   return (
-    <HStack maxW='230px' gap={10}>
-      <Button {...inc} onClick={() => onChange(valueAsNumber + 1)}>
+    <div className="flex items-center gap-10 max-w-[230px]">
+      <Button onClick={() => onChange(currentValue + 1)} size="sm">
         +
       </Button>
-      <Text fontSize='lg'>{valueAsNumber}</Text>
+      <span className="text-lg min-w-8 text-center">{currentValue}</span>
       <Button
-        {...dec}
-        isDisabled={!canDecrement}
+        disabled={!canDecrement}
         onClick={() => {
-          valueAsNumber > 0 && onChange(valueAsNumber - 1);
+          currentValue > 0 && onChange(currentValue - 1);
         }}
+        size="sm"
       >
         -
       </Button>
-    </HStack>
+    </div>
   );
 };
 

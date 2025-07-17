@@ -1,4 +1,5 @@
-import { Button, HStack, Input, Text, useNumberInput } from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import React from 'react';
 
 export interface ReceptionCallNumInputProps {
@@ -6,37 +7,33 @@ export interface ReceptionCallNumInputProps {
   onChange?: (value: number) => void;
 }
 
-const ReceptionCallNumInput: React.FC<ReceptionCallNumInputProps> = ({ value, onChange = () => {} }) => {
-  const { valueAsNumber, getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
-    step: 1,
-    value: String(value),
-    defaultValue: 0,
-    min: 1,
-    precision: 0,
-  });
-
-  const inc = getIncrementButtonProps();
-  const dec = getDecrementButtonProps();
-  const input = getInputProps();
+const ReceptionCallNumInput: React.FC<ReceptionCallNumInputProps> = ({ value = 0, onChange = () => {} }) => {
+  const currentValue = value || 0;
 
   return (
-    <>
-      <Text>呼び出し番号</Text>
-      <HStack maxW='230px'>
-        <Button {...inc} onClick={() => onChange(valueAsNumber + 1)}>
+    <div>
+      <div className="text-sm font-medium mb-2">呼び出し番号</div>
+      <div className="flex gap-2 max-w-[230px]">
+        <Button onClick={() => onChange(currentValue + 1)} size="sm">
           +
         </Button>
-        <Input {...input} onChange={(e) => onChange(Number(e.currentTarget.value))} />
+        <Input 
+          type="number" 
+          value={currentValue} 
+          onChange={(e) => onChange(Number(e.target.value))} 
+          min={1}
+          className="text-center"
+        />
         <Button
-          {...dec}
           onClick={() => {
-            valueAsNumber > 1 && onChange(valueAsNumber - 1);
+            currentValue > 1 && onChange(currentValue - 1);
           }}
+          size="sm"
         >
           -
         </Button>
-      </HStack>
-    </>
+      </div>
+    </div>
   );
 };
 

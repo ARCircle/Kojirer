@@ -1,4 +1,3 @@
-import { Box, HStack, Spinner } from '@chakra-ui/react';
 
 import { DonCard } from '@/components/DonCard';
 import { $api } from '@/utils/client';
@@ -51,17 +50,19 @@ const KitchenUI = () => {
   }, [refetch]);
 
   return (
-    <Box p={5} overflowX='auto' height='100vh'>
+    <div className="p-5 overflow-x-auto h-screen">
       {isLoading || !dons ? (
-        <Spinner />
+        <div className="flex items-center justify-center h-full">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
       ) : (
-        <HStack spacing={6} justify='flex-end' width='max-content' direction='row-reverse' height='100%'>
+        <div className="flex gap-6 justify-end w-max flex-row-reverse h-full">
           {dons.map((don) => (
-            <DonCard don={don} completeCooking={completeCooking} />
+            <DonCard key={don.id} don={don} completeCooking={completeCooking} />
           ))}
-        </HStack>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 
