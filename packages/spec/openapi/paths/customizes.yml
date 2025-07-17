@@ -2,7 +2,8 @@ CustomizesPath:
   get:
     tags:
       - customize
-    description:
+    summary: すべてのCustomizeを返す
+    operationId: getCustomizes
     responses:
       '200':
         description: すべてのCustomizeを返す
@@ -12,3 +13,16 @@ CustomizesPath:
               type: array
               items:
                 $ref: '../components/customize.yml#/Customize'
+      '400':
+        description: 不正なリクエスト
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: 'Invalid request'
+
+    security: [{}] # 何も決めていないので一旦空で
+

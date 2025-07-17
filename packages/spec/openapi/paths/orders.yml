@@ -2,7 +2,9 @@ OrdersPath:
   post:
     tags:
       - order
-    description:
+    summary: 注文を作成
+    operationId: createOrder
+    description: 新しい注文を作成する
     requestBody:
       required: true
       content:
@@ -34,3 +36,14 @@ OrdersPath:
                 price:
                   type: integer
                   format: int32
+      '400':
+        description: 不正なリクエスト
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: 'Invalid request'
+    security: [{}] # 何も決めていないので一旦空で
