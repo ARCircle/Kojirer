@@ -1,5 +1,5 @@
 import { $api } from '@/utils/client';
-import { Box, Button, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
 import paths from 'api';
 import React, { useState } from 'react';
 import { SwipeableList, SwipeableListItem, SwipeAction, TrailingActions } from 'react-swipeable-list';
@@ -43,20 +43,13 @@ const SidebarContent: React.FC<SidebarProps> = ({
   );
 
   return (
-    <Box
-      bg={useColorModeValue('white', 'gray.900')}
-      borderRight='1px'
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={80}
-      pos='fixed'
-      h='full'
-    >
-      <VStack h='20' alignItems='center' mx='8' align='stretch'>
-        <Text fontSize='2xl' fontFamily='monospace' fontWeight='bold' mt={4}>
+    <div className="bg-white border-r border-gray-200 w-80 fixed h-full">
+      <div className="h-20 flex items-center justify-center mx-8">
+        <h1 className="text-2xl font-mono font-bold mt-4">
           注文情報
-        </Text>
-      </VStack>
-      <Box overflowY='auto' px='8' h='60%'>
+        </h1>
+      </div>
+      <div className="overflow-y-auto px-8 h-[60%]">
         <SwipeableList>
           {dons.map((don, idx) => (
             <SwipeableListItem trailingActions={trailingActions(don.uniqueId)} key={don.uniqueId}>
@@ -71,23 +64,16 @@ const SidebarContent: React.FC<SidebarProps> = ({
             </SwipeableListItem>
           ))}
         </SwipeableList>
-      </Box>
-      <VStack
-        bottom={0}
-        pos='fixed'
-        p={10}
-        align='stretch'
-        backdropFilter='blur(10px)'
-        background='rgba(255, 255, 255, 0.4)'
-      >
-        <Text fontSize='xl'>合計金額 ￥{isLoading ? '...' : price}</Text>
+      </div>
+      <div className="fixed bottom-0 p-10 space-y-4 backdrop-blur-sm bg-white/40">
+        <div className="text-xl">合計金額 ￥{isLoading ? '...' : price}</div>
         <ReceptionCallNumInput value={callNum} onChange={setCallNum} />
 
-        <Button colorScheme='teal' mt={4} onClick={() => onOrder(callNum)} isDisabled={dons.length == 0}>
+        <Button variant="teal" className="mt-4 w-full" onClick={() => onOrder(callNum)} disabled={dons.length == 0}>
           注文
         </Button>
-      </VStack>
-    </Box>
+      </div>
+    </div>
   );
 };
 
