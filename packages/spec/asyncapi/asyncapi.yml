@@ -1,0 +1,179 @@
+asyncapi:
+  '3.0.0'
+
+  # security系も書けるみたいだが一旦無視している
+info:
+  title: Kojirer State Notification Service
+  version: 1.0.0
+  description: KojirerでDonやOrderの状態を同期するためのサービス
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/mit-license.php
+
+servers:
+  production:
+    host: api.kojirer.arcircle.f5.si
+    pathname: ws
+    protocol: WebSockets
+    description: 本番環境
+
+defaultContentType: application/json
+
+channels:
+  order:
+    address: order
+    messages:
+      notificationRequest:
+        $ref: '#/components/messages/requestNotification'
+      activeOrderState:
+        $ref: '#/components/messages/orderState'
+    bindings:
+      ws:
+        method: GET
+  don:
+    address: don
+    messages:
+      notificationRequest:
+        $ref: '#/components/messages/requestNotification'
+      activeDonState:
+        $ref: '#/components/messages/donState'
+    bindings:
+      ws:
+        method: GET
+
+operations:
+  requestActiveOrderStateNotification:
+    title: Request for active Order state notification
+    description: |
+      Orderの状態についての通知をリクエストする。
+      サーバーはリクエストを受け取ると、直ちに現在の状態を通知する。
+      そしてリクエストがあったセッションについて、状態変化時に通知を送信する。
+    action: send
+    channel:
+      $ref: '#/channels/order'
+    messages:
+      - $ref: '#/channels/order/messages/notificationRequest'
+    reply:
+      channel:
+        $ref: '#/channels/order'
+      messages:
+        - $ref: '#/channels/order/messages/activeOrderState'
+  requestActiveDonStateNotification:
+    title: Request for active Don state notification
+    description: |
+      Donの状態についての通知をリクエストする。
+      サーバーはリクエストを受け取ると、直ちに現在の状態を通知する。
+      そしてリクエストがあったセッションについて、状態変化時に通知を送信する。
+    action: send
+    channel:
+      $ref: '#/channels/don'
+    messages:
+      - $ref: '#/channels/don/messages/notificationRequest'
+    reply:
+      channel:
+        $ref: '#/channels/don'
+      messages:
+        - $ref: '#/channels/don/messages/activeDonState'
+  notifyActiveOrderState:
+    title: Notify active Order state
+    description: |
+      Orderの状態についての通知
+    action: receive
+    channel:
+      $ref: '#/channels/order'
+    messages:
+      - $ref: '#/channels/order/messages/activeOrderState'
+  notifyActiveDonState:
+    title: Notify active Don state
+    description: |
+      Donの状態についての通知
+    action: receive
+    channel:
+      $ref: '#/channels/don'
+    messages:
+      - $ref: '#/channels/don/messages/activeDonState'
+
+components:
+  messages:
+    requestNotification:
+      payload:
+        type: object
+        properties:
+          type:
+            type: string
+            enum: [request]
+          data:
+            $ref: '#/components/schemas/requestOption'
+    orderState:
+      payload:
+        type: object
+        properties:
+          type:
+            type: string
+            enum: [state]
+          data:
+            type: object
+            properties:
+              orders:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order'
+    donState:
+      payload:
+        type: object
+        properties:
+          type:
+            type: string
+            enum: [state]
+          data:
+            type: object
+            properties:
+              dons:
+                type: array
+                items:
+                  $ref: '#/components/schemas/don'
+  schemas:
+    requestOption:
+      title: Request Option
+      description: リクエスト時に設定するオプション
+      type: object
+      properties:
+        include:
+          type: boolean
+          description: 通知内容に子オブジェクトを含むかどうか
+    order:
+      title: Order
+      description: Orderオブジェクト
+      type: object
+      required: [id, call_num, state]
+      properties:
+        id:
+          type: string
+          description: OrderのユニークなID
+        call_num:
+          type: integer
+          description: Orderの呼び出し番号
+        state:
+          type: string
+          description: Orderの現在の状態
+          enum: [ordered, ready, delivered, cancelled]
+        dons:
+          type: array
+          description: |
+            Orderに紐づいているDonの配列
+            通知リクエスト時に 'includes: true' オプションを付与すると含まれる
+          items:
+            $ref: '#/components/schemas/don'
+    don:
+      title: Don
+      description: Donオブジェクト
+      type: object
+      required: [id, state]
+      properties:
+        id:
+          type: string
+          description: DonのユニークなID
+        state:
+          type: string
+          description: Donの現在の状態
+          enum: [ordered, cooking, cooked, delivered, cancelled]

@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "spec",
   "version": "0.0.1",
   "main": "index.js",
   "exports": {
@@ -32,7 +32,14 @@
     "build:tsup": "tsup-node --config tsup.config.ts",
     "clean": "rm -rf dist && rm -rf ./src/gen",
     "codegen": "pnpm run codegen:openapi-ts",
-    "codegen:openapi-ts": "tsx ./src/transform.ts"
+    "codegen:openapi-ts": "tsx ./src/transform.ts",
+    "docs:validate": "pnpm run docs:validate:openapi && pnpm run docs:validate:asyncapi",
+    "docs:build": "pnpm run docs:build:openapi && pnpm run docs:build:asyncapi",
+    "docs:validate:openapi": "pnpm --package=@redocly/cli dlx redocly lint openapi/openapi.yml",
+    "docs:validate:asyncapi": "pnpm dlx @asyncapi/cli validate asyncapi/asyncapi.yml",
+    "docs:build:openapi": "pnpm --package=@redocly/cli dlx redocly build-docs openapi/openapi.yml --output docs/openapi/index.html",
+    "docs:build:asyncapi": "pnpm dlx @asyncapi/cli generate fromTemplate asyncapi/asyncapi.yml @asyncapi/html-template@3.0.0 --use-new-generator --output docs/asyncapi",
+    "docs:serve:openapi": "pnpm --package=@redocly/cli dlx redocly preview-docs openapi/openapi.yml"
   },
   "author": "",
   "license": "ISC",
