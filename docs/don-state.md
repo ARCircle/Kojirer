@@ -4,11 +4,11 @@
 stateDiagram-v2
     [*] --> Ordered
     Ordered --> Cooking
-    Cooking --> Calling
-    Calling --> Finished
+    Cooking --> Cooked
+    Cooked --> Delivered
     Ordered --> Cancelled
     Cooking --> Cancelled
     Calling --> Cancelled
     Cancelled --> [*]
-    Finished --> [*]
+    Delivered --> [*]
 ```
