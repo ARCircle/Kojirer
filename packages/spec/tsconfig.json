@@ -31,5 +31,6 @@
     "skipLibCheck": true
   },
   "exclude": ["src/schemaFormatter.ts", "src/typesIndexFormatter.ts", "tsup.config.ts"],
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*.ts"],
+  "types": ["node"]
 }

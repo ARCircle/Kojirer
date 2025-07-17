@@ -1,24 +1,11 @@
+import { $api } from '@/utils/client';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { paths } from 'api/schema';
 import React, { useEffect, useState } from 'react';
 import ReceptionDonOptionRadio from './ReceptionDonOptionRadio';
 import ReceptionToppingNumberInput from './ReceptionToppingNumberInput';
-import { $api } from '@/utils/client';
-import {
-  AbsoluteCenter,
-  Box,
-  Button,
-  Center,
-  Divider,
-  Flex,
-  FormLabel,
-  Grid,
-  GridItem,
-  HStack,
-  Switch,
-  Text,
-  useBoolean,
-  VStack,
-} from '@chakra-ui/react';
-import { paths } from 'api/schema';
 
 type Don = paths['/order']['post']['requestBody']['content']['application/json']['dons'][0] & { uniqueId: string };
 
@@ -74,7 +61,7 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
 
   const [costomizes, setCostomizes] = useState<number[]>(initialCostomizeState);
   const [toppingAmounts, setToppingAmounts] = useState<number[]>(initialToppingAmountsState);
-  const [canDecrement, { toggle }] = useBoolean(false);
+  const [canDecrement, setCanDecrement] = useState(false);
 
   const title = isEdit ? `丼 #${index + 1} の編集` : '新規注文';
 
@@ -135,62 +122,65 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
 
   return (
     <form onSubmit={submit}>
-      <HStack justify='space-between'>
-        <Text fontSize='2xl'>{title}</Text>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold">{title}</h2>
         {isEdit && (
           <div>
-            <Button onClick={cancel}>キャンセル</Button>
+            <Button onClick={cancel} variant="outline">キャンセル</Button>
           </div>
         )}
-      </HStack>
-      <Box position='relative' padding={8}>
-        <Divider />
-        <AbsoluteCenter bg='white' px={2}>
-          <Text fontSize='xl'>オプション</Text>
-        </AbsoluteCenter>
-      </Box>
+      </div>
+      
+      <div className="relative py-8">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-300" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-white px-2 text-xl font-medium">オプション</span>
+        </div>
+      </div>
 
-      <VStack align='stretch' gap={4}>
+      <div className="space-y-4">
         {costomizeLabels.map(({ label }, idx) => (
-          <Grid key={idx} templateColumns='repeat(12, 1fr)' pb={4}>
-            <GridItem colSpan={3}>
-              <Text fontSize='xl'>{label}</Text>
-            </GridItem>
-            <GridItem colSpan={9}>
+          <div key={idx} className="grid grid-cols-12 gap-4 pb-4">
+            <div className="col-span-3 flex items-center">
+              <span className="text-xl">{label}</span>
+            </div>
+            <div className="col-span-9">
               <ReceptionDonOptionRadio
                 value={costomizes[idx]}
                 onChange={(value) => {
                   setCostomizes(costomizes.map((c, index) => (index === idx ? value : c)));
                 }}
               />
-            </GridItem>
-          </Grid>
+            </div>
+          </div>
         ))}
-      </VStack>
+      </div>
 
-      <Flex>
-        <Box position='relative' padding={8} w='70%'>
-          <Divider />
-          <AbsoluteCenter bg='white' px='4'>
-            <Text fontSize='xl'>トッピング</Text>
-          </AbsoluteCenter>
-        </Box>
-        <Center>
-          <FormLabel htmlFor='can-decrement' mb='0' fontSize='sm'>
+      <div className="flex items-center">
+        <div className="relative py-8 w-3/4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-white px-4 text-xl font-medium">トッピング</span>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="can-decrement" className="text-sm">
             デクリメントモード
-          </FormLabel>
-          <Switch id='can-decrement' size='lg' onChange={toggle} />
-        </Center>
-      </Flex>
+          </Label>
+          <Switch id="can-decrement" checked={canDecrement} onCheckedChange={setCanDecrement} />
+        </div>
+      </div>
 
       {toppingData?.map(({ id, label }, idx) => (
-        <Grid key={id} templateColumns='repeat(12, 1fr)' pb={4}>
-          <GridItem colSpan={3}>
-            <Center>
-              <Text fontSize='xl'>{label}</Text>
-            </Center>
-          </GridItem>
-          <GridItem colSpan={9}>
+        <div key={id} className="grid grid-cols-12 gap-4 pb-4">
+          <div className="col-span-3 flex items-center justify-center">
+            <span className="text-xl">{label}</span>
+          </div>
+          <div className="col-span-9">
             <ReceptionToppingNumberInput
               canDecrement={canDecrement}
               value={toppingAmounts[idx]}
@@ -198,15 +188,15 @@ const ReceptionDonForm: React.FC<ReceptionDonFormProps> = ({
                 setToppingAmounts(toppingAmounts.map((t, index) => (index === idx ? value : t)));
               }}
             />
-          </GridItem>
-        </Grid>
+          </div>
+        </div>
       ))}
 
-      <VStack align='stretch' pt={8}>
-        <Button colorScheme='teal' type='submit'>
+      <div className="pt-8">
+        <Button variant="teal" type="submit" className="w-full">
           {isEdit ? '編集' : '追加'}
         </Button>
-      </VStack>
+      </div>
     </form>
   );
 };

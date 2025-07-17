@@ -1,5 +1,6 @@
 import { $api } from '@/utils/client';
-import { Card, ListItem, Text, UnorderedList } from '@chakra-ui/react';
+import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { components } from 'api/schema';
 
 type Option = components['schemas']['Option'];
@@ -35,19 +36,27 @@ const ReceptionDonCard: React.FC<ReceptionDonCardProps> = ({
   const { data: toppingData } = $api.useQuery('get', '/toppings/available');
 
   return (
-    <Card w='100%' p={4} variant='outline' mt={2} borderColor={isSelecting ? 'red' : undefined} onClick={onClick}>
-      <Text>丼 #{index}</Text>
-      <Text>アブラ: {searchLabel(abura, options || [])}</Text>
-      <Text>カラメ: {searchLabel(karame, options || [])}</Text>
-      <Text>ニンニク: {searchLabel(ninniku, options || [])}</Text>
-      <Text>トッピング</Text>
-      <UnorderedList>
-        {toppings.map((topping, idx) => (
-          <ListItem key={idx}>
-            {toppingData ? toppingData[idx].label : ''}: {topping.amount}
-          </ListItem>
-        ))}
-      </UnorderedList>
+    <Card 
+      className={cn(
+        'w-full p-4 mt-2 cursor-pointer',
+        isSelecting ? 'border-red-500 border-2' : 'border'
+      )} 
+      onClick={onClick}
+    >
+      <div className="space-y-2">
+        <div className="font-medium">丼 #{index}</div>
+        <div>アブラ: {searchLabel(abura, options || [])}</div>
+        <div>カラメ: {searchLabel(karame, options || [])}</div>
+        <div>ニンニク: {searchLabel(ninniku, options || [])}</div>
+        <div>トッピング</div>
+        <ul className="list-disc list-inside pl-4">
+          {toppings.map((topping, idx) => (
+            <li key={idx}>
+              {toppingData ? toppingData[idx]?.label : ''}: {topping.amount}
+            </li>
+          ))}
+        </ul>
+      </div>
     </Card>
   );
 };

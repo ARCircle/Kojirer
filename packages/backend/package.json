@@ -11,7 +11,8 @@
     "migrate:create": "prisma migrate dev --create-only",
     "migrate:exe": "prisma migrate dev",
     "migrate:status": "prisma migrate status",
-    "migrate:reset": "prisma migrate reset"
+    "migrate:reset": "prisma migrate reset",
+    "db:studio": "prisma studio"
   },
   "author": "",
   "license": "ISC",
@@ -23,8 +24,8 @@
     "typescript": "^5.8.3"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.18",
-    "@types/express": "^5.0.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/node": "^22.15.30",
     "prisma": "^6.9.0",
     "tsc-alias": "^1.8.16",
