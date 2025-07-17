@@ -1,0 +1,14 @@
+CustomizesPath:
+  get:
+    tags:
+      - customize
+    description:
+    responses:
+      '200':
+        description: すべてのCustomizeを返す
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../components/customize.yml#/Customize'

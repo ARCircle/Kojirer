@@ -1,0 +1,33 @@
+Don:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+    status:
+      type: string
+      enum:
+        - ordered
+        - cooking
+        - cooked
+        - delivered
+        - cancelled
+    orderId:
+      type: string
+      format: uuid
+    createDatetime:
+      type: string
+      format: date-time
+    updateDatetime:
+      type: string
+      format: date-time
+    customizes:
+      type: array
+      items:
+        $ref: './customize.yml#/Customize'
+  required:
+    - id
+    - status
+    - orderId
+    - createDatetime
+    - updateDatetime
