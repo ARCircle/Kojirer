@@ -1,8 +1,16 @@
 packages:
   - packages/*
 onlyBuiltDependencies:
+  - '@asyncapi/cli'
+  - '@hyperjump/json-pointer'
+  - '@hyperjump/json-schema'
+  - '@hyperjump/json-schema-core'
+  - '@hyperjump/pact'
   - '@prisma/client'
   - '@prisma/engines'
   - '@tailwindcss/oxide'
   - esbuild
   - prisma
+  - protobufjs
+  - sharp
+  - yarn

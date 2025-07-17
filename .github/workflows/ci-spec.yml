@@ -1,11 +1,12 @@
-name: CI
+name: CI (API Specification)
 
 on:
   push:
     branches: [main]
-    paths: ['packages/api/openapi.yaml']
+    paths: ['packages/spec/**']
   pull_request:
     branches: [main]
+    paths: ['packages/spec/**']
 
 jobs:
   validate:
@@ -18,12 +19,16 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 10.11.1
+          run_install: false # cacheが復元されてからインストールしたい
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'latest'
-          cache: 'pnpm'
+          node-version: 22 # 24にすると pnpm install で heap out of memory する
+          cache: pnpm
 
-      - name: Validate OpenAPI specification
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate API specification
         run: pnpm run --filter spec docs:validate
