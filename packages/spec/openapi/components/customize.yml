@@ -1,0 +1,13 @@
+Customize:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+    label:
+      type: string
+    available:
+      type: boolean
+  required:
+    - id
+    - label
