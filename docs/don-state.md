@@ -8,7 +8,7 @@ stateDiagram-v2
     Cooked --> Delivered
     Ordered --> Cancelled
     Cooking --> Cancelled
-    Calling --> Cancelled
+    Cooked --> Cancelled
     Cancelled --> [*]
     Delivered --> [*]
 ```
