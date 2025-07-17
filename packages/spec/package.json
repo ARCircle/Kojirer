@@ -39,8 +39,7 @@
     "docs:validate:asyncapi": "pnpm dlx @asyncapi/cli validate asyncapi/asyncapi.yml",
     "docs:build:openapi": "pnpm --package=@redocly/cli dlx redocly build-docs openapi/openapi.yml --output docs/openapi/index.html",
     "docs:build:asyncapi": "pnpm dlx @asyncapi/cli generate fromTemplate asyncapi/asyncapi.yml @asyncapi/html-template@3.0.0 --use-new-generator --output docs/asyncapi",
-    "docs:serve:openapi": "pnpm --package=@redocly/cli dlx redocly preview-docs openapi/openapi.yml",
-    "docs:serve:asyncapi": "pnpm dlx @asyncapi/cli start studio asyncapi/asyncapi.yml"
+    "docs:serve:openapi": "pnpm --package=@redocly/cli dlx redocly preview-docs openapi/openapi.yml"
   },
   "author": "",
   "license": "ISC",
