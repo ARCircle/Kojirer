@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vitejs/plugin-react": "^4.5.1",
-    "api": "file:../api",
+    "api": "file:../spec",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^5.2.0",
