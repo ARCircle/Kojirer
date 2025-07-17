@@ -1,14 +1,21 @@
-OrdersPricePath:
+PricePath:
   post:
     tags:
-      - order
+      - price
     description: 注文の値段の総計を取得
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: '../components/Orders.yml#/Orders'
+            type: object
+            properties:
+              customize:
+                type: array
+                items:
+                  $ref: '../components/customize.yml#/Customize'
+              numSnsFollowed:
+                type: integer
     responses:
       '200':
         description: 価格を返す

@@ -11,4 +11,4 @@ DonsPath:
             schema:
               type: array
               items:
-                $ref: '../components/Dons.yml#/Dons'
+                $ref: '../components/don.yml#/Don'

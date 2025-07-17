@@ -21,4 +21,4 @@ DonsCookedPath:
         content:
           application/json:
             schema:
-              $ref: '../components/Dons.yml#/Dons'
+              $ref: '../components/don.yml#/Don'

@@ -1,4 +1,4 @@
-Orders:
+Order:
   type: object
   properties:
     id:
@@ -11,10 +11,17 @@ Orders:
       format: date-time
     callNum:
       type: integer
+    status:
+      type: string
+      enum:
+        - ordered
+        - ready
+        - delivered
+        - cancelled
     dons:
       type: array
       items:
-        $ref: './Dons.yml#/Dons'
+        $ref: './don.yml#/Don'
   required:
     - id
     - numSnsFollowed

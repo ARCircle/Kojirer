@@ -14,24 +14,26 @@ paths:
     $ref: './paths/dons.yml#/DonsPath'
   '/dons/{id}':
     $ref: './paths/donsID.yml#/DonsIDPath'
-  '/orders/price':
-    $ref: './paths/ordersPrice.yml#/OrdersPricePath'
+  '/price':
+    $ref: './paths/price.yml#/PricePath'
   '/dons/cooking':
     $ref: './paths/donsCooking.yml#/DonsCookingPath'
   '/dons/cooked':
     $ref: './paths/donsCooked.yml#/DonsCookedPath'
-  '/dons/deliver':
+  '/dons/delivered':
     $ref: './paths/donsDelivered.yml#/DonsDeliveredPath'
   '/dons/cancel':
     $ref: './paths/donsCancel.yml#/DonsCancelPath'
   '/orders/{id}':
     $ref: './paths/ordersID.yml#/OrdersIDPath'
+  '/orders':
+    $ref: './paths/orders.yml#/OrdersPath'
 
 components:
   schemas:
     Customizes:
-      $ref: './components/Customizes.yml#/Customizes'
+      $ref: './components/customize.yml#/Customize'
     Dons:
-      $ref: './components/Dons.yml#/Dons'
+      $ref: './components/don.yml#/Don'
     Orders:
-      $ref: './components/Orders.yml#/Orders'
+      $ref: './components/order.yml#/Order'

@@ -1,7 +1,7 @@
 OrdersIDPath:
   get:
     tags:
-      - don
+      - order
     description: 特定の注文の詳細を取得
     parameters:
       - name: id
@@ -16,4 +16,4 @@ OrdersIDPath:
         content:
           application/json:
             schema:
-              $ref: '../components/Dons.yml#/Dons'
+              $ref: '../components/don.yml#/Don'

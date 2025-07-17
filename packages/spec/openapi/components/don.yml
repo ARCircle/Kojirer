@@ -1,4 +1,4 @@
-Dons:
+Don:
   type: object
   properties:
     id:
@@ -6,11 +6,6 @@ Dons:
       format: uuid
     status:
       type: string
-      description: |
-        調理状態を表すstatus
-        1: 調理中
-        2: 調理完了
-        3: 受け渡し済み
       enum:
         - ordered
         - cooking
@@ -29,7 +24,7 @@ Dons:
     customizes:
       type: array
       items:
-        $ref: './Customizes.yml#/Customizes'
+        $ref: './customize.yml#/Customize'
   required:
     - id
     - status

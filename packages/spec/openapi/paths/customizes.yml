@@ -11,4 +11,4 @@ CustomizesPath:
             schema:
               type: array
               items:
-                $ref: '../components/Customizes.yml#/Customizes'
+                $ref: '../components/customize.yml#/Customize'
