@@ -1,0 +1,15 @@
+CustomizePrices:
+  type: object
+  properties:
+    customizeId:
+      type: string
+      format: uuid
+    price:
+      type: integer
+    since:
+      type: string
+      format: date-time
+  required:
+    - customizeId
+    - price
+    - since

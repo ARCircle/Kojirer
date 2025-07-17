@@ -1,0 +1,23 @@
+Orders:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+    numSnsFollowed:
+      type: integer
+    createDatetime:
+      type: string
+      format: date-time
+    callNum:
+      type: integer
+    dons:
+      type: array
+      items:
+        $ref: './Dons.yml#/Dons'
+  required:
+    - id
+    - numSnsFollowed
+    - createDatetime
+    - callNum
+    - dons

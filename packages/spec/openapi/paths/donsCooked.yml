@@ -1,0 +1,24 @@
+DonsCookedPath:
+  post:
+    tags:
+      - don
+    description: '`Don`の`status`を`cooked`に変更'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              donId:
+                type: string
+                format: uuid
+            required:
+              - donId
+    responses:
+      '201':
+        description: 当該`Don`を返す
+        content:
+          application/json:
+            schema:
+              $ref: '../components/Dons.yml#/Dons'

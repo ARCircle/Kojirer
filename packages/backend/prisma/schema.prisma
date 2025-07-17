@@ -24,6 +24,7 @@ model orders {
 model dons {
   id              String           @id @default(uuid()) @db.Uuid
   order_id        String           @db.Uuid
+  status          Int              @default(1) // 1: 調理中, 2: 調理完了, 3: 受け取り済み 
   create_datetime DateTime         @default(now())
   update_datetime DateTime         @updatedAt
   order           orders           @relation(fields: [order_id], references: [id])

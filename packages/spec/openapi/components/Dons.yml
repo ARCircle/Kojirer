@@ -1,0 +1,38 @@
+Dons:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+    status:
+      type: string
+      description: |
+        調理状態を表すstatus
+        1: 調理中
+        2: 調理完了
+        3: 受け渡し済み
+      enum:
+        - ordered
+        - cooking
+        - cooked
+        - delivered
+        - cancelled
+    orderId:
+      type: string
+      format: uuid
+    createDatetime:
+      type: string
+      format: date-time
+    updateDatetime:
+      type: string
+      format: date-time
+    customizes:
+      type: array
+      items:
+        $ref: './Customizes.yml#/Customizes'
+  required:
+    - id
+    - status
+    - orderId
+    - createDatetime
+    - updateDatetime
