@@ -16,7 +16,7 @@
     "migrate:status": "env-cmd -f .env --no-override pnpm --filter backend run migrate:status",
     "migrate:reset": "env-cmd -f .env --no-override pnpm --filter backend run migrate:reset",
     "db:studio": "env-cmd -f .env --no-override pnpm --filter backend run db:studio",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "pnpm run --filter backend test"
   },
   "author": "",
   "license": "ISC",
