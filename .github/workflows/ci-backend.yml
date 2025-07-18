@@ -27,8 +27,8 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: latest
-          cache: 'pnpm'
+          node-version: 22 # 24にすると pnpm install で heap out of memory する
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

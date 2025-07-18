@@ -3,7 +3,7 @@ name: Deploy API Documentation
 on:
   push:
     branches: [main]
-    paths: ['packages/api/openapi.yaml']
+    paths: ['packages/spec/**']
   workflow_dispatch:
 
 jobs:
@@ -21,12 +21,16 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 10.11.1
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'latest'
-          cache: 'pnpm'
+          node-version: 22 # 24にすると pnpm install で heap out of memory する
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build documentation
         run: pnpm --filter spec docs:build

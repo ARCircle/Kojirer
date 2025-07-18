@@ -2,6 +2,11 @@
 
 - AR会謹製豚そば「こうじろう」の食券管理システム
 
+## API仕様書
+
+- REST API: [OpenAPI](https://arcircle.github.io/Kojirer/openapi)
+- Websocket API: [AsyncAPI](https://arcircle.github.io/Kojirer/asyncapi)
+
 ## How to Start Develop
 
 ### ０. 前提

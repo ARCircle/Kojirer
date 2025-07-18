@@ -2,6 +2,8 @@ DonsDeliveredPath:
   post:
     tags:
       - don
+    summary: 丼を受け渡す
+    operationId: deliverDon
     description: '`Don`の`status`を`delivered`に変更'
     requestBody:
       required: true
@@ -22,3 +24,14 @@ DonsDeliveredPath:
           application/json:
             schema:
               $ref: '../components/don.yml#/Don'
+      '400':
+        description: 不正なリクエスト
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: 'Invalid request'
+    security: [{}] # 何も決めていないので一旦空で
