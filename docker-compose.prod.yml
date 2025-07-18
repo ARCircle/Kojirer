@@ -1,10 +1,11 @@
 # 本番環境での利用を想定
 services:
   web:
+    image: kojirer
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: kojirer
+    container_name: kojirer-app
     restart: always
     env_file:
       - .env.container
@@ -14,7 +15,7 @@ services:
       - db
   db:
     image: postgres:15-alpine
-    container_name: postgres
+    container_name: kojirer-db
     restart: always
     env_file:
       - .env.container
