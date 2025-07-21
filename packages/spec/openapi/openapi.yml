@@ -3,9 +3,13 @@ openapi: '3.0.3'
 info:
   title: 'Kojirer API'
   version: 0.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/mit-license.php
 
 servers:
-  - url: 'http://localhost:52600/api/'
+  - url: 'https://api.kojirer.arcircle.f5.si'
+    description: ローカル環境
 
 paths:
   '/customizes':
