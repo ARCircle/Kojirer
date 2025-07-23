@@ -1,7 +1,7 @@
 # 本番用アプリケーションイメージ
 # 動作には docker run --env-file や docker compose による環境変数による credential の設定が必須
 
-FROM node:24-slim AS base
+FROM node:22-slim AS base
 # 作業ディレクトリを指定 (ディレクトリがない場合は作ってくれる)
 WORKDIR /kojirer
 

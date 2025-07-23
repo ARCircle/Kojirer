@@ -1,7 +1,7 @@
 # 開発用アプリケーションイメージ
 # 動作には docker run --env-file や docker compose による環境変数による credential の設定が必須
 
-FROM node:24-slim
+FROM node:22-slim
 ENV NODE_ENV=development
 
 # 必要最小限のパッケージのみインストール
@@ -14,18 +14,18 @@ WORKDIR /kojirer
 
 # 依存関係のファイルのみをコピー
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/api/package.json ./packages/api/
+COPY packages/spec/package.json ./packages/spec/
 COPY packages/backend/package.json ./packages/backend/
 COPY packages/frontend/package.json ./packages/frontend/
 COPY packages/backend/prisma/schema.prisma ./packages/backend/prisma/
 
 # 依存関係をインストール（開発用パッケージも含む）
 RUN pnpm install && \
-    mkdir -p /opt/node_modules_cache/packages/api \
+    mkdir -p /opt/node_modules_cache/packages/spec \
             /opt/node_modules_cache/packages/backend \
             /opt/node_modules_cache/packages/frontend && \
     cp -a /kojirer/node_modules /opt/node_modules_cache/ && \
-    cp -a /kojirer/packages/api/node_modules /opt/node_modules_cache/packages/api/ && \
+    cp -a /kojirer/packages/spec/node_modules /opt/node_modules_cache/packages/spec/ && \
     cp -a /kojirer/packages/backend/node_modules /opt/node_modules_cache/packages/backend/ && \
     cp -a /kojirer/packages/frontend/node_modules /opt/node_modules_cache/packages/frontend/
 
