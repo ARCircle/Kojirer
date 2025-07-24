@@ -62,7 +62,7 @@ pnpm run migrate:dev
 DBにシードを入れる。
 
 ```bash
-docker exec -i postgres psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
+docker exec -i kojirer-db-local psql -U kojirer -d kojirer < packages/backend/examples/devdata.sql
 ```
 
 起動するサーバー
@@ -129,3 +129,9 @@ pnpm run api
 | UIライブラリ           | [React](https://ja.react.dev/)                                    |
 | ルーティングライブラリ | [@generouted/react-router](https://github.com/oedotme/generouted) |
 | UIコンポーネント       | [Chakra UI](https://chakra-ui.com/)                               |
+
+## Nodeのバージョンについて
+
+pnpmの問題かは不明だが最新のNode24を使用するとpnpm install時にnodeのJavaScript heap out of memoryエラーが発生して失敗する
+
+そのためプロジェクトのビルドおよびCIではNode.jsのバージョンを22に設定している。
