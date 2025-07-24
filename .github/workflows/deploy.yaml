@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main                     # main ブランチへの push で実行
+      - feature/k3s-cd
   workflow_dispatch:             # 手動実行も可能
 
 # ===== 権限 =====
