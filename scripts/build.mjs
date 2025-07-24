@@ -6,8 +6,8 @@ try {
   spawnSync('pnpm', ['run', 'clean'], { stdio: 'inherit' });
   console.log('✓ Cleaned built files');
 
-  // build api
-  spawnSync('pnpm', ['run', '--filter', 'api', 'build'], { stdio: 'inherit' });
+  // build spec
+  spawnSync('pnpm', ['run', '--filter', 'spec', 'build'], { stdio: 'inherit' });
 
   // build frontend
   spawnSync('pnpm', ['run', '--filter', 'frontend', 'build'], { stdio: 'inherit' });
