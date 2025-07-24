@@ -61,6 +61,7 @@ jobs:
       with:
         method: kubeconfig
         kubeconfig: ${{ secrets.KUBECONFIG }}
+        decodeBase64: true
 
     - name: Set image tag in kustomize overlay
       working-directory: k8s/overlays/prod
