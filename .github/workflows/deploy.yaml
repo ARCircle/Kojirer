@@ -24,7 +24,7 @@ jobs:
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}
       IMAGE_TAG: ${{ github.sha }}
-      FULL_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      FULL_IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
     steps:
     - uses: actions/checkout@v4
