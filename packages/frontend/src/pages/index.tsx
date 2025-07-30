@@ -8,7 +8,7 @@ export default function Home() {
       <Button>Button</Button>
       <div className='space-y-2'>
         <Link to='/status' className='block text-blue-600 hover:underline'>
-          yobidashi
+          status
         </Link>
         <Link to='/kitchen' className='block text-blue-600 hover:underline'>
           kitchen

@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { paths } from 'api/schema';
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChefHat, Megaphone, CheckCircle } from 'lucide-react';
 
 type Order = paths['/order/status']['post']['responses']['200']['content']['application/json'][0];
 
@@ -338,26 +339,32 @@ const YobidashiTable: React.FC<{ status: string }> = ({ status }) => {
 const Yobidashi: React.FC = () => {
   type TableLabelProp = {
     name: string;
-    icon: string;
+    icon: React.ReactNode;
     color: string;
   };
   const TableLabel: React.FC<TableLabelProp> = ({ name, icon, color }: TableLabelProp) => {
     return (
       <motion.div
-        className='text-center p-3 mx-auto mb-4'
+        className='text-center p-2 mx-auto mb-3'
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div
           className={cn(
-            'inline-flex items-center gap-3 px-6 py-3 rounded-2xl',
-            'text-3xl md:text-4xl lg:text-5xl font-bold text-white shadow-lg',
+            'inline-flex items-center gap-2 px-4 py-2 rounded-xl',
+            'text-lg md:text-xl lg:text-2xl font-bold text-white shadow-lg',
             'bg-gradient-to-r',
             color,
           )}
         >
-          <span className='text-4xl md:text-5xl lg:text-6xl'>{icon}</span>
+          <motion.div
+            className="flex items-center"
+            whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
+            transition={{ duration: 0.5 }}
+          >
+            {icon}
+          </motion.div>
           <span>{name}</span>
         </div>
       </motion.div>
@@ -392,7 +399,11 @@ const Yobidashi: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <TableLabel name='調理中' icon='👨‍🍳' color='from-orange-500 to-red-500' />
+          <TableLabel 
+            name='調理中' 
+            icon={<ChefHat size={32} className="text-white" />} 
+            color='from-orange-500 to-red-500' 
+          />
           <YobidashiRow status={'cooking'} />
         </motion.div>
 
@@ -402,7 +413,11 @@ const Yobidashi: React.FC = () => {
           whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.2 }}
         >
-          <TableLabel name='呼出中' icon='📢' color='from-blue-500 to-cyan-500' />
+          <TableLabel 
+            name='呼出中' 
+            icon={<Megaphone size={32} className="text-white" />} 
+            color='from-blue-500 to-cyan-500' 
+          />
           <motion.div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4' layout>
             <YobidashiTable status={'calling'} />
           </motion.div>
@@ -414,7 +429,11 @@ const Yobidashi: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <TableLabel name='完了' icon='✅' color='from-emerald-500 to-green-500' />
+          <TableLabel 
+            name='完了' 
+            icon={<CheckCircle size={32} className="text-white" />} 
+            color='from-emerald-500 to-green-500' 
+          />
           <YobidashiRow status={'finish'} />
         </motion.div>
       </motion.div>
