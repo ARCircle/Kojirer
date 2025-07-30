@@ -359,7 +359,7 @@ const Yobidashi: React.FC = () => {
           )}
         >
           <motion.div
-            className="flex items-center"
+            className='flex items-center'
             whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
             transition={{ duration: 0.5 }}
           >
@@ -380,10 +380,8 @@ const Yobidashi: React.FC = () => {
         transition={{ duration: 0.6 }}
         className='text-center mb-8'
       >
-        <h1 className='text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4'>
-          kojirer
-        </h1>
-        <p className='text-xl md:text-2xl text-gray-600 font-medium'>リアルタイム注文管理システム</p>
+        <h1 className='text-6xl md:text-7xl lg:text-8xl font-bold text-gray-700 mb-4'>kojirer</h1>
+        <p className='text-xl md:text-2xl text-gray-600 font-medium'>呼び出し状況</p>
       </motion.div>
 
       {/* Status Columns */}
@@ -399,10 +397,10 @@ const Yobidashi: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <TableLabel 
-            name='調理中' 
-            icon={<ChefHat size={32} className="text-white" />} 
-            color='from-orange-500 to-red-500' 
+          <TableLabel
+            name='調理中'
+            icon={<ChefHat size={32} className='text-white' />}
+            color='from-orange-500 to-red-500'
           />
           <YobidashiRow status={'cooking'} />
         </motion.div>
@@ -413,10 +411,10 @@ const Yobidashi: React.FC = () => {
           whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.2 }}
         >
-          <TableLabel 
-            name='呼出中' 
-            icon={<Megaphone size={32} className="text-white" />} 
-            color='from-blue-500 to-cyan-500' 
+          <TableLabel
+            name='呼出中'
+            icon={<Megaphone size={32} className='text-white' />}
+            color='from-blue-500 to-cyan-500'
           />
           <motion.div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4' layout>
             <YobidashiTable status={'calling'} />
@@ -429,10 +427,10 @@ const Yobidashi: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <TableLabel 
-            name='完了' 
-            icon={<CheckCircle size={32} className="text-white" />} 
-            color='from-emerald-500 to-green-500' 
+          <TableLabel
+            name='完了'
+            icon={<CheckCircle size={32} className='text-white' />}
+            color='from-emerald-500 to-green-500'
           />
           <YobidashiRow status={'finish'} />
         </motion.div>
