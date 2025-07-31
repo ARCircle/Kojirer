@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { paths } from 'api/schema';
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChefHat, Megaphone, CheckCircle } from 'lucide-react';
+import { ChefHat, Megaphone, CheckCircle, Eye } from 'lucide-react';
 
 type Order = paths['/order/status']['post']['responses']['200']['content']['application/json'][0];
 
@@ -378,10 +378,19 @@ const Yobidashi: React.FC = () => {
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className='text-center mb-8'
+        className='flex items-center justify-center gap-6 py-6 mb-8'
       >
-        <h1 className='text-6xl md:text-7xl lg:text-8xl font-bold text-gray-700 mb-4'>kojirer</h1>
-        <p className='text-xl md:text-2xl text-gray-600 font-medium'>呼び出し状況</p>
+        <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold text-gray-700'>kojirer</h1>
+        <div className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white shadow-lg'>
+          <motion.div
+            className='flex items-center'
+            whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
+            transition={{ duration: 0.5 }}
+          >
+            <Eye size={24} className='text-white' />
+          </motion.div>
+          <span className='text-lg md:text-xl font-bold'>ステータス</span>
+        </div>
       </motion.div>
 
       {/* Status Columns */}
