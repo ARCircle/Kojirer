@@ -29,7 +29,7 @@ export default function Home() {
       hoverColor: 'hover:bg-orange-700'
     },
     {
-      to: '/uketuke',
+      to: '/order',
       title: '注文受付',
       description: '新規注文登録',
       icon: <Utensils size={32} className="text-white" />,
