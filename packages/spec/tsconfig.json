@@ -22,7 +22,7 @@
     /* Interop Constraints */
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "composite": true,
+    // "composite": true,
 
     /* Type Checking */
     "strict": true,
@@ -31,6 +31,6 @@
     "skipLibCheck": true
   },
   "exclude": ["src/schemaFormatter.ts", "src/typesIndexFormatter.ts", "tsup.config.ts"],
-  "include": ["./src/**/*.ts"],
+  "include": ["src"],
   "types": ["node"]
 }

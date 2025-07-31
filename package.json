@@ -9,7 +9,7 @@
     "start": "cd /kojirer/packages/backend/built && /kojirer/node_modules/.bin/env-cmd -f /kojirer/.env --no-override node index.js",
     "clean": "node ./scripts/clean.mjs",
     "dev": "env-cmd -f .env --no-override node ./scripts/dev.mjs",
-    "api": "pnpm --filter api run build",
+    "spec": "pnpm --filter spec run build",
     "migrate:create": "env-cmd -f .env --no-override pnpm --filter backend run migrate:create",
     "migrate:exe": "env-cmd -f .env --no-override pnpm --filter backend run migrate:exe",
     "migrate:dev": "pnpm run migrate:exe",
