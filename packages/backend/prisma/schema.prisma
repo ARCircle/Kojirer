@@ -8,13 +8,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model orders {
-  id               String   @id @default(uuid()) @db.Uuid
+  id               String   @id @default(uuid(7)) @db.Uuid
   num_sns_followed Int      @default(0) // SNSフォローされた数ぶんだけトッピングを無料にする
   create_datetime  DateTime @default(now())
   call_num         Int
@@ -22,9 +26,9 @@ model orders {
 }
 
 model dons {
-  id              String           @id @default(uuid()) @db.Uuid
+  id              String           @id @default(uuid(7)) @db.Uuid
   order_id        String           @db.Uuid
-  status          Int              @default(1) // 1: 調理中, 2: 調理完了, 3: 受け取り済み 
+  status          Int              @default(1) // 1: 調理中, 2: 調理完了, 3: 受け取り済み
   create_datetime DateTime         @default(now())
   update_datetime DateTime         @updatedAt
   order           orders           @relation(fields: [order_id], references: [id])
@@ -32,16 +36,18 @@ model dons {
 }
 
 model don_customizes {
-  don_id     String @id @db.Uuid
-  topping_id String @db.Uuid
-  amount     Int // 負も取りうる (0がデフォルト量)
+  don_id       String @db.Uuid
+  customize_id String @db.Uuid
+  amount       Int // 負も取りうる (0がデフォルト量)
 
-  customize customizes @relation(fields: [topping_id], references: [id])
+  customize customizes @relation(fields: [customize_id], references: [id])
   don       dons       @relation(fields: [don_id], references: [id])
+
+  @@id([don_id, customize_id]) // 同じカスタマイズの値段に対して、同じ日付の価格は存在しない
 }
 
 model customizes {
-  id               String             @id @default(uuid()) @db.Uuid
+  id               String             @id @default(uuid(7)) @db.Uuid
   label            String             @db.VarChar()
   available        Boolean?           @default(true)
   customize_prices customize_prices[]

@@ -24,9 +24,12 @@
     "typescript": "^5.8.3"
   },
   "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^11.4.2",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^22.15.30",
+    "prisma-erd-generator": "^2.0.4",
+    "puppeteer": "^23.11.1",
     "prisma": "^6.9.0",
     "tsc-alias": "^1.8.16",
     "tsc-watch": "^7.1.1",
