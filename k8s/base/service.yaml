@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kojirer
+  labels:
+    app: kojirer
+spec:
+  type: ClusterIP
+  selector:
+    app: kojirer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 52600
+    protocol: TCP
