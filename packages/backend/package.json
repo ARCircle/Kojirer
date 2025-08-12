@@ -34,6 +34,7 @@
     "@types/express": "^5.0.3",
     "@types/node": "^22.15.30",
     "@types/winston": "^2.4.4",
+    "@types/ws": "^8.18.1",
     "prisma-erd-generator": "^2.0.4",
     "puppeteer": "^23.11.1",
     "tsc-alias": "^1.8.16",
