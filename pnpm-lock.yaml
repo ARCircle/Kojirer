@@ -42,6 +42,9 @@ importers:
       winston:
         specifier: ^3.17.0
         version: 3.17.0
+      ws:
+        specifier: ^8.18.3
+        version: 8.18.3
     devDependencies:
       '@mermaid-js/mermaid-cli':
         specifier: ^11.4.2
