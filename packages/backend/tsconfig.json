@@ -2,10 +2,8 @@
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     "noImplicitAny": false,
-
     /* Language and Environment */
     "target": "ES2020",
-
     /* Modules */
     "module": "Node16",
     "rootDir": "./src",
@@ -15,7 +13,6 @@
       "@/*": ["./src/*", "./built/*"]
     },
     "resolveJsonModule": true,
-
     /* Emit */
     "outDir": "./built",
     "declaration": true,
@@ -24,12 +21,16 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "composite": true,
-
     /* Type Checking */
     "strict": true,
-
     /* Completeness */
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "plugins": [
+      {
+        "transform": "typia/lib/transform"
+      }
+    ],
+    "strictNullChecks": true
   },
   "include": ["src/**/*"],
   "exclude": ["src/**/*.test.ts", "src/**/__tests__/**/*"]
