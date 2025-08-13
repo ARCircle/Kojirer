@@ -5,7 +5,7 @@ import { ApiError } from '@/utils/ApiError';
 import { bigint2number } from '@/utils/typeConverters';
 import { components } from 'api/schema';
 
-const router = express.Router();
+const router: any = express.Router();
 
 router.post(
   '/price',

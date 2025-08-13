@@ -6,7 +6,6 @@
     /* Modules */
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "rootDir": "./src",
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*", "./dist/*"]
@@ -31,6 +30,6 @@
     "skipLibCheck": true
   },
   "exclude": ["src/schemaFormatter.ts", "src/typesIndexFormatter.ts", "tsup.config.ts"],
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*.ts", "./src/gen/**/*.ts"],
   "types": ["node"]
 }

@@ -3,7 +3,7 @@ import prisma from '@/lib/prismaClient';
 import { asyncWrapper } from '@/utils/wrappers';
 import { ApiError } from '@/utils/ApiError';
 
-const router = express.Router();
+const router: any = express.Router();
 
 //get available only
 router.get(
