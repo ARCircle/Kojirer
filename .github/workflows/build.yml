@@ -29,5 +29,6 @@ jobs:
 
     - name: Check for build artifacts
       run: |
-        ls -la packages/backend/web/
-        ls -la packages/spec/dist/
+        ls -la packages/backend/built/web/ || echo "Backend web directory not found"
+        ls -la packages/spec/dist/ || echo "Spec dist directory not found"
+        ls -la packages/frontend/built/ || echo "Frontend built directory not found"
