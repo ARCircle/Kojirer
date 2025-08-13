@@ -6,3 +6,4 @@ pnpm-debug.log*
 .env.container
 
 db_data
+.DS_Store
