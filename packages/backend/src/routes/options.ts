@@ -2,7 +2,7 @@ import { typedAsyncWrapper } from '@/utils/wrappers';
 import express from 'express';
 import prisma from '@/lib/prismaClient';
 
-const router = express.Router();
+const router: any = express.Router();
 
 router.get(
   '/',

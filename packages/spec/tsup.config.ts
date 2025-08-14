@@ -8,5 +8,5 @@ export default defineConfig({
     schema: 'src/gen/schema.ts',
   },
   clean: true,
-  dts: true,
+  dts: false,
 });

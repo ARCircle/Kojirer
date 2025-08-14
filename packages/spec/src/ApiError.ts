@@ -1,5 +1,10 @@
-import type { components } from '@/gen/schema';
-type ErrorSchema = components['schemas']['Error'];
+// OpenAPIにErrorスキーマが存在しないため、独自に定義
+type ErrorSchema = {
+  title: string;
+  type: string;
+  status: number;
+  detail: string;
+};
 
 export default class ApiError extends Error {
   private _schema: ErrorSchema;

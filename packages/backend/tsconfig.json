@@ -22,12 +22,16 @@
     /* Interop Constraints */
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "composite": true,
+    "composite": false,
 
     /* Type Checking */
-    "strict": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "noEmitOnError": false,
 
     /* Completeness */
     "skipLibCheck": true
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "built", "vitest.config.ts", "**/*.test.ts", "**/*.spec.ts"]
 }

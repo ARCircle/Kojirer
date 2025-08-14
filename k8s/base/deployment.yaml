@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kojirer
+  labels:
+    app: kojirer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kojirer
+  template:
+    metadata:
+      labels:
+        app: kojirer
+    spec:
+      containers:
+      - name: kojirer
+        image: kojirer:latest
+        ports:
+        - containerPort: 52600
+          protocol: TCP
+        env:
+        - name: PORT
+          value: "52600"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"

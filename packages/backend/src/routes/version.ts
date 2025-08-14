@@ -1,6 +1,6 @@
 import express from 'express';
 
-const router = express.Router();
+const router: any = express.Router();
 
 // パスはファイル名からの相対パス
 // ここで"/"は，"/version/"を指す

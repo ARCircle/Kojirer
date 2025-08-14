@@ -30,8 +30,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pnpm run clean && pnpm run codegen && pnpm run build:tsup",
+    "build": "pnpm run clean && pnpm run codegen && pnpm run build:tsup && pnpm run build:types",
     "build:tsup": "tsup-node --config tsup.config.ts",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap && mv dist/src/* dist/ && rm -rf dist/src dist/tsconfig.tsbuildinfo",
     "clean": "rm -rf dist && rm -rf ./src/gen",
     "codegen": "pnpm run codegen:openapi-ts",
     "codegen:openapi-ts": "tsx ./src/transform.ts",
