@@ -8,6 +8,7 @@ on:
 
 jobs:
   deploy:
+    environment: github-pages
     runs-on: ubuntu-latest
     permissions:
       contents: read
