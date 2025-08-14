@@ -1,8 +1,4 @@
 {
   "files": [],
-  "references": [
-    { "path": "./packages/api" },
-    { "path": "./packages/backend" },
-    { "path": "./packages/frontend" }
-  ]
+  "references": [{ "path": "./packages/spec" }, { "path": "./packages/backend" }, { "path": "./packages/frontend" }]
 }

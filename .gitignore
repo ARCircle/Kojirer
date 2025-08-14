@@ -2,6 +2,8 @@ node_modules
 package-lock.json
 pnpm-debug.log*
 
+tsconfig.tsbuildinfo
+
 .env
 .env.container
 

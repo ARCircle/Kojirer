@@ -12,7 +12,7 @@
     "moduleResolution": "Node16",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*", "./dist/*"]
+      "@/*": ["./src/*", "./built/*"]
     },
     "resolveJsonModule": true,
 
@@ -29,5 +29,6 @@
 
     /* Completeness */
     "skipLibCheck": true
-  }
+  },
+  "include": ["src/**/*"]
 }
