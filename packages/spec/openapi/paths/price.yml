@@ -15,9 +15,9 @@ PricePath:
               customize:
                 type: array
                 items:
-                  $ref: '../components/customize.yml#/Customize'
-              numSnsFollowed:
-                type: integer
+                  - $ref: '../components/customize.yml#/Customize'
+            required:
+              - customize
     responses:
       '200':
         description: 価格を返す

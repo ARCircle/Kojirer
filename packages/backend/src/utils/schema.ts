@@ -1,4 +1,4 @@
-import paths from 'api';
+import { paths } from 'api/schema';
 
 export type ApiPath = keyof paths;
 

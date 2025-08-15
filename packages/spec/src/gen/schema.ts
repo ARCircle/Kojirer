@@ -204,7 +204,8 @@ export interface components {
             /** Format: uuid */
             id: string;
             label: string;
-            available?: boolean | null;
+            available: boolean;
+            isDiscount: boolean;
         };
         Don: {
             /** Format: uuid */
@@ -222,7 +223,6 @@ export interface components {
         Order: {
             /** Format: uuid */
             id: string;
-            numSnsFollowed: number;
             /** Format: date-time */
             createDatetime: Date;
             callNum: number;
@@ -347,8 +347,9 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    customize?: components["schemas"]["Customize"][] | null;
-                    numSnsFollowed?: number | null;
+                    customize: [
+                        components["schemas"]["Customize"]
+                    ];
                 };
             };
         };
@@ -552,7 +553,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Don"];
+                    "application/json": components["schemas"]["Order"];
                 };
             };
             /** @description 不正なリクエスト */
@@ -579,11 +580,13 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    numSnsFollowed?: number | null;
-                    callNum?: number | null;
-                    dons?: {
-                        customizes?: components["schemas"]["Customize"][] | null;
-                    }[] | null;
+                    numSnsFollowed: number;
+                    callNum: number;
+                    dons: {
+                        customizes?: [
+                            components["schemas"]["Customize"]
+                        ] | null;
+                    }[];
                 };
             };
         };
