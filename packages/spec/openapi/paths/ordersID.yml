@@ -18,7 +18,7 @@ OrdersIDPath:
         content:
           application/json:
             schema:
-              $ref: '../components/don.yml#/Don'
+              $ref: '../components/order.yml#/Order'
       '400':
         description: 不正なリクエスト
         content:

@@ -24,7 +24,11 @@ OrdersPath:
                     customizes:
                       type: array
                       items:
-                        $ref: '../components/customize.yml#/Customize'
+                        - $ref: '../components/customize.yml#/Customize'
+            required:
+              - numSnsFollowed
+              - callNum
+              - dons
     responses:
       '200':
         description: 価格を返す

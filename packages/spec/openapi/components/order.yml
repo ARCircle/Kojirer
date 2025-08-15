@@ -4,8 +4,6 @@ Order:
     id:
       type: string
       format: uuid
-    numSnsFollowed:
-      type: integer
     createDatetime:
       type: string
       format: date-time
@@ -24,7 +22,6 @@ Order:
         $ref: './don.yml#/Don'
   required:
     - id
-    - numSnsFollowed
     - createDatetime
     - callNum
     - dons

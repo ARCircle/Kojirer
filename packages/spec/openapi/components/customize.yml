@@ -8,6 +8,10 @@ Customize:
       type: string
     available:
       type: boolean
+    isDiscount:
+      type: boolean
   required:
     - id
     - label
+    - available
+    - isDiscount
