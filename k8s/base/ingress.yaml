@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kojirer
+  labels: { app: kojirer }
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: example.invalid   # overlay で差し替える
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kojirer
+                port:
+                  number: 80
