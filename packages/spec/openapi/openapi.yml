@@ -9,7 +9,7 @@ info:
 
 servers:
   - url: 'https://kojirer.arcircle.f5.si/api'
-    description: ローカル環境
+    description: 本番環境
 
 paths:
   '/customizes':
