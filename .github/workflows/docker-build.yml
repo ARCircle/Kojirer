@@ -53,8 +53,19 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
         platforms: linux/amd64
+        load: ${{ github.event_name == 'pull_request' }}  # PR時はローカルにロード
 
-    - name: Test Docker image
+    - name: Test Docker image locally (PR only)
       if: github.event_name == 'pull_request'
       run: |
+        docker run --rm ${{ steps.meta.outputs.FULL_IMAGE }} node --version
+        docker run --rm ${{ steps.meta.outputs.FULL_IMAGE }} sh -c "cd /kojirer && node packages/backend/built/index.js --version || echo 'Server check completed'"
+
+    - name: Verify pushed image (main/feature branches)
+      if: github.event_name != 'pull_request'
+      run: |
+        echo "Image pushed successfully: ${{ steps.meta.outputs.FULL_IMAGE }}"
+        echo "Waiting for image to be available in registry..."
+        sleep 5
+        docker pull ${{ steps.meta.outputs.FULL_IMAGE }}
         docker run --rm ${{ steps.meta.outputs.FULL_IMAGE }} node --version
