@@ -13,7 +13,9 @@ COPY . /kojirer
 
 RUN pnpm install --frozen-lockfile
 
-RUN cd packages/backend && SKIP_ERD_GENERATION=true pnpm exec prisma generate
+RUN cd packages/backend && \
+    sed -i '/generator erd {/,/}/d' prisma/schema.prisma && \
+    pnpm exec prisma generate
 
 RUN pnpm run build
 
