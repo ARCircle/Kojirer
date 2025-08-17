@@ -18,7 +18,6 @@ app.use(cors());
 // ヘルスチェック
 app.get('/healthz', (_req, res) => res.status(200).send('ok'));
 
-
 const filenames = fs.readdirSync(path.join(__dirname, 'routes'));
 
 // ファイル名ごとにrouteを動的インポート

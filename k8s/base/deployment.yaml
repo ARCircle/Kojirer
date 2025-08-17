@@ -15,18 +15,18 @@ spec:
         app: kojirer
     spec:
       containers:
-      - name: kojirer
-        image: kojirer:latest
-        ports:
-        - containerPort: 52600
-          protocol: TCP
-        env:
-        - name: PORT
-          value: "52600"
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
+        - name: kojirer
+          image: kojirer:latest
+          ports:
+            - containerPort: 52600
+              protocol: TCP
+          env:
+            - name: PORT
+              value: '52600'
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '200m'

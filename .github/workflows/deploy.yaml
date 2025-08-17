@@ -5,17 +5,17 @@ on:
     branches:
       - main
       - feature/k3s-cd
-  workflow_dispatch:             # 手動実行も可能
+  workflow_dispatch: # 手動実行も可能
 
 # ===== 権限 =====
 permissions:
-  contents: read                # コード取得
-  packages: write               # GHCR へ push
+  contents: read # コード取得
+  packages: write # GHCR へ push
   id-token: write
 
 concurrency:
-  group: "deploy-production"
-  cancel-in-progress: true      # 新しいデプロイが来たら前をキャンセル
+  group: 'deploy-production'
+  cancel-in-progress: true # 新しいデプロイが来たら前をキャンセル
 
 jobs:
   deploy:
@@ -26,53 +26,52 @@ jobs:
       IMAGE_TAG: ${{ github.sha }}
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Prepare image tag
-      id: meta
-      run: |
-        repo_lc="$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')"
-        echo "FULL_IMAGE=ghcr.io/${repo_lc}:${{ github.sha }}" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+      - name: Prepare image tag
+        id: meta
+        run: |
+          repo_lc="$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')"
+          echo "FULL_IMAGE=ghcr.io/${repo_lc}:${{ github.sha }}" >> "$GITHUB_OUTPUT"
 
-    - uses: docker/setup-buildx-action@v3
-    - uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and push web image
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        file: Dockerfile
-        push: true
-        tags: ${{ steps.meta.outputs.FULL_IMAGE }}
-        target: production
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-        platforms: linux/amd64
+      - name: Build and push web image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.FULL_IMAGE }}
+          target: production
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
 
-    - uses: imranismail/setup-kustomize@v1
+      - uses: imranismail/setup-kustomize@v1
 
-    - name: Set image tag in kustomize overlay
-      working-directory: k8s/overlays/prod
-      run: |
-        kustomize edit set image kojirer=${{ steps.meta.outputs.FULL_IMAGE }}
+      - name: Set image tag in kustomize overlay
+        working-directory: k8s/overlays/prod
+        run: |
+          kustomize edit set image kojirer=${{ steps.meta.outputs.FULL_IMAGE }}
 
-    - name: Build manifest with kustomize
-      run: kustomize build k8s/overlays/prod > manifest.yaml
+      - name: Build manifest with kustomize
+        run: kustomize build k8s/overlays/prod > manifest.yaml
 
-    - name: Apply manifest
-      uses: actions-hub/kubectl@v1.33.3
-      env:
-        KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
-      with:
-        args: apply -f manifest.yaml
+      - name: Apply manifest
+        uses: actions-hub/kubectl@v1.33.3
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: apply -f manifest.yaml
 
-    - name: Wait for rollout
-      uses: actions-hub/kubectl@v1.33.3
-      env:
-        KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
-      with:
-        args: rollout status deployment/kojirer --timeout=300s
-
+      - name: Wait for rollout
+        uses: actions-hub/kubectl@v1.33.3
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: rollout status deployment/kojirer --timeout=300s

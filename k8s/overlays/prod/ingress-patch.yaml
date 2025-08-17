@@ -8,7 +8,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
 spec:
   tls:
-    - hosts: ["kojirer.arcircle.f5.si"]
+    - hosts: ['kojirer.arcircle.f5.si']
       secretName: kojirer-tls
   rules:
     - host: kojirer.arcircle.f5.si

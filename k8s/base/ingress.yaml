@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: example.invalid   # overlay で差し替える
+    - host: example.invalid # overlay で差し替える
       http:
         paths:
           - path: /

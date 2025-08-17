@@ -9,7 +9,7 @@ spec:
   selector:
     app: kojirer
   ports:
-  - name: http
-    port: 80
-    targetPort: 52600
-    protocol: TCP
+    - name: http
+      port: 80
+      targetPort: 52600
+      protocol: TCP

@@ -7,22 +7,22 @@ spec:
     spec:
       initContainers:
         - name: db-migrate
-          image: kojirer:latest     # kustomize が本番タグに差し替え
+          image: kojirer:latest # kustomize が本番タグに差し替え
           env:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: kojirer-env
                   key: DATABASE_URL
-          command: ["sh","-lc","pnpm dlx prisma migrate deploy"]
+          command: ['sh', '-lc', 'pnpm dlx prisma migrate deploy']
 
       containers:
         - name: kojirer
           env:
             - name: PORT
-              value: "52600"
+              value: '52600'
             - name: HOST
-              value: "0.0.0.0"
+              value: '0.0.0.0'
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
