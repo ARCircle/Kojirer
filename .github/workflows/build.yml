@@ -1,0 +1,34 @@
+name: CI (pnpm Build)
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: pnpm/action-setup@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Build
+      run: pnpm run build
+
+    - name: Check for build artifacts
+      run: |
+        ls -la packages/backend/built/web/ || echo "Backend web directory not found"
+        ls -la packages/spec/dist/ || echo "Spec dist directory not found"
+        ls -la packages/frontend/built/ || echo "Frontend built directory not found"
