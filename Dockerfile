@@ -24,7 +24,9 @@ COPY --from=builder /kojirer/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=builder /kojirer/packages/backend/package.json ./packages/backend/package.json
 COPY --from=builder /kojirer/packages/backend/prisma/schema.prisma ./packages/backend/prisma/schema.prisma
 
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile
+RUN cd packages/backend && pnpm prisma generate
+RUN pnpm prune --prod
 
 COPY --from=builder /kojirer/packages/backend/built ./packages/backend/built
 
