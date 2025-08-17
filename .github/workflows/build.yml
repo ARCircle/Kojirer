@@ -25,10 +25,15 @@ jobs:
       run: pnpm install --frozen-lockfile
 
     - name: Build
-      run: pnpm run build
+      run: |
+        pnpm run build
+        if [ $? -ne 0 ]; then
+          echo "Build failed"
+          exit 1
+        fi
 
     - name: Check for build artifacts
       run: |
-        ls -la packages/backend/built/web/ || echo "Backend web directory not found"
-        ls -la packages/spec/dist/ || echo "Spec dist directory not found"
-        ls -la packages/frontend/built/ || echo "Frontend built directory not found"
+        ls -la packages/backend/built/web/ || exit 1
+        ls -la packages/spec/dist/ || exit 1
+        ls -la packages/frontend/built/ || exit 1
