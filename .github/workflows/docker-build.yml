@@ -2,13 +2,10 @@ name: CI (Docker Build)
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
     branches:
       - main
       - develop
-  push:
-    branches:
-      - main
-      - feature/k3s-cd
   workflow_dispatch:
 
 permissions:
@@ -43,30 +40,20 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build Docker image (and push on main/feature branches)
+    - name: Build Docker image
       uses: docker/build-push-action@v6
       with:
         context: .
         file: Dockerfile
-        push: ${{ github.event_name != 'pull_request' }}
+        push: false  # PRではpushしない
         tags: ${{ steps.meta.outputs.FULL_IMAGE }}
         target: production
         cache-from: type=gha
         cache-to: type=gha,mode=max
         platforms: linux/amd64
-        load: ${{ github.event_name == 'pull_request' }}  # PR時はローカルにロード
+        load: true  # ローカルにロード
 
-    - name: Test Docker image locally (PR only)
-      if: github.event_name == 'pull_request'
+    - name: Test Docker image locally
       run: |
         docker run --rm ${{ steps.meta.outputs.FULL_IMAGE }} node --version
         docker run --rm ${{ steps.meta.outputs.FULL_IMAGE }} sh -c "cd /kojirer && node packages/backend/built/index.js --version || echo 'Server check completed'"
-
-    - name: Verify pushed image (main/feature branches)
-      if: github.event_name != 'pull_request'
-      run: |
-        echo "Image pushed successfully: ${{ steps.meta.outputs.FULL_IMAGE }}"
-        echo "Waiting for image to be available in registry..."
-        sleep 5
-        docker pull ${{ steps.meta.outputs.FULL_IMAGE }}
-        docker run --rm ${{ steps.meta.outputs.FULL_IMAGE }} node --version
