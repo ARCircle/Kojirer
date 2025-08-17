@@ -16,7 +16,8 @@ permissions:
   packages: write
 
 concurrency:
-  group: "docker-build-${{ github.ref }}"
+  # PRの場合はPR番号でグループ化、それ以外はブランチ名でグループ化
+  group: "docker-build-${{ github.event.pull_request.number || github.ref }}"
   cancel-in-progress: true
 
 jobs:
