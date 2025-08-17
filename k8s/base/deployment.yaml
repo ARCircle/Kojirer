@@ -4,6 +4,11 @@ metadata:
   name: kojirer
   labels:
     app: kojirer
+env:
+  - name: PORT
+    value: "52600"
+  - name: HOST
+    value: "0.0.0.0"
 spec:
   replicas: 1
   selector:
