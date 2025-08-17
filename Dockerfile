@@ -13,6 +13,8 @@ COPY . /kojirer
 
 RUN pnpm install --frozen-lockfile
 
+RUN cd packages/backend && pnpm exec prisma generate
+
 RUN pnpm run build
 
 FROM base AS production
@@ -23,10 +25,9 @@ COPY --from=builder /kojirer/pnpm-workspace.yaml ./pnpm-workspace.yaml
 
 COPY --from=builder /kojirer/packages/backend/package.json ./packages/backend/package.json
 COPY --from=builder /kojirer/packages/backend/prisma/schema.prisma ./packages/backend/prisma/schema.prisma
+COPY --from=builder /kojirer/packages/backend/node_modules/.prisma ./packages/backend/node_modules/.prisma
 
-RUN pnpm install --frozen-lockfile
-RUN cd packages/backend && pnpm prisma generate
-RUN pnpm prune --prod
+RUN pnpm install --frozen-lockfile --prod
 
 COPY --from=builder /kojirer/packages/backend/built ./packages/backend/built
 
