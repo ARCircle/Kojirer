@@ -1,4 +1,21 @@
 export interface paths {
+    "/customizes": {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        /** すべてのCustomizeを返す */
+        get: operations["getCustomizes"];
+        put?: never | null;
+        post?: never | null;
+        delete?: never | null;
+        options?: never | null;
+        head?: never | null;
+        patch?: never | null;
+        trace?: never | null;
+    };
     "/dons": {
         parameters: {
             query?: never | null;
@@ -6,27 +23,8 @@ export interface paths {
             path?: never | null;
             cookie?: never | null;
         };
-        /** @description 全ての丼を取得 */
-        get: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody?: never | null;
-            responses: {
-                /** @description 成功 */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Don"][];
-                    };
-                };
-            };
-        };
+        /** 全ての丼を取得 */
+        get: operations["getDons"];
         put?: never | null;
         post?: never | null;
         delete?: never | null;
@@ -42,202 +40,11 @@ export interface paths {
             path?: never | null;
             cookie?: never | null;
         };
-        /** @description 特定のidの丼の詳細を取得 */
-        get: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path: {
-                    id: number;
-                };
-                cookie?: never | null;
-            };
-            requestBody?: never | null;
-            responses: {
-                /** @description 丼の詳細を返す */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Don"];
-                    };
-                };
-            };
-        };
-        /** @description donの調理状態を更新する */
-        put: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path: {
-                    id: number;
-                };
-                cookie?: never | null;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** Format: int32 */
-                        status: number;
-                    };
-                };
-            };
-            responses: {
-                /** @description 調理状態の変更に成功 */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Don"];
-                    };
-                };
-            };
-        };
-        post?: never | null;
-        delete?: never | null;
-        options?: never | null;
-        head?: never | null;
-        patch?: never | null;
-        trace?: never | null;
-    };
-    "/dons/price": {
-        parameters: {
-            query?: never | null;
-            header?: never | null;
-            path?: never | null;
-            cookie?: never | null;
-        };
-        get?: never | null;
-        put?: never | null;
-        /** @description 特定の条件の場合の丼の値段を取得 */
-        post: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** Format: int32 */
-                        size: number;
-                        toppings?: {
-                            /** Format: int32 */
-                            id: number;
-                            /** Format: int32 */
-                            amount: number;
-                        }[] | null;
-                        snsFollowed?: boolean | null;
-                    };
-                };
-            };
-            responses: {
-                /** @description 価格を返す */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** Format: int32 */
-                            price?: number | null;
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never | null;
-        options?: never | null;
-        head?: never | null;
-        patch?: never | null;
-        trace?: never | null;
-    };
-    "/dons/status/": {
-        parameters: {
-            query?: never | null;
-            header?: never | null;
-            path?: never | null;
-            cookie?: never | null;
-        };
-        get?: never | null;
-        put?: never | null;
-        /** @description 特定の状態の丼を取得する */
-        post: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /**
-                         * Format: int32
-                         * @description 調理状態を表すstatus
-                         *     1: 調理中
-                         *     2: 調理完了
-                         *     3: 受け渡し済み
-                         *
-                         */
-                        status: number;
-                        /**
-                         * Format: int32
-                         * @description 取得件数上限
-                         * @default 10
-                         */
-                        limit?: number | null;
-                    };
-                };
-            };
-            responses: {
-                /** @description 注文の一覧を正常に取得 */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Don"][];
-                    };
-                };
-            };
-        };
-        delete?: never | null;
-        options?: never | null;
-        head?: never | null;
-        patch?: never | null;
-        trace?: never | null;
-    };
-    "/options": {
-        parameters: {
-            query?: never | null;
-            header?: never | null;
-            path?: never | null;
-            cookie?: never | null;
-        };
-        get: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody?: never | null;
-            responses: {
-                /** @description オプションの数字と言葉をマッピングを取得 */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Option"][];
-                    };
-                };
-            };
-        };
+        /**
+         * 特定の丼の詳細を取得
+         * @description 特定のidの丼の詳細を取得
+         */
+        get: operations["getDonById"];
         put?: never | null;
         post?: never | null;
         delete?: never | null;
@@ -246,7 +53,7 @@ export interface paths {
         patch?: never | null;
         trace?: never | null;
     };
-    "/order": {
+    "/price": {
         parameters: {
             query?: never | null;
             header?: never | null;
@@ -256,61 +63,17 @@ export interface paths {
         get?: never | null;
         put?: never | null;
         /**
-         * 新規注文を追加
-         * @description 新規注文を含むリクエストに対して，DBにその内容を保存し，作成した内容をレスポンスする
+         * 注文の値段を算出
+         * @description 注文の値段の総計を取得
          */
-        post: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        callNum: number;
-                        dons: {
-                            /** Format: int32 */
-                            size: number;
-                            /** Format: int32 */
-                            yasai: number;
-                            /** Format: int32 */
-                            ninniku: number;
-                            /** Format: int32 */
-                            karame: number;
-                            /** Format: int32 */
-                            abura: number;
-                            snsFollowed?: boolean | null;
-                            toppings: {
-                                /** Format: int32 */
-                                id: number;
-                                /** Format: int32 */
-                                amount: number;
-                            }[];
-                        }[];
-                    };
-                };
-            };
-            responses: {
-                /** @description 注文の追加が成功 */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Order"];
-                    };
-                };
-            };
-        };
+        post: operations["calculatePrice"];
         delete?: never | null;
         options?: never | null;
         head?: never | null;
         patch?: never | null;
         trace?: never | null;
     };
-    "/order/price": {
+    "/dons/cooking": {
         parameters: {
             query?: never | null;
             header?: never | null;
@@ -319,53 +82,18 @@ export interface paths {
         };
         get?: never | null;
         put?: never | null;
-        /** @description オーダー単位の値段を取得 */
-        post: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        dons: {
-                            /** Format: int32 */
-                            size: number;
-                            toppings?: {
-                                /** Format: int32 */
-                                id: number;
-                                /** Format: int32 */
-                                amount: number;
-                            }[] | null;
-                            snsFollowed?: boolean | null;
-                        }[];
-                    };
-                };
-            };
-            responses: {
-                /** @description 価格を返す */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** Format: int32 */
-                            price?: number | null;
-                        };
-                    };
-                };
-            };
-        };
+        /**
+         * 丼を調理中に変更
+         * @description `Don`の`status`を`cooking`に変更
+         */
+        post: operations["setCookingDon"];
         delete?: never | null;
         options?: never | null;
         head?: never | null;
         patch?: never | null;
         trace?: never | null;
     };
-    "/order/status": {
+    "/dons/cooked": {
         parameters: {
             query?: never | null;
             header?: never | null;
@@ -373,103 +101,70 @@ export interface paths {
             cookie?: never | null;
         };
         get?: never | null;
-        /** @description 1つの order の中の全ての don の状態を targetStatus に更新する
-         *     order 単位で変更可能な status は 2 -> 3 or 3 -> 2 のみ.
-         *      */
-        put: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** Format: int32 */
-                        targetStatus: number;
-                        /** Format: int32 */
-                        orderId: number;
-                    };
-                };
-            };
-            responses: {
-                /** @description 更新後の Order を返す */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Order"];
-                    };
-                };
-            };
-        };
-        /** @description don のステータスに応じて Order を取得する。各ステータスの動作は以下の通り
-         *     1: 一つでも調理中の don がある Order を全て取得
-         *     2: 全ての don が調理済み かつ 受け渡しが完了していない Order を取得
-         *     3: オーダー内の全ての don が受け渡し完了の Order を取得
-         *      */
-        post: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** Format: int32 */
-                        status: number;
-                    };
-                };
-            };
-            responses: {
-                /** @description ステータスに応じた Order を返す */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Order"][];
-                    };
-                };
-            };
-        };
+        put?: never | null;
+        /**
+         * 丼を調理完了に変更
+         * @description `Don`の`status`を`cooked`に変更
+         */
+        post: operations["setCookedDon"];
         delete?: never | null;
         options?: never | null;
         head?: never | null;
         patch?: never | null;
         trace?: never | null;
     };
-    "/toppings": {
+    "/dons/delivered": {
         parameters: {
             query?: never | null;
             header?: never | null;
             path?: never | null;
             cookie?: never | null;
         };
-        get: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody?: never | null;
-            responses: {
-                /** @description すべてのトッピングを返す */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Topping"][];
-                    };
-                };
-            };
+        get?: never | null;
+        put?: never | null;
+        /**
+         * 丼を受け渡す
+         * @description `Don`の`status`を`delivered`に変更
+         */
+        post: operations["deliverDon"];
+        delete?: never | null;
+        options?: never | null;
+        head?: never | null;
+        patch?: never | null;
+        trace?: never | null;
+    };
+    "/dons/cancel": {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
         };
+        get?: never | null;
+        put?: never | null;
+        /**
+         * 丼をキャンセルする
+         * @description `Don`の`status`を`cancel`に変更
+         */
+        post: operations["cancelDon"];
+        delete?: never | null;
+        options?: never | null;
+        head?: never | null;
+        patch?: never | null;
+        trace?: never | null;
+    };
+    "/orders/{id}": {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        /**
+         * 特定の注文の詳細を取得
+         * @description 特定の注文の詳細を取得
+         */
+        get: operations["getOrderById"];
         put?: never | null;
         post?: never | null;
         delete?: never | null;
@@ -478,35 +173,20 @@ export interface paths {
         patch?: never | null;
         trace?: never | null;
     };
-    "/toppings/available": {
+    "/orders": {
         parameters: {
             query?: never | null;
             header?: never | null;
             path?: never | null;
             cookie?: never | null;
         };
-        get: {
-            parameters: {
-                query?: never | null;
-                header?: never | null;
-                path?: never | null;
-                cookie?: never | null;
-            };
-            requestBody?: never | null;
-            responses: {
-                /** @description すべてのトッピングを返す */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Topping"][];
-                    };
-                };
-            };
-        };
+        get?: never | null;
         put?: never | null;
-        post?: never | null;
+        /**
+         * 注文を作成
+         * @description 新しい注文を作成する
+         */
+        post: operations["createOrder"];
         delete?: never | null;
         options?: never | null;
         head?: never | null;
@@ -517,67 +197,38 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        Don: {
-            /** Format: int32 */
-            id: number;
-            /** Format: int32 */
-            callNum: number;
-            /** Format: int32 */
-            status: number;
-            /** Format: int32 */
-            orderId: number;
-            /** Format: int32 */
-            size: number;
-            /** Format: int32 */
-            yasai: number;
-            /** Format: int32 */
-            ninniku: number;
-            /** Format: int32 */
-            karame: number;
-            /** Format: int32 */
-            abura: number;
-            snsFollowed?: boolean | null;
-            toppings?: {
-                /** Format: int32 */
-                id: number;
-                label: string;
-                /** Format: int32 */
-                amount: number;
-            }[] | null;
-        };
-        Error: {
-            /** @description エラーを簡潔に表現したコード */
-            title: string;
-            /** @description エラーの詳細ドキュメントを指すURL */
-            type: string;
-            /** @description HTTPステータスコード */
-            status: number;
-            /** @description 開発者向けの詳細文 */
-            detail: string;
-        };
-        Option: {
-            id: number;
+        Customizes: components["schemas"]["Customize"];
+        Dons: components["schemas"]["Don"];
+        Orders: components["schemas"]["Order"];
+        Customize: {
+            /** Format: uuid */
+            id: string;
             label: string;
+            available: boolean;
+            isDiscount: boolean;
+        };
+        Don: {
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            status: "ordered" | "cooking" | "cooked" | "delivered" | "cancelled";
+            /** Format: uuid */
+            orderId: string;
+            /** Format: date-time */
+            createDatetime: Date;
+            /** Format: date-time */
+            updateDatetime: Date;
+            customizes?: components["schemas"]["Customize"][] | null;
         };
         Order: {
-            /** Format: int32 */
-            id: number;
-            /** Format: int32 */
-            callNum: number;
+            /** Format: uuid */
+            id: string;
             /** Format: date-time */
-            createdAt: Date;
-            /** Format: int32 */
-            donsCount: number;
-            /** Format: int32 */
-            cookingDonsCount: number;
+            createDatetime: Date;
+            callNum: number;
+            /** @enum {string} */
+            status?: ("ordered" | "ready" | "delivered" | "cancelled") | null;
             dons: components["schemas"]["Don"][];
-        };
-        Topping: {
-            /** Format: int32 */
-            id?: number | null;
-            label?: string | null;
-            /** Format: int32 */
-            price?: number | null;
         };
     };
     responses: never;
@@ -587,4 +238,383 @@ export interface components {
     pathItems: never;
 }
 export type $defs = Record<string, never>;
-export type operations = Record<string, never>;
+export interface operations {
+    getCustomizes: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        requestBody?: never | null;
+        responses: {
+            /** @description すべてのCustomizeを返す */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Customize"][];
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    getDons: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        requestBody?: never | null;
+        responses: {
+            /** @description 丼の一覧を返す */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Don"][];
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    getDonById: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path: {
+                id: string;
+            };
+            cookie?: never | null;
+        };
+        requestBody?: never | null;
+        responses: {
+            /** @description 丼の詳細を返す */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Don"];
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    calculatePrice: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    customize: [
+                        components["schemas"]["Customize"]
+                    ];
+                };
+            };
+        };
+        responses: {
+            /** @description 価格を返す */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: int32 */
+                        price?: number | null;
+                    };
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    setCookingDon: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    donId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description 当該`Don`を返す */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Don"];
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    setCookedDon: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    donId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description 当該`Don`を返す */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Don"];
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    deliverDon: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    donId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description 当該`Don`を返す */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Don"];
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    cancelDon: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    donId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description 当該`Don`を返す */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Don"];
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    getOrderById: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path: {
+                id: string;
+            };
+            cookie?: never | null;
+        };
+        requestBody?: never | null;
+        responses: {
+            /** @description 注文の詳細を返す */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Order"];
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    createOrder: {
+        parameters: {
+            query?: never | null;
+            header?: never | null;
+            path?: never | null;
+            cookie?: never | null;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    numSnsFollowed: number;
+                    callNum: number;
+                    dons: {
+                        customizes?: [
+                            components["schemas"]["Customize"]
+                        ] | null;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description 価格を返す */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: int32 */
+                        price?: number | null;
+                    };
+                };
+            };
+            /** @description 不正なリクエスト */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example Invalid request */
+                        error?: string | null;
+                    };
+                };
+            };
+        };
+    };
+}

@@ -3,7 +3,7 @@ import ts from 'typescript';
 import fs from 'node:fs';
 import addNullTransformer from './addNullFormatter';
 
-const schema = new URL('../openapi.yml', import.meta.url);
+const schema = new URL('../openapi/openapi.yml', import.meta.url);
 const printer = ts.createPrinter();
 
 const BLOB = ts.factory.createTypeReferenceNode(ts.factory.createIdentifier('Blob'));
