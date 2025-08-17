@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "postinstall": "prisma generate",
     "start": "node ./built/index.js",
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "watch": "tsc-watch --noClear --onSuccess \"node watch.mjs\"",
@@ -16,8 +17,10 @@
   },
   "author": "",
   "license": "ISC",
+  "//": "--prodでinstallするときもprisma generateが必要なのでprismaもdependenciesに入れる",
   "dependencies": {
     "@prisma/client": "^6.9.0",
+    "prisma": "^6.9.0",
     "api": "file:../spec",
     "cors": "^2.8.5",
     "express": "^5.1.0",
@@ -30,7 +33,6 @@
     "@types/node": "^22.15.30",
     "prisma-erd-generator": "^2.0.4",
     "puppeteer": "^23.11.1",
-    "prisma": "^6.9.0",
     "tsc-alias": "^1.8.16",
     "tsc-watch": "^7.1.1",
     "vitest": "^1.6.1"
