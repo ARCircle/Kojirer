@@ -10,3 +10,4 @@ images:
 
 patchesStrategicMerge:
   - ingress-patch.yaml
+  - deployment-patch.yaml
