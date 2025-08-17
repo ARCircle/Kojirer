@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - develop
+  # Docker Build は PR のみで実行する
   workflow_dispatch:
 
 permissions:
