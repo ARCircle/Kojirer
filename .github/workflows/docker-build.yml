@@ -48,8 +48,6 @@ jobs:
         push: false  # PRではpushしない
         tags: ${{ steps.meta.outputs.FULL_IMAGE }}
         target: production
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
         platforms: linux/amd64
         load: true  # ローカルにロード
-        no-cache-filters: builder  # builderステージのキャッシュを無効化
+        no-cache: true  # 全体のキャッシュを無効化
