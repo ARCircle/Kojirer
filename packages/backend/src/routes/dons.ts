@@ -35,8 +35,9 @@ router.get(
         createDatetime: don.create_datetime,
         updateDatetime: don.update_datetime,
         status,
-        customizes: don.customizes.map(({ customize }) => ({
+        customizes: don.customizes.map(({ customize, is_discount }) => ({
           ...customize,
+          isDiscount: is_discount,
         })),
       });
     }
