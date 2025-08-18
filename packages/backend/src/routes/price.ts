@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { typedAsyncWrapper } from '@/utils/wrappers';
 import { calcPrice } from '@/utils/calcPrice';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.post(
   '/',
@@ -14,3 +14,5 @@ router.post(
     res.status(200).send({ price });
   }),
 );
+
+export default router;
