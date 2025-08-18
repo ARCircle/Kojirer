@@ -1,6 +1,6 @@
-import express from 'express';
+import express, { Router } from 'express';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // パスはファイル名からの相対パス
 // ここで"/"は，"/version/"を指す

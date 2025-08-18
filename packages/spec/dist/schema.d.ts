@@ -200,6 +200,12 @@ interface components {
         Customizes: components["schemas"]["Customize"];
         Dons: components["schemas"]["Don"];
         Orders: components["schemas"]["Order"];
+        CustomizeKind: {
+            /** Format: uuid */
+            id: string;
+            label: string;
+            available: boolean;
+        };
         Customize: {
             /** Format: uuid */
             id: string;
@@ -254,7 +260,7 @@ interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Customize"][];
+                    "application/json": components["schemas"]["CustomizeKind"][];
                 };
             };
             /** @description 不正なリクエスト */

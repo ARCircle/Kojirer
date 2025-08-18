@@ -1,12 +1,13 @@
-import { $api } from '@/utils/client';
+// import { $api } from '@/utils/client';
 import { cn } from '@/lib/utils';
-import { useQueryClient } from '@tanstack/react-query';
-import { paths } from 'api/schema';
-import React, { useEffect, useState } from 'react';
+// import { useQueryClient } from '@tanstack/react-query';
+// import { paths } from 'api/schema';
+// import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChefHat, Megaphone, CheckCircle, Eye } from 'lucide-react';
 
-type Order = paths['/order/status']['post']['responses']['200']['content']['application/json'][0];
+// type Order = paths['/order/status']['post']['responses']['200']['content']['application/json'][0];
 
 type FudaProps = {
   order: Order;
@@ -14,8 +15,8 @@ type FudaProps = {
 };
 
 const FudaSimple: React.FC<FudaProps> = ({ order, color }) => {
-  const queryClient = useQueryClient();
-  const { mutate } = $api.useMutation('put', '/order/status');
+  // const queryClient = useQueryClient();
+  // const { mutate } = $api.useMutation('put', '/order/status');
   const [isHovered, setIsHovered] = useState(false);
 
   const getGradientColors = () => {
@@ -48,36 +49,38 @@ const FudaSimple: React.FC<FudaProps> = ({ order, color }) => {
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() =>
-        mutate(
-          {
-            body: { orderId: order.id, targetStatus: 3 },
-          },
-          {
-            onSuccess: (result) => {
-              queryClient.setQueryData(
-                [
-                  'post',
-                  '/order/status',
-                  {
-                    body: { status: 3 },
-                  },
-                ],
-                (old: Order[]) => [...old, result],
-              );
-              queryClient.setQueryData(
-                [
-                  'post',
-                  '/order/status',
-                  {
-                    body: { status: 2 },
-                  },
-                ],
-                (old: Order[]) => old.filter((o) => o.id !== result.id),
-              );
-            },
-          },
-        )
+      // onClick={() =>
+      onClick={
+        () => {}
+        // mutate(
+        //   {
+        //     body: { orderId: order.id, targetStatus: 3 },
+        //   },
+        //   {
+        //     onSuccess: (result) => {
+        //       queryClient.setQueryData(
+        //         [
+        //           'post',
+        //           '/order/status',
+        //           {
+        //             body: { status: 3 },
+        //           },
+        //         ],
+        //         (old: Order[]) => [...old, result],
+        //       );
+        //       queryClient.setQueryData(
+        //         [
+        //           'post',
+        //           '/order/status',
+        //           {
+        //             body: { status: 2 },
+        //           },
+        //         ],
+        //         (old: Order[]) => old.filter((o) => o.id !== result.id),
+        //       );
+        //     },
+        //   },
+        // )
       }
     >
       {/* Shimmer effect */}
@@ -217,43 +220,44 @@ const FudaProgress: React.FC<FudaProps> = ({ order: order }) => {
 };
 
 const YobidashiRow: React.FC<{ status: string }> = ({ status }) => {
-  let statusNum = 0;
-  if (status === 'cooking') {
-    statusNum = 1;
-  } else if (status === 'calling') {
-    statusNum = 2;
-  } else if (status === 'finish') {
-    statusNum = 3;
-  }
-  const { data, error, isLoading, refetch } = $api.useQuery('post', '/order/status', {
-    body: { status: statusNum },
-  });
+  // let statusNum = 0;
+  // if (status === 'cooking') {
+  //   statusNum = 1;
+  // } else if (status === 'calling') {
+  //   statusNum = 2;
+  // } else if (status === 'finish') {
+  //   statusNum = 3;
+  // }
+  // const { data, error, isLoading, refetch } = $api.useQuery('post', '/order/status', {
+  //   body: { status: statusNum },
+  // });
 
-  const [ordersCooking, setCookingOrders] = useState<Order[]>([]);
+  // const [ordersCooking, setCookingOrders] = useState<Order[]>([]);
+  const [ordersCooking] = useState<Order[]>([]);
 
-  useEffect(() => {
-    if (error) {
-      return;
-    }
-    if (data && !isLoading) {
-      setCookingOrders(data);
-    }
-  }, [data, error, isLoading]);
+  // useEffect(() => {
+  //   if (error) {
+  //     return;
+  //   }
+  //   if (data && !isLoading) {
+  //     setCookingOrders(data);
+  //   }
+  // }, [data, error, isLoading]);
 
-  // 1秒ごとにrefetchを呼び出す
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      refetch();
-    }, 1000); // 1秒間隔
+  // // 1秒ごとにrefetchを呼び出す
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     refetch();
+  //   }, 1000); // 1秒間隔
 
-    // コンポーネントがアンマウントされるときにintervalをクリア
-    return () => clearInterval(intervalId);
-  }, [refetch]);
+  //   // コンポーネントがアンマウントされるときにintervalをクリア
+  //   return () => clearInterval(intervalId);
+  // }, [refetch]);
 
-  // 本当にこれでいいのかは不明
-  if (data === undefined) {
-    return <div>loading...</div>;
-  }
+  // // 本当にこれでいいのかは不明
+  // if (data === undefined) {
+  //   return <div>loading...</div>;
+  // }
 
   return (
     <AnimatePresence>
@@ -277,43 +281,44 @@ const YobidashiRow: React.FC<{ status: string }> = ({ status }) => {
 };
 
 const YobidashiTable: React.FC<{ status: string }> = ({ status }) => {
-  let statusNum = 0;
-  if (status === 'cooking') {
-    statusNum = 1;
-  } else if (status === 'calling') {
-    statusNum = 2;
-  } else if (status === 'finish') {
-    statusNum = 3;
-  }
-  const { data, error, isLoading, refetch } = $api.useQuery('post', '/order/status', {
-    body: { status: statusNum },
-  });
+  // let statusNum = 0;
+  // if (status === 'cooking') {
+  //   statusNum = 1;
+  // } else if (status === 'calling') {
+  //   statusNum = 2;
+  // } else if (status === 'finish') {
+  //   statusNum = 3;
+  // }
+  // const { data, error, isLoading, refetch } = $api.useQuery('post', '/order/status', {
+  //   body: { status: statusNum },
+  // });
 
-  const [ordersCalling, setOrdersCalling] = useState<Order[]>([]);
+  // const [ordersCalling, setOrdersCalling] = useState<Order[]>([]);
+  const [ordersCalling] = useState<Order[]>([]);
 
-  useEffect(() => {
-    if (error) {
-      return;
-    }
-    if (data && !isLoading) {
-      setOrdersCalling(data);
-    }
-  }, [data, error, isLoading]);
+  // useEffect(() => {
+  //   if (error) {
+  //     return;
+  //   }
+  //   if (data && !isLoading) {
+  //     setOrdersCalling(data);
+  //   }
+  // }, [data, error, isLoading]);
 
-  // 1秒ごとにrefetchを呼び出す
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      refetch();
-    }, 1000); // 1秒間隔
+  // // 1秒ごとにrefetchを呼び出す
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     refetch();
+  //   }, 1000); // 1秒間隔
 
-    // コンポーネントがアンマウントされるときにintervalをクリア
-    return () => clearInterval(intervalId);
-  }, [refetch]);
+  //   // コンポーネントがアンマウントされるときにintervalをクリア
+  //   return () => clearInterval(intervalId);
+  // }, [refetch]);
 
-  // 本当にこれでいいのかは不明
-  if (data === undefined) {
-    return <div>loading...</div>;
-  }
+  // // 本当にこれでいいのかは不明
+  // if (data === undefined) {
+  //   return <div>loading...</div>;
+  // }
 
   return (
     <AnimatePresence>
