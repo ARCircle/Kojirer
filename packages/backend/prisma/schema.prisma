@@ -8,9 +8,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-}
+// ER図を生成するgenerator
+// 普段は必要ないのでコメントアウトしている
+// note: コメント解除するとCIが落ちるので注意
+// generator erd {
+//   provider = "prisma-erd-generator"
+// }
 
 datasource db {
   provider = "postgresql"
@@ -32,7 +35,7 @@ model dons {
   create_datetime DateTime         @default(now())
   update_datetime DateTime         @updatedAt
   order           orders           @relation(fields: [order_id], references: [id])
-  customizes  don_customizes[]
+  customizes      don_customizes[]
 }
 
 model don_customizes {
@@ -50,7 +53,7 @@ model customizes {
   label            String             @db.VarChar()
   available        Boolean            @default(true)
   customize_prices customize_prices[]
-  dons   don_customizes[]
+  dons             don_customizes[]
 }
 
 model customize_prices {

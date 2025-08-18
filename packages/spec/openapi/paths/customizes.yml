@@ -12,7 +12,7 @@ CustomizesPath:
             schema:
               type: array
               items:
-                $ref: '../components/customize.yml#/Customize'
+                $ref: '../components/customizeKind.yml#/CustomizeKind'
       '400':
         description: 不正なリクエスト
         content:
