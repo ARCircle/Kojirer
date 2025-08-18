@@ -45,6 +45,15 @@ if (process.env.NODE_ENV === 'production') {
 app.use(errorHandler);
 
 // サーバー起動
-app.listen(port, host, () => {
+const server = app.listen(port, host, () => {
   console.log(`listening on http://${host}:${port}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    console.log('HTTP server closed');
+    process.exit(0);
+  });
 });

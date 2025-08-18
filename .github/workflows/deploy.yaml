@@ -74,4 +74,4 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
-          args: rollout status deployment/kojirer --timeout=300s
+          args: rollout status deployment/kojirer --timeout=600s
