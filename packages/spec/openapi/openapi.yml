@@ -8,8 +8,8 @@ info:
     url: https://opensource.org/licenses/mit-license.php
 
 servers:
-  - url: 'https://api.kojirer.arcircle.f5.si'
-    description: ローカル環境
+  - url: 'https://kojirer.arcircle.f5.si/api'
+    description: 本番環境
 
 paths:
   '/customizes':

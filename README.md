@@ -135,3 +135,22 @@ pnpm run api
 pnpmの問題かは不明だが最新のNode24を使用するとpnpm install時にnodeのJavaScript heap out of memoryエラーが発生して失敗する
 
 そのためプロジェクトのビルドおよびCIではNode.jsのバージョンを22に設定している。
+
+## 本番環境のログを見る
+kubernetes dashboardがデプロイされているので以下で確認できる。
+
+### 初回だけ
+- kubectl が入っていなければまずは何らかの方法でkubectlをインストール
+- kubeconfigを`~/.kube/config`に貼り付ける。(※configはディレクトリではなく拡張子なしのファイル)
+
+### 次回以降
+```bash
+
+# 一時的なトークンを生成
+kubectl -n kubernetes-dashboard create token admin-user
+
+# dashboard をポートフォワーディング
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
+
+# ブラウザで https://localhost:8443 にアクセスして上のトークンでログイン
+```
