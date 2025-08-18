@@ -50,5 +50,3 @@ jobs:
           tags: ${{ steps.meta.outputs.FULL_IMAGE }}
           target: production
           platforms: linux/amd64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max

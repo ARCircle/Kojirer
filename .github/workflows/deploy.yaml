@@ -47,8 +47,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.FULL_IMAGE }}
           target: production
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           platforms: linux/amd64
 
       - uses: imranismail/setup-kustomize@v1
