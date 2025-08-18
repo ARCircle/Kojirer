@@ -3,6 +3,7 @@ import { ApiError } from '@/utils/ApiError';
 import { calcPrice } from '@/utils/calcPrice';
 import { donStatus, orderStatus } from '@/utils/status';
 import { typedAsyncWrapper } from '@/utils/wrappers';
+import { logger } from '@/utils/logger';
 import express, { Router } from 'express';
 
 const router: Router = express.Router();
@@ -58,7 +59,13 @@ router.post(
   typedAsyncWrapper<'/orders', 'post'>(async (req, res, next) => {
     const order = req.body;
 
-    await prisma.orders.create({
+    logger.info('Creating new order', {
+      callNum: order.callNum,
+      donCount: order.dons?.length || 0,
+      ip: req.ip,
+    });
+
+    const createdOrder = await prisma.orders.create({
       include: {
         dons: {
           include: {
@@ -89,6 +96,12 @@ router.post(
       .flat()
       .filter((c) => c !== undefined && c !== null);
     const price = await calcPrice(customizes);
+
+    logger.info('Order created successfully', {
+      orderId: createdOrder.id,
+      price,
+      callNum: order.callNum,
+    });
 
     res.status(201).json({ price });
   }),
