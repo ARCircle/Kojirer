@@ -10,6 +10,7 @@ const app = express();
 const port = Number(process.env.PORT ?? 52600);
 const host = process.env.HOST ?? '0.0.0.0';
 
+// 各種モジュールをインポート
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'web')));
@@ -18,6 +19,7 @@ app.use(cors());
 // ヘルスチェック
 app.get('/healthz', (_req, res) => res.status(200).send('ok'));
 
+// routesのファイル名の配列を取得
 const filenames = fs.readdirSync(path.join(__dirname, 'routes'));
 
 // ファイル名ごとにrouteを動的インポート
