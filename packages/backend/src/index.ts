@@ -3,6 +3,7 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { errorHandler } from './middlewares/errorHandler';
+import { logger } from '@/utils/logger';
 
 const app = express();
 
@@ -16,8 +17,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'web')));
 app.use(cors());
 
-// ヘルスチェック
-app.get('/healthz', (_req, res) => res.status(200).send('ok'));
+// リクエストログ
+app.use((req, res, next) => {
+  logger.info('Request received', {
+    method: req.method,
+    url: req.url,
+    ip: req.ip,
+    userAgent: req.get('User-Agent'),
+  });
+  next();
+});
 
 // routesのファイル名の配列を取得
 const filenames = fs.readdirSync(path.join(__dirname, 'routes'));
@@ -32,6 +41,8 @@ for (const filename of filenames) {
   app.use(`/api/${name}`, route.default);
 }
 
+// ヘルスチェック
+app.get('/healthz', (_req, res) => res.status(200).send('ok'));
 // APIそのもの
 app.get('/api/*splat', (req, res) => {
   res.send('Undefined api root');
@@ -48,14 +59,18 @@ app.use(errorHandler);
 
 // サーバー起動
 const server = app.listen(port, host, () => {
-  console.log(`listening on http://${host}:${port}`);
+  logger.info('Server started', {
+    host,
+    port,
+    environment: process.env.NODE_ENV || 'development',
+  });
 });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
+  logger.info('SIGTERM signal received: closing HTTP server');
   server.close(() => {
-    console.log('HTTP server closed');
+    logger.info('HTTP server closed');
     process.exit(0);
   });
 });
