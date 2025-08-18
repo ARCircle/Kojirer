@@ -5,7 +5,10 @@ import path from 'path';
 import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
-const port = 52600;
+
+// ===== 設定 =====
+const port = Number(process.env.PORT ?? 52600);
+const host = process.env.HOST ?? '0.0.0.0';
 
 // 各種モジュールをインポート
 app.use(express.json());
@@ -13,11 +16,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'web')));
 app.use(cors());
 
+// ヘルスチェック
+app.get('/healthz', (_req, res) => res.status(200).send('ok'));
+
 // routesのファイル名の配列を取得
 const filenames = fs.readdirSync(path.join(__dirname, 'routes'));
 
 // ファイル名ごとにrouteを動的インポート
 for (const filename of filenames) {
+  if (!filename.endsWith('.js')) continue;
   const name = filename.replace('.js', '');
   const route_path = `${__dirname}/routes/${name}.js`;
   const route = require(route_path);
@@ -39,6 +46,16 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(errorHandler);
 
-// ポート開放
-app.listen(port);
-console.log(`Opened http://localhost:${port}/`);
+// サーバー起動
+const server = app.listen(port, host, () => {
+  console.log(`listening on http://${host}:${port}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    console.log('HTTP server closed');
+    process.exit(0);
+  });
+});
