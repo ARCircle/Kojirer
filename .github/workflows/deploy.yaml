@@ -66,9 +66,16 @@ jobs:
         with:
           args: apply -f manifest.yaml
 
-      - name: Wait for rollout
+      - name: Wait for app rollout
         uses: actions-hub/kubectl@v1.33.3
         env:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
           args: rollout status deployment/kojirer --timeout=600s
+
+      - name: Wait for prisma-studio rollout
+        uses: actions-hub/kubectl@v1.33.3
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: rollout status deployment/prisma-studio --timeout=300s
