@@ -10,6 +10,7 @@ services:
       - .env.container
     ports:
       - '52600:52600' # backend
+      - '52601:52601' # backend websocket
       - '52800:52800' # frontend
       - '5555:5555' # Prisma Studio
     depends_on:

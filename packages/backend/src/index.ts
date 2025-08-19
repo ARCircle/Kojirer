@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { errorHandler } from './middlewares/errorHandler';
 import { logger } from '@/utils/logger';
+import { WebSocketDonChannel } from './websocket/donChannel';
 
 const app = express();
 
@@ -65,6 +66,10 @@ const server = app.listen(port, host, () => {
     environment: process.env.NODE_ENV || 'development',
   });
 });
+
+// WebSocketサーバー
+const donChannel = new WebSocketDonChannel({ wssConfig: { port: 52601 } });
+logger.info('WebSocket server started on ws://localhost:52601');
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
