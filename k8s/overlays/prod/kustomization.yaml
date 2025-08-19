@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - prisma-studio.yaml
 
 images:
   - name: kojirer
