@@ -18,7 +18,18 @@ spec:
       containers:
         - name: prisma-studio
           image: kojirer:latest
-          command: ['npx', 'prisma', 'studio', '--port', '5555', '--browser', 'none']
+          command:
+            [
+              'npx',
+              'prisma',
+              'studio',
+              '--port',
+              '5555',
+              '--browser',
+              'none',
+              '--schema',
+              './packages/backend/prisma/schema.prisma',
+            ]
           ports:
             - containerPort: 5555
               protocol: TCP
