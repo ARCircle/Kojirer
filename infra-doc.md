@@ -154,24 +154,6 @@ kubectl create secret generic kojirer-env \
 3. **プッシュ**: ghcr.io (GitHub Container Registry)へプッシュ
 4. **デプロイ**: Kustomizeでマニフェスト生成 → kubectl apply
 
-### Kustomize構成
-
-```
-k8s/
-├── base/                 # 基本リソース定義
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   ├── ingress.yaml
-│   └── kustomization.yaml
-├── overlays/
-│   ├── prod/            # 本番環境設定
-│   │   ├── deployment-patch.yaml
-│   │   ├── ingress-patch.yaml
-│   │   └── kustomization.yaml
-│   └── infra/           # インフラツール
-│       ├── prisma-studio.yaml
-│       └── kustomization.yaml
-```
 
 ## 運用手順
 
@@ -184,19 +166,10 @@ k8s/
 git push origin main
 ```
 
-#### 手動デプロイ
-
-```bash
-# マニフェスト適用
-kubectl apply -k k8s/overlays/prod
-
-# デプロイメント状態確認
-kubectl rollout status deployment/kojirer --timeout=600s
-```
-
 ### モニタリング
 
 #### ログ確認
+基本dashboardから閲覧。cliからなら以下コマンド。
 
 ```bash
 # 最新ログ
@@ -207,7 +180,7 @@ kubectl logs deploy/kojirer --previous --tail=200
 ```
 
 #### Pod状態確認
-
+基本dashboardから閲覧。cliからなら以下コマンド。
 ```bash
 # Pod一覧
 kubectl get pod -l app=kojirer -o wide
@@ -216,25 +189,12 @@ kubectl get pod -l app=kojirer -o wide
 kubectl describe deploy/kojirer
 ```
 
-#### ヘルスチェック
-
-```bash
-# 内部から
-kubectl run tmp-curl --rm -it --restart=Never --image=curlimages/curl -- \
-  curl -sSI http://kojirer/healthz
-
-# 外部から
-curl -sI https://kojirer.arcircle.f5.si/healthz
-```
 
 #### Prisma Studio
 
 アプリケーションと同じ環境で、**GitHub ActionsのCDで自動デプロイ**：
 
 ```bash
-# 状態確認
-kubectl get pod -l app=prisma-studio
-
 # ポートフォワード
 kubectl port-forward svc/prisma-studio 5555:5555
 
@@ -242,11 +202,6 @@ kubectl port-forward svc/prisma-studio 5555:5555
 # http://localhost:5555
 ```
 
-**特徴**:
-
-- アプリケーションと統合された環境で動作
-- mainブランチpushでアプリケーションと同時にデプロイ
-- 同じKustomizeオーバーレイで管理
 
 ## セキュリティ
 
@@ -264,6 +219,8 @@ kubectl port-forward svc/prisma-studio 5555:5555
 ### アクセス制御
 
 - Kubernetes DashboardはTokenベース認証
+
+---
 
 ## 初期セットアップ手順
 
