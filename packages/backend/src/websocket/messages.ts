@@ -23,6 +23,17 @@ export type DonStateMessage = {
 };
 
 /**
+ * サーバーがOrderの状態を通知するメッセージ
+ * https://arcircle.github.io/Kojirer/asyncapi/#message-undefined
+ */
+export type OrderStateMessage = {
+  type: 'state';
+  data: {
+    orders: Order[];
+  };
+};
+
+/**
  * WebSocketスキーマにおけるRequestOptionオブジェクト
  * https://arcircle.github.io/Kojirer/asyncapi/#schema-requestOption
  */
@@ -37,4 +48,15 @@ export type RequestOption = {
 export type Don = {
   id: string;
   state: 'ordered' | 'cooking' | 'cooked' | 'delivered' | 'cancelled';
+};
+
+/**
+ * WebSocketスキーマにおけるOrderオブジェクト
+ * https://arcircle.github.io/Kojirer/asyncapi/#schema-order
+ */
+export type Order = {
+  id: string;
+  call_num: number; // TODO: このnumber微妙すぎるので後で考える
+  state: 'ordered' | 'ready' | 'delivered' | 'cancelled';
+  dons?: Don[]; // include: falseならundef, trueだがDonがない場合は空配列
 };
