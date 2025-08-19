@@ -140,6 +140,59 @@ pnpmの問題かは不明だが最新のNode24を使用するとpnpm install時�
 
 kubernetes dashboardがデプロイされているので以下で確認できる。
 
+## 環境構成
+
+### 本番環境 (Production)
+
+- **デプロイ**: mainブランチへのpushで自動デプロイ
+- **URL**: https://kojirer.arcircle.f5.si
+
+### 開発環境 (Development)
+
+- **デプロイ**: GitHub ActionsのWorkflow Dispatchで手動デプロイ（組織メンバーのみ）
+- **制限**: 最大4スロット（dev-1〜dev-4）まで同時存在可能
+- **アクセス**: ポートフォワーディング（外部公開なし）
+- **データベース**: PostgreSQLスキーマ分離で本番から完全独立
+- **DB初期化**: Prismaマイグレーション + 開発用サンプルデータ自動投入
+- **Secret管理**: 事前準備済みスロット専用Secret（`dev-1-env`〜`dev-4-env`）
+
+#### dev環境の使い方
+
+**1. デプロイ**
+
+```bash
+# GitHub ActionsのDeploy Development Environmentワークフローを実行
+# 入力項目:
+# - branch: デプロイしたいブランチ/コミット (例: feature-auth)
+# → 利用可能なスロット（dev-1〜dev-4）に自動デプロイされる
+```
+
+**2. アクセス**
+
+```bash
+# アプリケーション（例：dev-1スロット）
+kubectl port-forward svc/dev-1-kojirer 8080:52600
+# → http://localhost:8080 でアクセス
+
+# Prisma Studio（DB管理）
+kubectl port-forward svc/dev-1-prisma-studio 5555:5555
+# → http://localhost:5555 でアクセス
+```
+
+**3. 削除**
+
+```bash
+# GitHub ActionsのCleanup Development Environmentワークフローを実行
+# 入力項目:
+# - slot_number: 削除するスロット番号 (1〜4)
+# → Kubernetesリソース + DBスキーマも完全削除（Secretは保持）
+```
+
+**セキュリティ機能**
+
+- 組織メンバーのみデプロイ可能（外部からの実行を防止）
+- PostgreSQLスキーマ分離で本番データと完全独立
+
 ### 初回だけ
 
 - kubectl が入っていなければまずは何らかの方法でkubectlをインストール
