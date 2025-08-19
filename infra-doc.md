@@ -134,7 +134,7 @@ kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy
 ```bash
 # DATABASE_URL Secretの作成
 kubectl create secret generic kojirer-env \
-  --from-literal=DATABASE_URL='postgresql://*** */:***@pg-postgresql.db.svc.cluster.local:5432/***?schema=public'
+  --from-literal=DATABASE_URL='postgresql://***/:***@pg-postgresql.db.svc.cluster.local:5432/***?schema=public'
 ```
 
 ### Ingress設定
@@ -154,10 +154,9 @@ kubectl create secret generic kojirer-env \
 3. **プッシュ**: ghcr.io (GitHub Container Registry)へプッシュ
 4. **デプロイ**: Kustomizeでマニフェスト生成 → kubectl apply
 
-
 ## 運用手順
 
-### デプロイメント
+### 本番デプロイメント
 
 #### 自動デプロイ (CI/CD)
 
@@ -166,9 +165,53 @@ kubectl create secret generic kojirer-env \
 git push origin main
 ```
 
+### dev環境運用
+
+#### dev環境作成
+
+```bash
+# GitHub Actions > Actions > Deploy Development Environment
+# 入力:
+# - branch: デプロイしたいブランチ (例: feature-auth)
+
+# デプロイされるリソース:
+# - dev-[1-4]-kojirer (アプリケーション)
+# - dev-[1-4]-prisma-studio (DB管理ツール)
+# - dev-[1-4]-devdata-sql-xxxxx (サンプルデータConfigMap)
+# - PostgreSQL schema: dev-[1-4] (マイグレーション＋サンプルデータ投入済み)
+# ※事前準備済みSecret（dev-[1-4]-env）を使用
+```
+
+#### dev環境アクセス
+
+```bash
+# アプリケーション（例：dev-1スロット）
+kubectl port-forward svc/dev-1-kojirer 8080:52600
+
+# Prisma Studio
+kubectl port-forward svc/dev-1-prisma-studio 5555:5555
+
+# dev環境一覧確認
+kubectl get deployments -l app=kojirer --field-selector metadata.name!=kojirer
+```
+
+#### dev環境削除
+
+```bash
+# GitHub Actions > Actions > Cleanup Development Environment
+# 入力:
+# - slot_number: 削除するスロット番号 (1〜4)
+
+# 削除されるリソース:
+# - Kubernetesリソース（Deployment, Service, ConfigMap）
+# - PostgreSQLスキーマ（dev-[1-4]）とその全データ（サンプルデータ含む）
+# ※Secret（dev-[1-4]-env）は保持（再利用可能）
+```
+
 ### モニタリング
 
 #### ログ確認
+
 基本dashboardから閲覧。cliからなら以下コマンド。
 
 ```bash
@@ -180,7 +223,9 @@ kubectl logs deploy/kojirer --previous --tail=200
 ```
 
 #### Pod状態確認
+
 基本dashboardから閲覧。cliからなら以下コマンド。
+
 ```bash
 # Pod一覧
 kubectl get pod -l app=kojirer -o wide
@@ -188,7 +233,6 @@ kubectl get pod -l app=kojirer -o wide
 # 詳細情報
 kubectl describe deploy/kojirer
 ```
-
 
 #### Prisma Studio
 
@@ -201,7 +245,6 @@ kubectl port-forward svc/prisma-studio 5555:5555
 # ブラウザでアクセス
 # http://localhost:5555
 ```
-
 
 ## セキュリティ
 
@@ -258,8 +301,60 @@ helm upgrade --install pg bitnami/postgresql \
 
 # 7. Secret作成
 kubectl create secret generic kojirer-env \
-  --from-literal=DATABASE_URL='postgresql://*** */:***@pg-postgresql.db.svc.cluster.local:5432/***?schema=public'
+  --from-literal=DATABASE_URL='postgresql://***/:***@pg-postgresql.db.svc.cluster.local:5432/***?schema=public'
 
-# 8. アプリケーションデプロイ
+# 8. dev環境用スロットSecret作成
+kubectl create secret generic dev-1-env \
+  --from-literal=DATABASE_URL='postgresql://***/:***@pg-postgresql.db.svc.cluster.local:5432/***?schema=dev-1'
+kubectl create secret generic dev-2-env \
+  --from-literal=DATABASE_URL='postgresql://***/:***@pg-postgresql.db.svc.cluster.local:5432/***?schema=dev-2'
+kubectl create secret generic dev-3-env \
+  --from-literal=DATABASE_URL='postgresql://***/:***@pg-postgresql.db.svc.cluster.local:5432/***?schema=dev-3'
+kubectl create secret generic dev-4-env \
+  --from-literal=DATABASE_URL='postgresql://***/:***@pg-postgresql.db.svc.cluster.local:5432/***?schema=dev-4'
+
+# 9. dev環境システム
+## 概要
+- GitHub ActionsでWorkflow Dispatch実行によりdev環境を作成/削除
+- PostgreSQLスキーマ分離により本番と完全独立
+- 最大4環境まで同時運用可能
+
+## セキュリティ機能
+- ARCircle組織メンバーのみ実行可能（外部実行防止）
+- kojirer-envからDATABASE_URLを自動抽出・変換（GitHub Secretsへの追加不要）
+- ::add-mask::によるログ出力保護
+- 削除時の本番データ保護機能
+
+## Secret管理
+- 事前準備済みスロット専用Secret（dev-1-env〜dev-4-env）を手動で作成・管理
+- PostgreSQLスキーマ名をスロット別に変更（schema=dev-[1-4]）
+- Kubernetes公式推奨のstringData方式を使用
+
+## DB初期化システム
+dev環境デプロイ時に以下の順序でDB初期化が実行される：
+
+1. **db-migrate initContainer**
+   - Image: kojirer:latest
+   - Command: `pnpm dlx prisma migrate deploy`
+   - 新しいスキーマにテーブル構造を作成
+
+2. **db-seed initContainer**
+   - Image: postgres:16-alpine
+   - ConfigMap: kustomize configMapGeneratorで`packages/backend/examples/devdata.sql`から自動生成
+   - Command: `psql "$DATABASE_URL" -f /devdata.sql`
+   - 開発用サンプルデータを投入
+
+3. **kojirer container**
+   - メインアプリケーションが起動
+   - すでにマイグレーション＋サンプルデータが投入済み
+
+### サンプルデータ内容
+- customizes: 8種類のカスタマイズ（サイズ3種 + トッピング5種）
+- customize_prices: 価格履歴データ（2024年→2025年の価格変更を含む）
+- orders: 6つの注文（SNSフォロー特典のパターン違い）
+- dons: 11個の丼（全ステータスパターン + 時系列データ）
+- don_customizes: カスタマイズ関連データ（SNS特典、割引テスト含む）
+
+# 10. アプリケーションデプロイ
 kubectl apply -k k8s/overlays/prod
 ```
