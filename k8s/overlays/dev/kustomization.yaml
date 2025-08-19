@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/deployment.yaml
+  - ../../base/service.yaml
+  - prisma-studio.yaml
+
+configMapGenerator:
+  - name: devdata-sql
+    files:
+      - devdata.sql=../../../packages/backend/examples/devdata.sql
+
+images:
+  - name: kojirer
+    newTag: latest
+
+namePrefix: dev-
+nameSuffix: ''
+
+commonLabels:
+  environment: dev-template
+
+patchesStrategicMerge:
+  - deployment-patch.yaml

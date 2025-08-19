@@ -1,0 +1,90 @@
+name: Cleanup Development Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      slot_number:
+        description: '削除するdevスロット番号 (1-4)'
+        required: true
+        type: choice
+        options:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+
+# ===== 権限 =====
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    env:
+      SLOT_NAME: dev-${{ inputs.slot_number }}
+
+    steps:
+      - name: Delete dev environment
+        uses: actions-hub/kubectl@v1.33.3
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: delete deployment,service -l app=kojirer,environment=${{ env.SLOT_NAME }} --ignore-not-found=true
+
+      - name: Delete dev prisma-studio
+        uses: actions-hub/kubectl@v1.33.3
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: delete deployment,service -l app=prisma-studio,environment=${{ env.SLOT_NAME }} --ignore-not-found=true
+
+      - name: Drop database schema
+        uses: actions-hub/kubectl@v1.33.3
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: |
+            # dev環境のSecretが存在することを確認
+            if ! kubectl get secret ${{ env.SLOT_NAME }}-env >/dev/null 2>&1; then
+              echo "Dev environment secret not found, skipping schema cleanup"
+              exit 0
+            fi
+
+            # DATABASE_URLを取得して安全性を確認
+            DEV_DATABASE_URL=$(kubectl get secret ${{ env.SLOT_NAME }}-env -o jsonpath='{.data.DATABASE_URL}' | base64 -d)
+
+            # dev環境のスキーマ名が含まれていることを確認（本番データ保護）
+            if [[ "$DEV_DATABASE_URL" != *"schema=${{ env.SLOT_NAME }}"* ]]; then
+              echo "Error: DATABASE_URL does not contain expected dev schema name. Refusing to delete."
+              echo "Expected schema: ${{ env.SLOT_NAME }}"
+              exit 1
+            fi
+
+            # publicスキーマでないことを確認（本番データ保護）
+            if [[ "$DEV_DATABASE_URL" == *"schema=public"* ]]; then
+              echo "Error: Refusing to delete public schema for safety"
+              exit 1
+            fi
+
+            echo "Safe to delete schema: ${{ env.SLOT_NAME }}"
+
+            # 一時的なPodでDBスキーマを削除
+            kubectl run db-cleanup-${{ env.SLOT_NAME }} --image=ghcr.io/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]'):latest \
+              --rm -i --restart=Never \
+              --env=DATABASE_URL="$DEV_DATABASE_URL" \
+              --command -- sh -c "npx prisma db execute --stdin <<< 'DROP SCHEMA IF EXISTS \"${{ env.SLOT_NAME }}\" CASCADE;'" || true
+
+      - name: Delete dev environment secret
+        uses: actions-hub/kubectl@v1.33.3
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: echo "Skipping secret deletion - using persistent slot secrets"
+
+      - name: Verify cleanup
+        uses: actions-hub/kubectl@v1.33.3
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: get deployments -l environment=${{ env.SLOT_NAME }}

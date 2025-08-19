@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kojirer
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: db-migrate
+          image: kojirer:latest # kustomizeがタグ差し替え
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dev-slot-env
+                  key: DATABASE_URL
+          command: ['sh', '-lc', 'pnpm dlx prisma migrate deploy']
+        - name: db-seed
+          image: postgres:16-alpine
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dev-slot-env
+                  key: DATABASE_URL
+          volumeMounts:
+            - name: devdata-sql
+              mountPath: /devdata.sql
+              subPath: devdata.sql
+          command: ['sh', '-lc', 'psql "$DATABASE_URL" -f /devdata.sql']
+      volumes:
+        - name: devdata-sql
+          configMap:
+            name: devdata-sql
+      containers:
+        - name: kojirer
+          env:
+            - name: PORT
+              value: '52600'
+            - name: HOST
+              value: '0.0.0.0'
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dev-slot-env
+                  key: DATABASE_URL
+          readinessProbe:
+            httpGet: { path: /healthz, port: 52600 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /healthz, port: 52600 }
+            initialDelaySeconds: 15
+            periodSeconds: 20
