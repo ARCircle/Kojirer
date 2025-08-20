@@ -7,3 +7,5 @@ const __dirname = path.dirname(__filename);
 
 fs.rmSync(__dirname + '/../packages/backend/built', { recursive: true, force: true });
 fs.rmSync(__dirname + '/../packages/frontend/built', { recursive: true, force: true });
+
+fs.rmSync(__dirname + '/../packages/backend/tsconfig.tsbuildinfo', { force: true });
