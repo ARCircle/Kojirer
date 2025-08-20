@@ -14,7 +14,7 @@
     "migrate:status": "prisma migrate status",
     "migrate:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
-    "prepare": "ts-patch install"
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then ts-patch install; fi"
   },
   "author": "",
   "license": "ISC",
