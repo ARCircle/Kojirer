@@ -1,6 +1,7 @@
 import winston from 'winston';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
+const isTest = process.env.NODE_ENV === 'test';
 
 const logFormat = winston.format.combine(
   winston.format.timestamp({
@@ -23,7 +24,7 @@ const devFormat = winston.format.combine(
 );
 
 const logger = winston.createLogger({
-  level: isDevelopment ? 'debug' : 'info',
+  level: isTest ? 'error' : isDevelopment ? 'debug' : 'info',
   format: isDevelopment ? devFormat : logFormat,
   transports: [
     new winston.transports.Console(),
