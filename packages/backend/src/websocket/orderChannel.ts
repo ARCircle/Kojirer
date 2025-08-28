@@ -4,7 +4,8 @@ import { WebSocket, WebSocketServer } from 'ws';
 import { Order, OrderStateMessage, RequestNotificationMessage } from './messages';
 import { typiaValidationErrorMessage } from '@/utils/errorMessage';
 
-export interface OrderChannel {
+// TODO: ここにinterfaceがあるのは正しい状態ではないのでexportが必要になったら直す
+interface OrderChannel {
   notifyActiveOrderState: (currentState: Order[]) => void;
 }
 
