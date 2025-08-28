@@ -4,6 +4,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import { Don, DonStateMessage, RequestNotificationMessage } from './messages';
 import { typiaValidationErrorMessage } from '@/utils/errorMessage';
 
+// TODO: ここにinterfaceがあるのは正しい状態ではないのでexportが必要になったら直す
 interface DonChannel {
   notifyActiveDonState: (currentState: Don[]) => void;
 }
