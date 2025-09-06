@@ -20,9 +20,10 @@ export const getActiveDons = async (): Promise<ActiveDon[]> => {
   const resDons: ActiveDon[] = dons
     .map((don) => {
       const status = donStatus(don.status);
+      if (!status) throw ApiError.internalProblems();
+
       const isActive = status !== 'delivered' && status !== 'cancelled';
       if (!isActive) return null;
-      if (!status) throw ApiError.internalProblems();
 
       return {
         id: don.id,
