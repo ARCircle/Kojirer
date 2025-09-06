@@ -3,15 +3,14 @@ import prisma from '@/lib/prismaClient';
 import { typedAsyncWrapper } from '@/utils/wrappers';
 import { ApiError } from '@/utils/ApiError';
 import { donStatus } from '@/utils/status';
-import { getAllDons } from '@/usecases/getAllDonUsecase';
+import { getActiveDons } from '@/usecases/getActiveDonsUsecase';
 
 const router: Router = express.Router();
 
 router.get(
   '/',
   typedAsyncWrapper<'/dons', 'get'>(async (req, res, next) => {
-    // const dons = await getAllDons({ prisma });
-    const dons = await getAllDons();
+    const dons = await getActiveDons();
     res.status(200).json(dons);
   }),
 );

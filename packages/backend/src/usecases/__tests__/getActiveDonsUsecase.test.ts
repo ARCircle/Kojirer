@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getAllDons } from '../getAllDonUsecase';
+import { getActiveDons } from '../getActiveDonsUsecase';
 import { donStatus } from '../../utils/status';
 import { randomUUID } from 'crypto';
 import prisma from '../../lib/prismaClient';
@@ -19,7 +19,7 @@ const mockPrisma = vi.mocked(prisma) as unknown as {
   };
 };
 
-describe('getAllDons', () => {
+describe('getActiveDons', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -66,7 +66,7 @@ describe('getAllDons', () => {
     mockPrisma.dons.findMany.mockResolvedValue(mockDons);
     vi.mocked(donStatus).mockReturnValueOnce('ordered').mockReturnValueOnce('cooking');
 
-    const result = await getAllDons();
+    const result = await getActiveDons();
 
     expect(mockPrisma.dons.findMany).toHaveBeenCalledWith({
       include: {
@@ -131,7 +131,7 @@ describe('getAllDons', () => {
     mockPrisma.dons.findMany.mockResolvedValue(mockDons);
     vi.mocked(donStatus).mockReturnValue(undefined);
 
-    await expect(getAllDons()).rejects.toThrow();
+    await expect(getActiveDons()).rejects.toThrow();
 
     expect(donStatus).toHaveBeenCalledWith(999);
   });
@@ -139,7 +139,7 @@ describe('getAllDons', () => {
   it('Donが見つからない場合は空配列を返す', async () => {
     mockPrisma.dons.findMany.mockResolvedValue([]);
 
-    const result = await getAllDons();
+    const result = await getActiveDons();
 
     expect(result).toEqual([]);
     expect(mockPrisma.dons.findMany).toHaveBeenCalledWith({
@@ -170,9 +170,107 @@ describe('getAllDons', () => {
     mockPrisma.dons.findMany.mockResolvedValue(mockDons);
     vi.mocked(donStatus).mockReturnValue('cooked');
 
-    const result = await getAllDons();
+    const result = await getActiveDons();
 
     expect(result).toHaveLength(1);
     expect(result[0].customizes).toEqual([]);
+  });
+
+  it('deliveredステータスのDonを返さない', async () => {
+    const mockDons = [
+      {
+        id: randomUUID(),
+        order_id: randomUUID(),
+        create_datetime: new Date(),
+        update_datetime: new Date(),
+        status: 4,
+        order: { id: randomUUID() },
+        customizes: [],
+      },
+      {
+        id: randomUUID(),
+        order_id: randomUUID(),
+        create_datetime: new Date(),
+        update_datetime: new Date(),
+        status: 1,
+        order: { id: randomUUID() },
+        customizes: [],
+      },
+    ];
+
+    mockPrisma.dons.findMany.mockResolvedValue(mockDons);
+    vi.mocked(donStatus).mockReturnValueOnce('delivered').mockReturnValueOnce('ordered');
+
+    const result = await getActiveDons();
+
+    expect(result).toHaveLength(1);
+    expect(result[0].status).toBe('ordered');
+    expect(donStatus).toHaveBeenCalledWith(4);
+    expect(donStatus).toHaveBeenCalledWith(1);
+  });
+
+  it('cancelledステータスのDonを返さない', async () => {
+    const mockDons = [
+      {
+        id: randomUUID(),
+        order_id: randomUUID(),
+        create_datetime: new Date(),
+        update_datetime: new Date(),
+        status: 5,
+        order: { id: randomUUID() },
+        customizes: [],
+      },
+      {
+        id: randomUUID(),
+        order_id: randomUUID(),
+        create_datetime: new Date(),
+        update_datetime: new Date(),
+        status: 2,
+        order: { id: randomUUID() },
+        customizes: [],
+      },
+    ];
+
+    mockPrisma.dons.findMany.mockResolvedValue(mockDons);
+    vi.mocked(donStatus).mockReturnValueOnce('cancelled').mockReturnValueOnce('cooking');
+
+    const result = await getActiveDons();
+
+    expect(result).toHaveLength(1);
+    expect(result[0].status).toBe('cooking');
+    expect(donStatus).toHaveBeenCalledWith(5);
+    expect(donStatus).toHaveBeenCalledWith(2);
+  });
+
+  it('deliveredとcancelledの両方が含まれる場合、どちらも返さない', async () => {
+    const mockDons = [
+      {
+        id: randomUUID(),
+        order_id: randomUUID(),
+        create_datetime: new Date(),
+        update_datetime: new Date(),
+        status: 4,
+        order: { id: randomUUID() },
+        customizes: [],
+      },
+      {
+        id: randomUUID(),
+        order_id: randomUUID(),
+        create_datetime: new Date(),
+        update_datetime: new Date(),
+        status: 5,
+        order: { id: randomUUID() },
+        customizes: [],
+      },
+    ];
+
+    mockPrisma.dons.findMany.mockResolvedValue(mockDons);
+    vi.mocked(donStatus).mockReturnValueOnce('delivered').mockReturnValueOnce('cancelled');
+
+    const result = await getActiveDons();
+
+    expect(result).toHaveLength(0);
+    expect(donStatus).toHaveBeenCalledWith(4);
+    expect(donStatus).toHaveBeenCalledWith(5);
   });
 });
