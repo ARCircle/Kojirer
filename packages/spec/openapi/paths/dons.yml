@@ -2,17 +2,17 @@ DonsPath:
   get:
     tags:
       - don
-    summary: 全ての丼を取得
-    operationId: getDons
+    summary: 現在アクティブな丼を取得
+    operationId: getActiveDons
     responses:
       '200':
-        description: 丼の一覧を返す
+        description: アクティブな丼の一覧を返す
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: '../components/don.yml#/Don'
+                $ref: '../components/don.yml#/ActiveDon'
       '400':
         description: 不正なリクエスト
         content:

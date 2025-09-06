@@ -23,8 +23,8 @@ export interface paths {
             path?: never | null;
             cookie?: never | null;
         };
-        /** 全ての丼を取得 */
-        get: operations["getDons"];
+        /** 現在アクティブな丼を取得 */
+        get: operations["getActiveDons"];
         put?: never | null;
         post?: never | null;
         delete?: never | null;
@@ -213,6 +213,19 @@ export interface components {
             available: boolean;
             isDiscount: boolean;
         };
+        ActiveDon: {
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            status: "ordered" | "cooking" | "cooked";
+            /** Format: uuid */
+            orderId: string;
+            /** Format: date-time */
+            createDatetime: Date;
+            /** Format: date-time */
+            updateDatetime: Date;
+            customizes?: components["schemas"]["Customize"][] | null;
+        };
         Don: {
             /** Format: uuid */
             id: string;
@@ -277,7 +290,7 @@ export interface operations {
             };
         };
     };
-    getDons: {
+    getActiveDons: {
         parameters: {
             query?: never | null;
             header?: never | null;
@@ -286,13 +299,13 @@ export interface operations {
         };
         requestBody?: never | null;
         responses: {
-            /** @description 丼の一覧を返す */
+            /** @description アクティブな丼の一覧を返す */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Don"][];
+                    "application/json": components["schemas"]["ActiveDon"][];
                 };
             };
             /** @description 不正なリクエスト */
