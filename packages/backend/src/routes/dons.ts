@@ -3,46 +3,16 @@ import prisma from '@/lib/prismaClient';
 import { typedAsyncWrapper } from '@/utils/wrappers';
 import { ApiError } from '@/utils/ApiError';
 import { donStatus } from '@/utils/status';
-import { components } from 'api/schema';
-
-type Don = components['schemas']['Don'];
+import { getAllDons } from '@/usecases/getAllDonUsecase';
 
 const router: Router = express.Router();
 
 router.get(
   '/',
   typedAsyncWrapper<'/dons', 'get'>(async (req, res, next) => {
-    const dons = await prisma.dons.findMany({
-      include: {
-        order: true,
-        customizes: {
-          include: {
-            customize: true,
-          },
-        },
-      },
-    });
-
-    const resDons: Don[] = [];
-
-    for (const don of dons) {
-      const status = donStatus(don.status);
-      if (!status) throw ApiError.internalProblems();
-
-      resDons.push({
-        id: don.id,
-        orderId: don.order_id,
-        createDatetime: don.create_datetime,
-        updateDatetime: don.update_datetime,
-        status,
-        customizes: don.customizes.map(({ customize, is_discount }) => ({
-          ...customize,
-          isDiscount: is_discount,
-        })),
-      });
-    }
-
-    res.status(200).json(resDons);
+    // const dons = await getAllDons({ prisma });
+    const dons = await getAllDons();
+    res.status(200).json(dons);
   }),
 );
 
