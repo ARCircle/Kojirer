@@ -1,12 +1,12 @@
 import { logger } from '@/utils/logger';
 import typia from 'typia';
 import { WebSocket, WebSocketServer } from 'ws';
-import { Order, OrderStateMessage, RequestNotificationMessage } from './messages';
+import { WebSocketOrder, OrderStateMessage, RequestNotificationMessage } from './messages';
 import { typiaValidationErrorMessage } from '@/utils/errorMessage';
 
 // TODO: ここにinterfaceがあるのは正しい状態ではないのでexportが必要になったら直す
 interface OrderChannel {
-  notifyActiveOrderState: (currentState: Order[]) => void;
+  notifyActiveOrderState: (currentState: WebSocketOrder[]) => void;
 }
 
 type WebSocketOrderChannelProps = {
@@ -71,7 +71,7 @@ export class WebSocketOrderChannel implements OrderChannel {
    * Orderの状態を購読しているクライアントに通知する
    * @param currentState 通知するOrderの状態
    */
-  notifyActiveOrderState(currentState: Order[]): void {
+  notifyActiveOrderState(currentState: WebSocketOrder[]): void {
     const orderStateMessage: OrderStateMessage = {
       type: 'state',
       data: {
@@ -103,7 +103,7 @@ export class WebSocketOrderChannel implements OrderChannel {
 
     // TODO: ActiveなOrderの状態を取得する処理を呼び出す
     // TODO: Orderなのでincludeを見る必要がある
-    const exampleOrderState: Order[] = [
+    const exampleOrderState: WebSocketOrder[] = [
       { id: '1', call_num: 1, state: 'ordered' },
       { id: '2', call_num: 2, state: 'ready' },
     ];

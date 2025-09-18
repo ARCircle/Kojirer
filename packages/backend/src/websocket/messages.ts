@@ -2,6 +2,8 @@
  * WebSocketで流れるメッセージの型定義
  */
 
+import { components } from 'api/schema';
+
 /**
  * クライアント側が送信する通知リクエスト
  * https://arcircle.github.io/Kojirer/asyncapi/#message-undefined
@@ -18,7 +20,7 @@ export type RequestNotificationMessage = {
 export type DonStateMessage = {
   type: 'state';
   data: {
-    dons: Don[];
+    dons: WebSocketDon[];
   };
 };
 
@@ -29,7 +31,7 @@ export type DonStateMessage = {
 export type OrderStateMessage = {
   type: 'state';
   data: {
-    orders: Order[];
+    orders: WebSocketOrder[];
   };
 };
 
@@ -45,7 +47,7 @@ export type RequestOption = {
  * WebSocketスキーマにおけるDonオブジェクト
  * https://arcircle.github.io/Kojirer/asyncapi/#schema-don
  */
-export type Don = {
+export type WebSocketDon = {
   id: string;
   state: 'ordered' | 'cooking' | 'cooked' | 'delivered' | 'cancelled';
 };
@@ -54,9 +56,25 @@ export type Don = {
  * WebSocketスキーマにおけるOrderオブジェクト
  * https://arcircle.github.io/Kojirer/asyncapi/#schema-order
  */
-export type Order = {
+export type WebSocketOrder = {
   id: string;
   call_num: number; // TODO: このnumber微妙すぎるので後で考える
   state: 'ordered' | 'ready' | 'delivered' | 'cancelled';
-  dons?: Don[]; // include: falseならundef, trueだがDonがない場合は空配列
+  dons?: WebSocketDon[]; // include: falseならundef, trueだがDonがない場合は空配列
+};
+
+type ActiveDon = components['schemas']['ActiveDon'];
+/**
+ * WebSocket用のDonオブジェクトコンバーター
+ */
+export const donConverter = {
+  /**
+   * ActiveDonからWebSocketDonを得る
+   */
+  fromActiveDon: (don: ActiveDon): WebSocketDon => {
+    return {
+      id: don.id,
+      state: don.status,
+    };
+  },
 };

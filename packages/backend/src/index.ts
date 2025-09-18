@@ -5,8 +5,9 @@ import path from 'path';
 import { errorHandler } from './middlewares/errorHandler';
 import { logger } from '@/utils/logger';
 import { WebSocketDonChannel } from './websocket/donChannel';
-import { Don } from './websocket/messages';
+import { WebSocketDon } from './websocket/messages';
 import { WebSocketServer } from 'ws';
+import { getActiveDons } from './usecases/getActiveDonsUsecase';
 
 const app = express();
 
@@ -71,17 +72,14 @@ const server = app.listen(port, host, () => {
 
 // WebSocketサーバー
 const wss = new WebSocketServer({ port: 52601 });
-const donChannel = new WebSocketDonChannel({ wss });
+const donChannel = new WebSocketDonChannel({ wss, getActiveDons });
 logger.info('WebSocket server started on ws://localhost:52601');
 
 // 5秒ごとに通知をテスト送信
-setInterval(() => {
+setInterval(async () => {
   logger.info('Sending notification to active clients...');
-  const exampleDonState: Don[] = [
-    { id: '1', state: 'ordered' },
-    { id: '2', state: 'cooking' },
-  ];
-  donChannel.notifyActiveDonState(exampleDonState);
+  const activeDons = await getActiveDons();
+  donChannel.notifyActiveDonState(activeDons);
 }, 5000);
 
 // Graceful shutdown

@@ -1,16 +1,20 @@
 import { logger } from '@/utils/logger';
 import typia from 'typia';
 import { WebSocket, WebSocketServer } from 'ws';
-import { Don, DonStateMessage, RequestNotificationMessage } from './messages';
+import { WebSocketDon, DonStateMessage, RequestNotificationMessage, donConverter } from './messages';
 import { typiaValidationErrorMessage } from '@/utils/errorMessage';
+import { components } from 'api/schema';
 
 // TODO: ここにinterfaceがあるのは正しい状態ではないのでexportが必要になったら直す
 interface DonChannel {
-  notifyActiveDonState: (currentState: Don[]) => void;
+  notifyActiveDonState: (activeDons: ActiveDon[]) => void;
 }
+
+type ActiveDon = components['schemas']['ActiveDon'];
 
 type WebSocketDonChannelProps = {
   wss: WebSocketServer;
+  getActiveDons: () => Promise<ActiveDon[]>;
 };
 
 /**
@@ -19,14 +23,15 @@ type WebSocketDonChannelProps = {
  */
 export class WebSocketDonChannel implements DonChannel {
   private readonly wss: WebSocketServer;
-
+  private readonly getActiveDons: () => Promise<ActiveDon[]>;
   /**
    * WebSocket接続ごとに通知するかどうかを管理するマップ
    */
   private notificationStates: WeakMap<WebSocket, boolean> = new WeakMap();
 
-  constructor({ wss }: WebSocketDonChannelProps) {
+  constructor({ wss, getActiveDons }: WebSocketDonChannelProps) {
     this.wss = wss;
+    this.getActiveDons = getActiveDons;
     logger.debug('WebSocketDonChannel initialized');
 
     this.wss.on('connection', (ws: WebSocket) => {
@@ -61,16 +66,15 @@ export class WebSocketDonChannel implements DonChannel {
     });
   }
 
-  // 一旦messagesのDonにしているがDomainTypeにすべきではある
   /**
    * Donの状態を購読しているクライアントに通知する
    * @param currentState 通知するDonの状態
    */
-  notifyActiveDonState(currentState: Don[]): void {
+  notifyActiveDonState(activeDons: ActiveDon[]): void {
     const donStateMessage: DonStateMessage = {
       type: 'state',
       data: {
-        dons: currentState,
+        dons: activeDons.map((don) => donConverter.fromActiveDon(don)),
       },
     };
 
@@ -93,14 +97,10 @@ export class WebSocketDonChannel implements DonChannel {
    * Donの状態取得リクエストを受け取った時の処理
    * @param ws - WebSocket接続
    */
-  private onRequestActiveDonStateNotification(ws: WebSocket): void {
+  private async onRequestActiveDonStateNotification(ws: WebSocket): Promise<void> {
     this.requestActiveDonStateNotification(ws);
 
-    // TODO: ActiveなDonの状態を取得する処理を呼び出す
-    const exampleDonState: Don[] = [
-      { id: '1', state: 'ordered' },
-      { id: '2', state: 'cooking' },
-    ];
-    this.notifyActiveDonState(exampleDonState);
+    const activeDons = await this.getActiveDons();
+    this.notifyActiveDonState(activeDons);
   }
 }
