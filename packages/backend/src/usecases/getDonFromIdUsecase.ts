@@ -29,14 +29,17 @@ export const getDonFromIdUseCase = async (id: string): Promise<Don> => {
   const status = donStatus(don.status);
   if (!status) throw ApiError.internalProblems();
 
-  const resDon = {
+  return {
     id: don.id,
     orderId: don.order_id,
     createDatetime: don.create_datetime,
     updateDatetime: don.update_datetime,
     status,
-    customize: don.customizes,
+    customizes: don.customizes.map((c) => ({
+      id: c.customize.id,
+      label: c.customize.label,
+      available: c.customize.available,
+      isDiscount: c.is_discount,
+    })),
   };
-
-  return resDon;
 };

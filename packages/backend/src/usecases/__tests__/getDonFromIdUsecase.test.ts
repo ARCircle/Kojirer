@@ -40,7 +40,8 @@ describe('getDonFromIdUseCase', () => {
           is_discount: true,
           customize: {
             id: randomUUID(),
-            name: 'Extra sauce',
+            label: 'Extra sauce',
+            available: true,
             price: 100,
           },
         },
@@ -48,7 +49,8 @@ describe('getDonFromIdUseCase', () => {
           is_discount: false,
           customize: {
             id: randomUUID(),
-            name: 'Extra cheese',
+            label: 'Extra cheese',
+            available: true,
             price: 200,
           },
         },
@@ -80,7 +82,12 @@ describe('getDonFromIdUseCase', () => {
       createDatetime: mockDon.create_datetime,
       updateDatetime: mockDon.update_datetime,
       status: 'ordered',
-      customize: mockDon.customizes,
+      customizes: mockDon.customizes.map((c) => ({
+        id: c.customize.id,
+        label: c.customize.label,
+        available: c.customize.available,
+        isDiscount: c.is_discount,
+      })),
     });
 
     expect(donStatus).toHaveBeenCalledWith(1);
@@ -124,7 +131,7 @@ describe('getDonFromIdUseCase', () => {
       createDatetime: mockDon.create_datetime,
       updateDatetime: mockDon.update_datetime,
       status: 'cooking',
-      customize: mockDon.customizes,
+      customizes: [],
     });
 
     expect(donStatus).toHaveBeenCalledWith(2);
