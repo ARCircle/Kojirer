@@ -45,7 +45,7 @@ importers:
     devDependencies:
       '@mermaid-js/mermaid-cli':
         specifier: ^11.4.2
-        version: 11.6.0(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3))
+        version: 11.6.0(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3))(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3))
       '@types/cors':
         specifier: ^2.8.19
         version: 2.8.19
@@ -60,7 +60,7 @@ importers:
         version: 2.4.4
       prisma-erd-generator:
         specifier: ^2.0.4
-        version: 2.0.4(@prisma/client@6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3))(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3))
+        version: 2.0.4(@prisma/client@6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3))(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3))(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3))
       puppeteer:
         specifier: ^23.11.1
         version: 23.11.1(typescript@5.8.3)
@@ -11408,7 +11408,7 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
       use-sync-external-store: 1.5.0(react@19.1.0)
 
-  '@headlessui/tailwindcss@0.2.2(tailwindcss@3.4.17)':
+  '@headlessui/tailwindcss@0.2.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3)))':
     dependencies:
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3))
 
@@ -11470,7 +11470,7 @@ snapshots:
       '@antfu/install-pkg': 1.1.0
       '@antfu/utils': 8.1.1
       '@iconify/types': 2.0.0
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       globals: 15.15.0
       kolorist: 1.8.0
       local-pkg: 1.1.1
@@ -11816,9 +11816,9 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.2': {}
 
-  '@mermaid-js/mermaid-cli@11.6.0(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3))':
+  '@mermaid-js/mermaid-cli@11.6.0(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3))(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3))':
     dependencies:
-      '@mermaid-js/mermaid-zenuml': 0.2.1(@types/react@18.3.23)(mermaid@11.9.0)
+      '@mermaid-js/mermaid-zenuml': 0.2.1(@types/react@18.3.23)(mermaid@11.9.0)(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3))
       chalk: 5.4.1
       commander: 14.0.0
       import-meta-resolve: 4.1.0
@@ -11829,9 +11829,9 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@mermaid-js/mermaid-zenuml@0.2.1(@types/react@18.3.23)(mermaid@11.9.0)':
+  '@mermaid-js/mermaid-zenuml@0.2.1(@types/react@18.3.23)(mermaid@11.9.0)(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3))':
     dependencies:
-      '@zenuml/core': 3.34.0(@types/react@18.3.23)
+      '@zenuml/core': 3.34.0(@types/react@18.3.23)(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3))
       mermaid: 11.9.0
     transitivePeerDependencies:
       - '@types/react'
@@ -12391,7 +12391,7 @@ snapshots:
 
   '@puppeteer/browsers@2.6.1':
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       extract-zip: 2.0.1
       progress: 2.0.3
       proxy-agent: 6.5.0
@@ -14064,11 +14064,11 @@ snapshots:
       loupe: 2.3.7
       pretty-format: 29.7.0
 
-  '@zenuml/core@3.34.0(@types/react@18.3.23)':
+  '@zenuml/core@3.34.0(@types/react@18.3.23)(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3))':
     dependencies:
       '@floating-ui/react': 0.27.13(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@headlessui/react': 2.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@headlessui/tailwindcss': 0.2.2(tailwindcss@3.4.17)
+      '@headlessui/tailwindcss': 0.2.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3)))
       antlr4: 4.11.0
       class-variance-authority: 0.7.1
       clsx: 2.1.1
@@ -14411,7 +14411,7 @@ snapshots:
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       http-errors: 2.0.0
       iconv-lite: 0.6.3
       on-finished: 2.4.1
@@ -15109,6 +15109,10 @@ snapshots:
 
   dayjs@1.11.13: {}
 
+  debug@4.4.1:
+    dependencies:
+      ms: 2.1.3
+
   debug@4.4.1(supports-color@10.0.0):
     dependencies:
       ms: 2.1.3
@@ -15603,7 +15607,7 @@ snapshots:
       content-type: 1.0.5
       cookie: 0.7.2
       cookie-signature: 1.2.2
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
@@ -15637,7 +15641,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -15739,7 +15743,7 @@ snapshots:
 
   finalhandler@2.1.0:
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       encodeurl: 2.0.0
       escape-html: 1.0.3
       on-finished: 2.4.1
@@ -15960,7 +15964,7 @@ snapshots:
     dependencies:
       basic-ftp: 5.0.5
       data-uri-to-buffer: 6.0.2
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
     transitivePeerDependencies:
       - supports-color
 
@@ -16142,7 +16146,7 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
     transitivePeerDependencies:
       - supports-color
 
@@ -16157,6 +16161,13 @@ snapshots:
     dependencies:
       agent-base: 6.0.2
       debug: 4.4.1(supports-color@10.0.0)
+    transitivePeerDependencies:
+      - supports-color
+
+  https-proxy-agent@7.0.6:
+    dependencies:
+      agent-base: 7.1.3
+      debug: 4.4.1
     transitivePeerDependencies:
       - supports-color
 
@@ -16519,7 +16530,7 @@ snapshots:
       decimal.js: 10.6.0
       html-encoding-sniffer: 4.0.0
       http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6(supports-color@10.0.0)
+      https-proxy-agent: 7.0.6
       is-potential-custom-element-name: 1.0.1
       nwsapi: 2.2.20
       parse5: 7.3.0
@@ -17477,10 +17488,10 @@ snapshots:
     dependencies:
       '@tootallnate/quickjs-emscripten': 0.23.0
       agent-base: 7.1.3
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       get-uri: 6.0.5
       http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6(supports-color@10.0.0)
+      https-proxy-agent: 7.0.6
       pac-resolver: 7.0.1
       socks-proxy-agent: 8.0.5
     transitivePeerDependencies:
@@ -17761,9 +17772,9 @@ snapshots:
 
   printable-characters@1.0.42: {}
 
-  prisma-erd-generator@2.0.4(@prisma/client@6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3))(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3)):
+  prisma-erd-generator@2.0.4(@prisma/client@6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3))(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3))(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3)):
     dependencies:
-      '@mermaid-js/mermaid-cli': 11.6.0(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3))
+      '@mermaid-js/mermaid-cli': 11.6.0(@types/react@18.3.23)(puppeteer@23.11.1(typescript@5.8.3))(ts-node@10.9.2(@types/node@22.15.30)(typescript@5.8.3))
       '@prisma/client': 6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3)
       '@prisma/generator-helper': 6.12.0
       dotenv: 16.4.7
@@ -17836,9 +17847,9 @@ snapshots:
   proxy-agent@6.5.0:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6(supports-color@10.0.0)
+      https-proxy-agent: 7.0.6
       lru-cache: 7.18.3
       pac-proxy-agent: 7.2.0
       proxy-from-env: 1.1.0
@@ -17865,7 +17876,7 @@ snapshots:
     dependencies:
       '@puppeteer/browsers': 2.6.1
       chromium-bidi: 0.11.0(devtools-protocol@0.0.1367902)
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       devtools-protocol: 0.0.1367902
       typed-query-selector: 2.12.0
       ws: 8.18.3
@@ -18303,7 +18314,7 @@ snapshots:
 
   router@2.2.0:
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       depd: 2.0.0
       is-promise: 4.0.0
       parseurl: 1.3.3
@@ -18374,7 +18385,7 @@ snapshots:
 
   send@1.2.0:
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
@@ -18596,7 +18607,7 @@ snapshots:
   socks-proxy-agent@8.0.5:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       socks: 2.8.6
     transitivePeerDependencies:
       - supports-color
@@ -19379,7 +19390,7 @@ snapshots:
   vite-node@1.6.1(@types/node@22.15.30):
     dependencies:
       cac: 6.7.14
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       pathe: 1.1.2
       picocolors: 1.1.1
       vite: 5.4.19(@types/node@22.15.30)
@@ -19427,7 +19438,7 @@ snapshots:
       '@vitest/utils': 1.6.1
       acorn-walk: 8.3.4
       chai: 4.5.0
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1
       execa: 8.0.1
       local-pkg: 0.5.1
       magic-string: 0.30.17
