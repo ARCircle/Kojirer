@@ -22,7 +22,7 @@
     "@prisma/client": "^6.9.0",
     "api": "file:../spec",
     "cors": "^2.8.5",
-    "express": "^5.1.0",
+    "express": "^5.2.0",
     "prisma": "^6.9.0",
     "typescript": "^5.8.3",
     "winston": "^3.17.0"
